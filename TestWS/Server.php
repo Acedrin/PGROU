@@ -6,6 +6,16 @@ class HelloWorld {
         return "Hello from " . $name;
     }
 
+    function goodbye($name) {
+    	return "Goodbye from " . $name;
+    }
+}
+
+class Calculatrice {
+
+	function somme($a,$b) {
+		return $a + $b;
+	}
 }
 
 $URL = "http://localhost/github/PGROU/TestWS/test.wsdl";
