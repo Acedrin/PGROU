@@ -16,7 +16,8 @@
 
         $var2 = 3;
         $var3 = 6;
-        $res3 = $client->calc(new SoapParam($var2, "a", $var3, "b"));
+        $res3 = $client->somme(new SoapParam($var2, "a"),
+                              new SoapParam($var3, "b"));
         print $res3 . "<br/>\n";
 
         ?>

@@ -9,6 +9,11 @@ class HelloWorld {
     function goodbye($name) {
     	return "Goodbye from " . $name;
     }
+
+    function somme($a,$b) {
+        $c = Calculatrice::somme($a,$b);
+        return $c;
+    }
 }
 
 class Calculatrice {
@@ -21,6 +26,7 @@ class Calculatrice {
 $URL = "http://localhost/github/PGROU/TestWS/test.wsdl";
 $server = new SoapServer($URL);
 $server->setClass("HelloWorld");
+//$server->setClass("Calculatrice");
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $server->handle();
 } else {
