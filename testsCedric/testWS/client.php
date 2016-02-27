@@ -5,7 +5,7 @@
 		<title></title>
 	</head>
 	<body>
-		<?php ini_set("soap.wsdl_cache_enabled", 0);
+		<?php 
 			$client = new SoapClient("http://localhost/github/PGROU/testsCedric/testWS/test.wsdl");
 			$var = "Machine";
 			$res = $client->hello(new SoapParam($var, "name"));
