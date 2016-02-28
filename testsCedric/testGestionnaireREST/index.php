@@ -1,7 +1,7 @@
 <?php 
 	require "gestionnaire.php";
 	
-	$service = end(explode('\\',getcwd()));
-	$manager = new Gestionnaire($service);
+	$root = end(explode('\\',getcwd()));
+	$manager = new Gestionnaire($root);
 	echo $manager->getAnswer();
 ?>
