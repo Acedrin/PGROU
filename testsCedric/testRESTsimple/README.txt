@@ -1,0 +1,1 @@
+http://localhost/github/PGROU/testsCedric/testRESTsimple/hello/
