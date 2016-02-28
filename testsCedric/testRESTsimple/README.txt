@@ -1,1 +1,1 @@
-http://localhost/github/PGROU/testsCedric/testRESTsimple/hello/
+http://localhost/github/PGROU/testsCedric/testRESTsimple/hello/Machine
