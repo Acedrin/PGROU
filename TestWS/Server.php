@@ -24,6 +24,7 @@ class Calculatrice {
 }
 
 $URL = "http://localhost/github/PGROU/TestWS/test.wsdl";
+//$URL = "http://localhost/github/PGROU/TestWS/test2.wsdl";
 $server = new SoapServer($URL);
 $server->setClass("HelloWorld");
 //$server->setClass("Calculatrice");

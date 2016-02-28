@@ -7,7 +7,10 @@
     <body>
         <?php
         $client = new SoapClient("http://localhost/github/PGROU/TestWS/test.wsdl");
+        //$client = new SoapClient("http://localhost/github/PGROU/TestWS/test2.wsdl");
+		
         $var = "Machine";
+		
         $res1 = $client->hello(new SoapParam($var, "name"));
         print $res1 . "<br/>\n";
 
