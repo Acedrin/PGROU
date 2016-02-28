@@ -14,7 +14,7 @@
 		
 		
 	} else {
-		echo "Ce serveur SOAP peut gérer les fonctions suivantes : ";
+		echo "Ce serveur REST peut gérer les fonctions suivantes : ";
 		$functions = $server->getFunctions();
 		foreach($functions as $func) {
 			echo $func . "\r";
