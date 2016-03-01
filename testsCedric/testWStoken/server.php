@@ -1,7 +1,7 @@
 <?php
 	class HelloWorld {
 		private $_token;
-		function token($token) {
+		function setToken($token) {
 			$this->_token = $token;
 		}
 		function hello($name) {
