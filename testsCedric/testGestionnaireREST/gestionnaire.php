@@ -2,17 +2,17 @@
 	require "moteur.php";
 	
 	class Gestionnaire {
-		private $_root;
+		private $_path;
 		private $_moteur;
-		public function Gestionnaire($root) {
-			$this->_root = $root;
+		public function Gestionnaire($path) {
+			$this->_path = $path;
 			$this->_moteur = new Moteur();
 		}
 		public function getRoute() {
 			$method = $_SERVER["REQUEST_METHOD"];
 			$URI = $_SERVER["REQUEST_URI"];
 			
-			$call = end(explode($this->_root,$URI));
+			$call = end(explode($this->_path,$URI));
 			$route = explode('/', trim($call, '/'));
 			$function = array_shift($route);
 			$parameters = $route;

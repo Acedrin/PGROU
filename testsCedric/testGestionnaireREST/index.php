@@ -1,7 +1,11 @@
 <?php 
 	require "gestionnaire.php";
 	
-	$root = end(explode('\\',getcwd()));
-	$manager = new Gestionnaire($root);
-	echo $manager->getAnswer();
+	$path = end(explode('\\',getcwd()));
+	$manager = new Gestionnaire($path);
+	echo $manager->getAnswer()."\n";
+	/*
+	print "<pre>";
+	print_r($_SERVER);
+	print "</pre>";*/
 ?>
