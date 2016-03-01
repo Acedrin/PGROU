@@ -1,6 +1,11 @@
 <?php
 	class HelloWorld {
-		function hello($name,$token) {
+		private $_token;
+		function token($token) {
+			$this->_token = $token;
+		}
+		function hello($name) {
+			$token = $this->_token;
 			$temps = 1;
 			//sleep($temps+1);
 			$answer = "ERROR !";
