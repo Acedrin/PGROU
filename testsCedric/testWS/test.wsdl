@@ -7,17 +7,18 @@ xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
 xmlns="http://schemas.xmlsoap.org/wsdl/">
 	<wsdl:message name="helloRequest">
 		<wsdl:part name="name" type="xsd:string"/>
+		<wsdl:part name="token" type="xsd:string"/>
 	</wsdl:message>
 	<wsdl:message name="helloResponse">
 		<wsdl:part name="result" type="xsd:string"/>
 	</wsdl:message>
-	<wsdl:portType name="helloPortType">
+	<wsdl:portType name="HelloWorldPortType">
 		<wsdl:operation name="hello">
 			<wsdl:input message="tns:helloRequest"/>
 			<wsdl:output message="tns:helloResponse"/>
 		</wsdl:operation>
 	</wsdl:portType>
-	<wsdl:binding name="helloBinding" type="tns:helloPortType">
+	<wsdl:binding name="HelloWorldBinding" type="tns:HelloWorldPortType">
 		<soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
 		<wsdl:operation name="hello">
 			<soap:operation soapAction="urn:xmethods-delayed-quotes#hello"/>
@@ -31,8 +32,8 @@ xmlns="http://schemas.xmlsoap.org/wsdl/">
 			</wsdl:output>
 		</wsdl:operation>
 	</wsdl:binding>
-	<wsdl:service name="helloService">
-		<wsdl:port name="helloPort" binding="helloBinding">
+	<wsdl:service name="HelloWorldService">
+		<wsdl:port name="HelloWorldPort" binding="HelloWorldBinding">
 			<soap:address location="http://localhost/github/PGROU/testsCedric/testWS/server.php"/>
 		</wsdl:port>
 	</wsdl:service>
