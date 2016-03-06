@@ -1,0 +1,145 @@
+body {
+	background-color:white;
+}
+
+#header {
+	position:absolute;
+	left:10px;
+	right:10px;
+	top:10px;
+	height:100px;
+	z-index:1;
+	background-color:orange;
+	visibility: visible;
+}
+
+#imageHeader {
+	position:absolute;
+	left:5px;
+	top:5px;
+	bottom:5px;
+	width:100px;
+	z-index:1;
+	visibility: visible;
+}
+
+#titleHeader {
+	position:absolute;
+	left:110px;
+	top:25px;
+	bottom:25px;
+	right:50px;
+	z-index:1;
+	background-color:pink;
+	font-family:times;
+	font-size:28pt;
+	text-align:center;
+	color:blue;
+	visibility: visible;
+}
+
+#mailHeader {
+	position:absolute;
+	right:10px;
+	bottom:5px;
+	z-index:1;
+	text-align:right;
+	font-family:times;
+	font-size:12pt;
+	color:blue;
+	visibility: visible;
+}
+
+#Footer {
+	position:absolute;
+	left:10px;
+	right:10px;
+	bottom:10px;
+	height:20px;
+	z-index:1;
+	background-color:black;
+	color:white;
+	visibility: visible;
+	text-align:center;
+	font-size:9pt;
+}
+
+
+#nav {
+	position:absolute;
+	left:10px;
+	top:120px;
+	width:200px;
+	bottom:40px;
+	z-index:1;
+	background-color:orange;
+	visibility: visible;
+}
+
+#Centre {
+	position:absolute;
+	left:220px;
+	right:10px;
+	top:120px;
+	bottom:40px;
+	z-index:0;
+	background-color:#FFFFFF;
+	visibility: visible;
+	border: 1px black solid;
+}
+
+.blocNav {
+	position:relative;
+	margin-top:5px;
+	margin-bottom:5px;
+	margin-left:5px;
+	margin-right:5px;
+	visibility: visible;
+	display:block;
+}
+
+.blocNavHeader {
+	position:relative;
+	margin-top:1px;
+	margin-left:1px;
+	margin-right:12px;
+	height:20px;
+	background-color:#40FF40;
+	visibility: visible;
+}
+
+.blocNavElement {
+	position:relative;
+	margin-top:1px;
+	margin-left:1px;
+	margin-right:2px;
+	background-color:white;
+	color:black;
+	visibility: visible;
+}
+
+.PageCentrale {
+	width:100%;
+	height:100%;
+	display: block;
+}
+
+a, a:link, a:visited {
+	color:black;
+	text-decoration:none;
+}
+
+a:hover {
+	color:red;
+	text-decoration:none;
+}
+
+iframe {
+	width:100%;
+	height:100%;
+	display: block;
+	overflow:scroll;
+	border:none;
+}
+
+
