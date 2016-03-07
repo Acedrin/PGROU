@@ -1,41 +1,42 @@
 <?php
 
-/*IP du client
-Date/heure
-Nom de l’application
-Fonction/Service appelée
-Description de l’opération effectuée
-*/
-
-include('settings.php');
-
 class Logger{
 
 // logDevice= 1-> file
 //            2-> db
 //            3-> file+db
 
-const LOGDEVICE=3;
-const LOGFILE="./prava.txt";
+private $LOGDEVICE;
+private $LOGFILE;
+private $DB;
+private $USER;
+private $PASSWD;
 
 
-/*public function __construct(){
-    $this->logDevice=$logDevice;
-    $this->logFile=$logFile;
+public function __construct(){
+
+    include 'settings.php';
+
+    $this->LOGDEVICE=$logDevice;
+    $this->LOGFILE=$logFile;
+/*    $this->$DB=$db;
+    $this->$USER=$user;
+    $this->$PASSWD=$passwd;*/
+
     echo "costruttore";
-    // aggiungere lettura file settings per parametri
-}*/
+}
 
 public function Logging($ip,$nom,$function,$op){
 
-    echo Logger::LOGDEVICE;
-    echo Logger:: LOGFILE;
+    echo $this->LOGDEVICE;
+    echo $this->LOGFILE;
 
-    $time="[".date('H:i:s', time())."]";
+
+    $time="[".date('Y/m/d - H:i:s', time())."]";
     $txt=$time." ".$ip." ".$nom." ".$function." ".$op;
     echo "</br>".$txt;
     echo "</br>case";
-    switch(Logger::LOGDEVICE){
+    switch($this->LOGDEVICE){
         case 1:
         echo "</br>case 1";
             $this->fileLog($txt);
@@ -52,12 +53,12 @@ public function Logging($ip,$nom,$function,$op){
 
 private function fileLog($log){
     echo "</br>fileLog";
-    $myfile = file_put_contents(Logger::LOGFILE, $log.PHP_EOL , FILE_APPEND);
+    $myfile = file_put_contents($this->LOGFILE, $log.PHP_EOL , FILE_APPEND);
 }
 
 private function createTable(){
     echo "</br>createTable";
-    $connect=mysqli_connect("localhost","root","giano","log");
+    $connect=mysqli_connect("localhost",$this->$USER,$this->$PASSWD,$this->$DB);
     $val = mysqli_query($connect,'select 1 from `logTable`');
 
     if(!$val){
@@ -71,7 +72,7 @@ private function dbLog($ip,$nom,$function,$op){
     echo "</br>dbLog";
     $this->createTable();
 
-    $connect=mysqli_connect("localhost","root","giano","log");
+    $connect=mysqli_connect("localhost",$this->$USER,$this->$PASSWD,$this->$DB);
     $query="INSERT INTO `logTable`(`time`,`ip`, `nome`, `function`, `operation`) VALUES ( NOW(),'".$ip."','".$nom."','".$function."','".$op."')";
     $sql = mysqli_query($connect,$query);
     if($sql) echo "</br>inserted row";
