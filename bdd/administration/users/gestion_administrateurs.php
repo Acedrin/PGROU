@@ -1,4 +1,13 @@
 <?php
+/* --------------------------------------------------
+  Projet MOOWSE
+  Fichier html
+  Vue de l'interface de gestion des administrateurs de MooWse
+
+  Victor Enaud
+  Ecole Centrale de Nantes
+  -------------------------------------------------- */
+
 session_start();
 ini_set("display_errors", 0);
 error_reporting(0);
@@ -11,6 +20,7 @@ if (isset($_SESSION['login'])) {
             <meta charset="UTF-8" />
             <title>MooWse - Gestion administrateurs</title>
             <script>
+                // Fonction pour afficher/cacher la zone d'ajout d'un nouvel administrateur
                 function toggleNewAdmin() {
                     if (document.getElementById("new_admin").style.display == "none") {
                         document.getElementById("new_admin").style.display = "block";
@@ -19,6 +29,8 @@ if (isset($_SESSION['login'])) {
                     }
                 }
 
+                // Fonction pour afficher/cacher la ligne de présentation et la
+                // ligne d'édition d'un administrateur existant
                 function toggleEdit(id) {
                     if (document.getElementById("see_admin_" + id).style.display == "none") {
                         document.getElementById("see_admin_" + id).style.display = "";
@@ -48,6 +60,8 @@ if (isset($_SESSION['login'])) {
                     <?php
                     while ($row = $users->fetch()) {
                         ?>
+                        <!-- Ligne de présentation d'un administrateur existant
+                        La ligne est visible par défaut -->
                         <tr id="see_admin_<?php echo $row['user_id'] ?>">
 
                             <td>
@@ -69,6 +83,8 @@ if (isset($_SESSION['login'])) {
                             </td>
                         </tr>
 
+                        <!-- Ligne d'édition d'un administrateur existant
+                        La ligne est cachée par défaut -->
                     <form action="addUser.php" method="POST">
                         <input type="hidden" name="user_id" value=<?php echo $row['user_id'] ?>>
                         <tr id="edit_admin_<?php echo $row['user_id'] ?>" style="display:none">
@@ -139,6 +155,8 @@ if (isset($_SESSION['login'])) {
                 ?>
             </tbody>
         </table>
+        <!-- Formulaire d'ajout d'un nouvel administrateur
+        Le formulaire est caché par défaut  -->
         <p><button type="button" onClick="toggleNewAdmin()">Ajouter un administrateur</button></p>
         <div id="new_admin" style="display:none">
             <h2>Ajouter un administrateur</h2>
@@ -171,30 +189,30 @@ if (isset($_SESSION['login'])) {
                                         <option value = "<?php echo $i ?>"><?php echo $i ?></option>
                                         <?php
                                     }
-                                ?>
-                            </select>
-                            <select name="annee">
-                                <option value="0">0</option>
-                                <?php
-                                for ($i = $today; $i <= $today + 10; $i++) {
                                     ?>
-                                    <option value = "<?php echo $i ?>"><?php echo $i ?></option>
+                                </select>
+                                <select name="annee">
+                                    <option value="0">0</option>
                                     <?php
-                                }
-                                ?>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><button type="submit">Ajouter</button></td>
-                    </tr>
-                </tbody>
-            </table>
-        </form>
-    </div>
-</body>
-</html>
-<?php
+                                    for ($i = $today; $i <= $today + 10; $i++) {
+                                        ?>
+                                        <option value = "<?php echo $i ?>"><?php echo $i ?></option>
+                                        <?php
+                                    }
+                                    ?>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><button type="submit">Ajouter</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </form>
+        </div>
+    </body>
+    </html>
+    <?php
 } else {
     header('Content-Type: text/html; charset=utf-8');
     header("Location:../index.html");

@@ -14,8 +14,8 @@ require 'vendor/autoload.php';
 // on desactive l'affichage des erreurs pour ameliorer la securite et l'ergonomie
 
 session_start(); // On démarre la session AVANT toute chose
-ini_set("display_errors", 0);
-error_reporting(0);
+//ini_set("display_errors", 0);
+//error_reporting(0);
 
 $restart = true;
 

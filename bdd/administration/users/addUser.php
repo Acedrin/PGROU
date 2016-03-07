@@ -1,8 +1,11 @@
 <?php
 
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+/* --------------------------------------------------
+  Projet MOOWSE
+  Fichier de script
+  Ajout/modification d'un administrateur de MooWse dans la base de données
+
+  Victor Enaud
+  Ecole Centrale de Nantes
+  -------------------------------------------------- */
 
