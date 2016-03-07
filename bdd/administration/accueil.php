@@ -12,16 +12,16 @@ if (isset($_SESSION['login'])) {
             <meta charset="UTF-8" />
         </head>
         <body>
-            
+
             <div class="navigation">
                 <h2>Bienvenue sur l'interface d'administration de MooWse</h2>
                 <div class="navigation2"><a href="">Modification d'un WebService</a></br></div>
                 <div class="navigation2"><a href="">Configuration de la base de données</a></br></div>
                 <div class="navigation2"><a href="users/getUsers.php">Gestion des administrateurs de MooWse</a></br></div>
                 <div class="navigation2"><a href="">Historique</a></br></div>
-            <form action="deconnexion.php" method="POST">
-                <p><button type="submit">Déconnexion</button></p>
-            </form>
+                <form action="deconnexion.php" method="POST">
+                    <p><button type="submit">Déconnexion</button></p>
+                </form>
                 <h6>Moteur de Webservices de l'Ecole Centrale de Nantes.</h6></div>
         </body>
     </html>

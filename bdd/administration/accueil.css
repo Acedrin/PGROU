@@ -44,3 +44,29 @@ a:hover {
     color: whitesmoke;
 
 }
+
+table {
+    width: 100%;
+    text-align: center;
+    border-collapse:collapse;
+}
+
+th {
+    background-color: darksalmon;
+    border:1px solid darkred;
+    color:white;
+}
+
+td {
+    border:1px solid darkred;
+}
+
+button {
+    background-color: darksalmon;
+    border: 1px solid darkred;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+}
+

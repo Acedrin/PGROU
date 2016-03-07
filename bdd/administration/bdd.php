@@ -13,7 +13,7 @@
  */
 
 try {
-    $serveur = new PDO('mysql:host=localhost;dbname=moowse;charset=utf8', 'root', '');
+    $bdd = new PDO('mysql:host=localhost;dbname=moowse;charset=utf8', 'root', '');
 } catch (Exception $e) {
     die('Erreur : ' . $e->getMessage());
 }

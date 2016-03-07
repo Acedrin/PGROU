@@ -8,9 +8,14 @@
   Victor Enaud
   Ecole Centrale de Nantes
   -------------------------------------------------- */
+
 // Booléen pour vérifier la bonne suppression de l'utilisateur
 $deleted = false;
 
+// Connexion à la base de données
+require("../bdd.php");
+
+// Vérification de la requête POST
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Initialisation de l'id utilisateur
     $user_id = 0;
@@ -21,11 +26,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     try {
-        // Connexion à la base de données
-        $bdd = new PDO('mysql:host=localhost;dbname=moowse;charset=utf8', 'root', '');
-
         // Suppression de l'utilisateur
-        $stmt = $bdd->prepare("DELETE FROM user where (:user_id)");
+        $stmt = $bdd->prepare("DELETE FROM user WHERE user_id=:user_id");
         $stmt->bindParam(':user_id', $user_id);
         $deleted = $stmt->execute();
 // Gestion des exceptions
@@ -34,7 +36,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 // Redirection vers la vue gestion_administrateurs.php
-//header('Content-Type: text/html; charset=utf-8');
-//header("Location:gestion_administrateurs.php");
-
-include_once('gestion_administrateurs.php');
+// Passage par le controlleur getUsers.php pour avoir la liste des administrateurs
+header("Location:getUsers.php");
+die();

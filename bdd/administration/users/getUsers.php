@@ -11,24 +11,21 @@
   -------------------------------------------------- */
 
 // Connexion à la base de données
-//include('bdd.php');
+require("../bdd.php");
 
 try {
-    // Connexion à la base de données
-    $bdd = new PDO('mysql:host=localhost;dbname=moowse;charset=utf8', 'root', '');
-
     // Récupération de tous les utilisateurs
-    $users = $bdd->prepare('SELECT * FROM user');
-    $users->setFetchMode(PDO::FETCH_ASSOC);
-    $users->execute();
-
+    $stmt = $bdd->prepare('SELECT * FROM user');
+    $stmt->setFetchMode(PDO::FETCH_ASSOC);
+    $stmt->execute();
+    
+    // Enregistrement du résultat dans un tableau
+    $users = $stmt->fetchAll();
+    
+    // Fermeture de la connexion
+    $stmt->closeCursor();
+    
 // Traitement des exceptions
 } catch (Exception $e) {
     die('Erreur : ' . $e->getMessage());
 }
-
-// Redirection vers la vue gestion_administrateurs.php
-//header('Content-Type: text/html; charset=utf-8');
-//header("Location:gestion_administrateurs.php");
-
-include_once('gestion_administrateurs.php');
