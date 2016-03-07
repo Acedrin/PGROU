@@ -15,7 +15,7 @@ class Logger{
 //            2-> db
 //            3-> file+db
 
-const LOGDEVICE=1;
+const LOGDEVICE=2;
 const LOGFILE="./prava.txt";
 
 /*public function stampa($txt){
@@ -45,11 +45,11 @@ public function Logging($ip,$nom,$function,$op){
             $this->fileLog($txt);
             break;
         case 2:
-            $this->dbLog($txt);
+            $this->dbLog($ip,$nom,$function,$op);
             break;
         case 3:
             $this->fileLog($txt);
-            $this->dbLog($txt);
+            $this->dbLog($ip,$nom,$function,$op);
             break;
     }
 }
@@ -59,8 +59,27 @@ private function fileLog($log){
     $myfile = file_put_contents(Logger::LOGFILE, $log.PHP_EOL , FILE_APPEND);
 }
 
-private function dbLog($log){
+private function createTable(){
+    echo "</br>createTable";
+    $connect=mysqli_connect("localhost","root","giano","log");
+    $val = mysqli_query($connect,'select 1 from `logTable`');
 
+    if(!$val){
+        $sql=mysqli_query($connect,'CREATE TABLE logTable (id INT AUTO_INCREMENT PRIMARY KEY NOT NULL, ip VARCHAR(15), nome VARCHAR(50), function VARCHAR(50),operation VARCHAR(50))');
+        if($sql) echo "</br>ok table created!";
+    }
+    mysqli_close($connect);
+}
+
+private function dbLog($ip,$nom,$function,$op){
+    echo "</br>dbLog";
+    $this->createTable();
+
+    $connect=mysqli_connect("localhost","root","giano","log");
+    $query="INSERT INTO `logTable`(`ip`, `nome`, `function`, `operation`) VALUES ('".$ip."','".$nom."','".$function."','".$op."')";
+    $sql = mysqli_query($connect,$query);
+    if($sql) echo "</br>inserted row";
+    else echo "</br>error query: ".$query;
 }
 
 }

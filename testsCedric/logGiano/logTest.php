@@ -7,6 +7,6 @@ $bar = new Logger(1,2);
 
 $bar->Logging("127.0.0.1","NOME","function","operation");
 
-echo "logTest";
+echo "</br>logTest";
 
 ?>
