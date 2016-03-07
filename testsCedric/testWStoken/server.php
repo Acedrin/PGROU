@@ -1,30 +1,43 @@
 <?php
 	class HelloWorld {
-		private $_token;
-		function setToken($token) {
-			$this->_token = $token;
-		}
-		function hello($name) {
-			$token = $this->_token;
-			$temps = 1;
-			//sleep($temps+1);
-			$answer = "ERROR !";
-			session_start();
-			if(isset($_SESSION["token"]) && isset($_SESSION["token_time"]) && isset($token)) {
-				if($_SESSION["token"] == $token) {
-					if($_SESSION["token_time"] >= (time() - $temps)) {
-						$answer = "Hello from " . $name;
+		private $_username = "login";
+		private $_password = "password";
+		private $_authenticated = false;
+		private $_tokenTTL = 1;
+		public function Security($Security) {
+			if(isset($Security->UsernameToken->Username) && isset($Security->UsernameToken->Password)) {
+				if($Security->UsernameToken->Username == $this->_username && $Security->UsernameToken->Password == $this->_password) {
+					$this->_authenticated = true;
+				}
+			} elseif(isset($Security->BinarySecurityToken)) {
+				//sleep($this->_tokenTTL+1);
+				session_start();
+				if(isset($_SESSION["token"]) && isset($_SESSION["token_time"])) {
+					if($_SESSION["token"] == $Security->BinarySecurityToken) {
+						if($_SESSION["token_time"] >= (time() - $this->_tokenTTL)) {
+							$this->_authenticated = true;
+						}
 					}
 				}
 			}
-			return $answer;
 		}
-		function getToken() {
-			session_start();
-			$token = uniqid(rand(), true);
-			$_SESSION["token"] = $token;
-			$_SESSION["token_time"] = time();
+		public function authenticate() {
+			$token = "ERROR !";
+			if ($this->_authenticated) {
+				session_start();
+				$time = time();
+				$token = uniqid(rand(), true);
+				$_SESSION["token"] = $token;
+				$_SESSION["token_time"] = $time;
+			}
 			return $token;
+		}
+		public function hello($name) {
+			$answer = "ERROR !";
+			if($this->_authenticated) {
+				$answer = "Hello from " . $name;
+			}
+			return $answer;
 		}
 	}
 	
