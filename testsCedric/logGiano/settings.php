@@ -11,7 +11,7 @@ $logFile="./prava.txt";
 
 //credentials for the database
 $db="log";
-$user="root";
+$user1="root";
 $passwd="giano";
 
 

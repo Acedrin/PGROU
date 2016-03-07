@@ -19,9 +19,9 @@ public function __construct(){
 
     $this->LOGDEVICE=$logDevice;
     $this->LOGFILE=$logFile;
-/*    $this->$DB=$db;
-    $this->$USER=$user;
-    $this->$PASSWD=$passwd;*/
+    $this->DB=$db;
+    $this->USER=$user;
+    $this->PASSWD=$passwd;
 
     echo "costruttore";
 }
