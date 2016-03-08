@@ -22,13 +22,12 @@ require("../bdd.php");
 if (isset($_SESSION['login'])) {
     try {
         // Récupération de tous les clients
-        $stmt = $bdd->prepare('SELECT * FROM clients');
+        $stmt = $bdd->prepare('SELECT * FROM client');
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
         $stmt->execute();
 
         // Enregistrement du résultat dans un tableau
         $clients = $stmt->fetchAll();
-
         // Fermeture de la connexion
         $stmt->closeCursor();
 
@@ -41,12 +40,19 @@ if (isset($_SESSION['login'])) {
     }
     try {
         // Récupération de toutes les modalités
-        $stmt = $bdd->prepare('SELECT * FROM clients');
+        $stmt = $bdd->prepare('SELECT * FROM modality');
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
         $stmt->execute();
-        
+
         // Enregistrement du résultat dans un tableau
-        $modalities = $stmt->fetchAll();
+        $modality_id = array();
+        $modality_name = array();
+        // Utilisation d'une boucle pour que le label des colonnes soit l'id
+        while ($row = $stmt->fetch()) {
+            $modality_id[] = $row['modality_id'];
+            $modality_name[] = $row['modality_name'];
+        }
+        $modalities = array_combine($modality_id, $modality_name);
 
         // Fermeture de la connexion
         $stmt->closeCursor();
