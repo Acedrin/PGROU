@@ -3,7 +3,7 @@
 /* --------------------------------------------------
   Projet MOOWSE
   Fichier de script
-  Sélection de tous les administrateurs de MooWse dans la base de données
+  Sélection de tous les clients de MooWse dans la base de données
 
   Victor Enaud
   Ecole Centrale de Nantes
@@ -21,20 +21,39 @@ require("../bdd.php");
 // Protection pour ne pas acceder au contrôleur sans être connecté
 if (isset($_SESSION['login'])) {
     try {
-        // Récupération de tous les utilisateurs
-        $stmt = $bdd->prepare('SELECT * FROM user');
+        // Récupération de tous les clients
+        $stmt = $bdd->prepare('SELECT * FROM clients');
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
         $stmt->execute();
 
         // Enregistrement du résultat dans un tableau
-        $users = $stmt->fetchAll();
+        $clients = $stmt->fetchAll();
 
         // Fermeture de la connexion
         $stmt->closeCursor();
 
 // Traitement des exceptions
     } catch (Exception $e) {
-        $message = array(false, "Erreur lors de la récupération des administrateurs./nVeuillez rééssayer");
+        $message = array(false, "Erreur lors de la récupération des clients./nVeuillez rééssayer");
+
+        // Enregistrement du message
+        $_SESSION['alert'] = $message;
+    }
+    try {
+        // Récupération de toutes les modalités
+        $stmt = $bdd->prepare('SELECT * FROM clients');
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $stmt->execute();
+        
+        // Enregistrement du résultat dans un tableau
+        $modalities = $stmt->fetchAll();
+
+        // Fermeture de la connexion
+        $stmt->closeCursor();
+
+// Traitement des exceptions
+    } catch (Exception $e) {
+        $message = array(false, "Erreur lors de la récupération des modalités./nVeuillez rééssayer" . $message[1]);
 
         // Enregistrement du message
         $_SESSION['alert'] = $message;
