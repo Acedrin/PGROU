@@ -93,25 +93,39 @@ if (isset($_SESSION['login'])) {
                 }
             } else {
                 try {
-                    // Ajout de l'utilisateur
-                    $stmt = $bdd->prepare("INSERT INTO  user(user_uid,  user_expirationdate) VALUES (:user_uid, :user_expirationdate)");
+                    // Vérification de l'unicité de l'uid
+                    $stmt = $bdd->prepare('SELECT user_uid FROM user WHERE user_uid = :user_uid');
+                    $stmt->setFetchMode(PDO::FETCH_ASSOC);
                     $stmt->bindParam(':user_uid', $user_uid);
-                    $stmt->bindParam(':user_expirationdate', $user_expirationdate);
-                    $added = $stmt->execute();
+                    $stmt->execute();
 
-                    // Fermeture de la connexion
+                    $rows = $stmt->fetch();
                     $stmt->closeCursor();
 
-                    if ($edited) {
-                        // L'administrateur a bien été édité
-                        $message = array(true, "L'administrateur a bien été ajouté");
+                    if ($rows['user_uid'] == $user_uid) {
+                        // L'uid ajouté existe déjà, refus
+                        $message = array(false, "Le login ajout&eacute; existe d&eacute;j&agrave; dans la base de donn&eacute;es");
                     } else {
-                        $message = array(false, "Erreur lors de l'ajout de l'administrateur/nVeuillez rééssayer");
+                        // Ajout de l'utilisateur
+                        $stmt = $bdd->prepare("INSERT INTO  user(user_uid,  user_expirationdate) VALUES (:user_uid, :user_expirationdate)");
+                        $stmt->bindParam(':user_uid', $user_uid);
+                        $stmt->bindParam(':user_expirationdate', $user_expirationdate);
+                        $added = $stmt->execute();
+
+                        // Fermeture de la connexion
+                        $stmt->closeCursor();
+
+                        if ($edited) {
+                            // L'administrateur a bien été édité
+                            $message = array(true, "L'administrateur a bien &eacute;t&eacute; ajout&eacute;");
+                        } else {
+                            $message = array(false, "Erreur lors de l'ajout de l'administrateur/nVeuillez r&eacute;&eacute;ssayer");
+                        }
                     }
 
                     // Gestion des exceptions
                 } catch (Exception $e) {
-                    $message = array(false, "Erreur lors de l'ajout de l'administrateur./nVeuillez rééssayer");
+                    $message = array(false, "Erreur lors de l'ajout de l'administrateur./nVeuillez r&eacute;&eacute;ssayer");
                 }
             }
         }
@@ -128,7 +142,7 @@ if (isset($_SESSION['login'])) {
 } else {
     // L'utilisateur n'est pas connecté
     // Il est redirigé vers la page d'accueil
-    $message = array(false, "Connectez-vous pour accéder à cette ressource");
+    $message = array(false, "Connectez-vous pour acc&eacute;der à cette ressource");
     $_SESSION['alert'] = $message;
 
     header('Content-Type: text/html; charset=utf-8');
