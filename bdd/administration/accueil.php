@@ -18,6 +18,7 @@ if (isset($_SESSION['login'])) {
                 <div class="navigation2"><a href="">Modification d'un WebService</a></br></div>
                 <div class="navigation2"><a href="">Configuration de la base de données</a></br></div>
                 <div class="navigation2"><a href="users/gestion_administrateurs.php">Gestion des administrateurs de MooWse</a></br></div>
+                <div class="navigation2"><a href="clients/gestion_clients.php">Gestion des clients de MooWse</a></br></div>
                 <div class="navigation2"><a href="">Historique</a></br></div>
                 <form action="deconnexion.php" method="POST">
                     <p><button type="submit">Déconnexion</button></p>
