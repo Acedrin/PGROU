@@ -2,23 +2,30 @@
 
 ini_set("soap.wsdl_cache_ttl", 1);
 
+	ini_set("display_startup_errors",true);
+	ini_set("display_errors",true);
+	ini_set("html_errors",true);
+	//ini_set("zend_extension","C:\xampp\php\ext\php_xdebug.dll"); // inutile, Ã  activer directement dans php.ini, avant de redÃ©marrer XAMPP
+	ini_set("log_errors",false);
+	error_reporting(E_ALL);
+
 //echo bin2hex(openssl_random_pseudo_bytes(8,true));
 //Ici le client entre ses mots de passe en brut (ce fichier n'est pas accessible par un pirate, seules les informations transmises le sont)
 
 $username = "client" . "," . "modalite";
 $password = "password";
 
-//Il faut maintenant hacher une première fois le mot de passe (on utilisera simplement sha1 pour le moment)
+//Il faut maintenant hacher une premiï¿½re fois le mot de passe (on utilisera simplement sha1 pour le moment)
 
 $hashedPassword=sha1($password);
 
-//génération d'un sel (aléatoire pour le moment, il est possible d'ajouter la date), le sel va permettre de brouiller le mot de passe aux yeux d'un HDM
+//gï¿½nï¿½ration d'un sel (alï¿½atoire pour le moment, il est possible d'ajouter la date), le sel va permettre de brouiller le mot de passe aux yeux d'un HDM
 
 $salt=password_hash();
 
-//cryatge du mot de passe avec la fonction crypt (incassable, mais récupérable)
+//cryatge du mot de passe avec la fonction crypt (incassable, mais rï¿½cupï¿½rable)
 
-$encryptedPassword=crypt($hashedPassword,$salt); //mot de passe crypté
+$encryptedPassword=crypt($hashedPassword,$salt); //mot de passe cryptï¿½
 
 $options = array(
     //"location" => NULL,
@@ -69,7 +76,7 @@ $actor = "http://schemas.xmlsoap.org/soap/actor/next"; // le destinataire est le
 //$actor = ""; // le destinataire est le dernier rÃ©cepteur (marche mais lance un warning)
 
 $Username = $username;
-$Password = $encryptedPassword; //on envoie le mot de passe crypté
+$Password = $encryptedPassword; //on envoie le mot de passe cryptï¿½
 $Salt=$salt; //ajout du sel
 
 $UsernameToken["Username"] = new SoapVar($Username, XSD_STRING, NULL, $wsse, NULL, $wsse);
