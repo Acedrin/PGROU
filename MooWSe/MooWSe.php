@@ -5,19 +5,24 @@
 		private $_tokenTimeToLive = 1;
 		public function Security($Security) {
                         //ajout d'une condition sur le sel
-			if(isset($Security->UsernameToken->Username) && isset($Security->UsernameToken->Password)&&isset($Security->UsernameToken->Salt)) {
-				//ligne ‡ commenter
+			//if(isset($Security->UsernameToken->Username) && isset($Security->UsernameToken->Password)&&isset($Security->UsernameToken->Salt)) {
+			if(isset($Security->UsernameToken->Username) && isset($Security->UsernameToken->Password)&&isset($Security->UsernameToken->Nonce)&&isset($Security->UsernameToken->Created)) {
+				//ligne ÔøΩ commenter
                                 list($client_name,$client_access) = explode(",",$Security->UsernameToken->Username); 
-				$client_password = $Security->UsernameToken->Password;
-                                //sel ajoutÈ
+				//$client_password = $Security->UsernameToken->Password;
+				$client_password_digest = $Security->UsernameToken->Password;
+                                //sel ajoutÔøΩ
                                 $client_salt=$Security->UsernameToken->Salt;
+				$client_nonce=$Security->UsernameToken->Nonce;
+				$client_created=$Security->UsernameToken->Created;
 				$client_IP = $_SERVER["REMOTE_ADDR"];
 				
 				//autorisations : (client,modalite,password,ip)->enregistr√©?
 				$registered = 
 					$client_name == "client" && 
 					$client_access == "modalite" && 
-					$client_password == "password" && 
+					//$client_password == "password" && 
+					$client_password_digest == base64_encode(sha1($client_nonce.$client_created.sha1("password"))) && 
 					$client_IP == "::1"
 				;
 				if($registered) {
@@ -55,8 +60,9 @@
 				$client_access = $_SESSION["access"];
 				$action = "authenticate";
 				
+				$crypto_strong = false;
 				while (!$crypto_strong) {
-					$token = bin2hex(openssl_random_pseudo_bytes(8,$crypto_strong));
+					$token = base64_encode(bin2hex(openssl_random_pseudo_bytes(16,$crypto_strong)));
 					$token_time = time();
 				}
 				
