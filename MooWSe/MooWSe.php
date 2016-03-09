@@ -4,9 +4,13 @@
 		private $_tokenChecked = false;
 		private $_tokenTimeToLive = 1;
 		public function Security($Security) {
-			if(isset($Security->UsernameToken->Username) && isset($Security->UsernameToken->Password)) {
-				list($client_name,$client_access) = explode(",",$Security->UsernameToken->Username); 
+                        //ajout d'une condition sur le sel
+			if(isset($Security->UsernameToken->Username) && isset($Security->UsernameToken->Password)&&isset($Security->UsernameToken->Salt)) {
+				//ligne à commenter
+                                list($client_name,$client_access) = explode(",",$Security->UsernameToken->Username); 
 				$client_password = $Security->UsernameToken->Password;
+                                //sel ajouté
+                                $client_salt=$Security->UsernameToken->Salt;
 				$client_IP = $_SERVER["REMOTE_ADDR"];
 				
 				//autorisations : (client,modalite,password,ip)->enregistrÃ©?
