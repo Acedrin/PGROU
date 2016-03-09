@@ -31,101 +31,102 @@ if (isset($_SESSION['login'])) {
     // Vérification de la requête POST
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Initialisation des variables du formulaire
-        $user_id = 0;
-        $user_uid = "";
-        $annee = 0;
-        $mois = 0;
-        $jour = 0;
-        $user_expirationdate = "";
+        $client_id = 0;
+        $client_name = "";
+        $client_ip = "";
+        $modality_id = 0;
+        $client_password = "";
 
-        // Vérification de la présence de l'id utilisateur à modifier le cas échéant
-        if (isset($_POST['user_id'])) {
-            $user_id = $_POST['user_id'];
+        // Vérification de la présence de l'id client à modifier le cas échéant
+        if (isset($_POST['client_id'])) {
+            $client_id = $_POST['client_id'];
         }
 
-        if (isset($_POST['user_uid'])) {
-            $user_uid = htmlspecialchars($_POST['user_uid']);
+        // Vérification du champ "client_name"
+        if (isset($_POST['client_name'])) {
+            $client_name = htmlspecialchars($_POST['client_name']);
 
-            // Vérification de si la date d'expération n'est pas fixée (donc infinie)
-            if ($_POST['annee'] == 0 && $_POST['mois'] == 0 && $_POST['jour'] == 0) {
-                $correct = true;
+            // Vérification du champ "client_ip"
+            if (isset($_POST['client_ip'])) {
+                $client_ip = htmlspecialchars($_POST['client_ip']);
 
-                // Sinon vérification qu'aucune des entrées n'est nulles
-            } else if ($_POST['annee'] != 0 && $_POST['mois'] != 0 && $_POST['jour'] != 0) {
-                $user_expirationdate = $_POST['annee'] . "-" . $_POST['mois'] . "-" . $_POST['jour'];
-                $user_expirationdate = htmlspecialchars($user_expirationdate);
-                $correct = true;
+                // Vérification du champ "modality_id"
+                if ($_POST['modality_id'] > 0) {
+                    $modality_id = htmlspecialchars($_POST['modality_id']);
+
+                    // Vérification de si les deux mots de passes sont égaux
+                    if (($_POST['client_password'] == $_POST['client_password_verification'])) {
+                        $client_password = htmlspecialchars($_POST['client_password']);
+                        $correct = true;
+                    } else {
+                        // Les deux mots de passes ne sont pas identiques
+                        $message = array(false, "Erreur - Les mots de passes tapés sont différents/nVeuillez recommencer");
+                    }
+                } else {
+                    // L'id de modalité n'est pas fixé
+                    $message = array(false, "Vous n'avez pas indiqué la modalité de connexion du client à ajouter");
+                }
             } else {
-                // Le format de la date n'est pas correct
-                $message = array(false, "La date d'expiration ne peut contenir un 0 si d'autres paramètres sont non nuls");
+                // L'ip n'est pas fixé
+                $message = array(false, "Vous n'avez pas indiqué l'ip du client à ajouter");
             }
         } else {
-            // l'uid n'est pas fixé
-            $message = array(false, "Vous n'avez pas indiqué le login de l'administrateur à ajouter");
+            // Le nom n'est pas fixé
+            $message = array(false, "Vous n'avez pas indiqué le nom du client à ajouter");
         }
 
         // Si le formulaire remis est correct, on enregistre
         if ($correct) {
             // Si l'id de l'utilisateur est supérieur à 0, c'est une modification
             // Sinon c'est un ajout
-            if ($user_id > 0) {
+            if ($client_id > 0) {
                 try {
-                    // Modification de l'utilisateur
-                    $stmt = $bdd->prepare("UPDATE user SET user_uid=:user_uid, user_expirationdate=:user_expirationdate WHERE user_id=:user_id");
-                    $stmt->bindParam(':user_uid', $user_uid);
-                    $stmt->bindParam(':user_expirationdate', $user_expirationdate);
-                    $stmt->bindParam(':user_id', $user_id);
+                    // Modification du client
+                    $stmt = $bdd->prepare("UPDATE client SET client_name=:client_name, client_ip=:client_ip, modality_id=:modality_id, client_password=:client_password WHERE client_id=:client_id");
+                    $stmt->bindParam(':client_name', $client_name);
+                    $stmt->bindParam(':client_ip', $client_ip);
+                    $stmt->bindParam(':modality_id', $modality_id);
+                    $stmt->bindParam(':client_password', $client_password);
+                    $stmt->bindParam(':client_id', $client_id);
                     $edited = $stmt->execute();
 
                     // Fermeture de la connexion
                     $stmt->closeCursor();
 
                     if ($edited) {
-                        // L'administrateur a bien été édité
-                        $message = array(true, "L'administrateur a bien été modifié");
+                        // Le client a bien été édité
+                        $message = array(true, "Le client a bien été modifié");
                     } else {
-                        $message = array(false, "Erreur lors de la modification de l'administrateur/nVeuillez rééssayer");
+                        $message = array(false, "Erreur lors de la modification du client/nVeuillez r&eacute;&eacute;ssayer");
                     }
 
                     // Gestion des exceptions
                 } catch (Exception $e) {
-                    $message = array(false, "Erreur lors de la modification de l'administrateur/nVeuillez rééssayer");
+                    $message = array(false, "Erreur lors de la modification du client/nVeuillez r&eacute;&eacute;ssayer");
                 }
             } else {
                 try {
-                    // Vérification de l'unicité de l'uid
-                    $stmt = $bdd->prepare('SELECT user_uid FROM user WHERE user_uid = :user_uid');
-                    $stmt->setFetchMode(PDO::FETCH_ASSOC);
-                    $stmt->bindParam(':user_uid', $user_uid);
-                    $stmt->execute();
+                    // Ajout du client
+                    $stmt = $bdd->prepare("INSERT INTO client(client_name, client_ip, modality_id, client_password) VALUES (:client_name, :client_ip, :modality_id, :client_password)");
+                    $stmt->bindParam(':client_name', $client_name);
+                    $stmt->bindParam(':client_ip', $client_ip);
+                    $stmt->bindParam(':modality_id', $modality_id);
+                    $stmt->bindParam(':client_password', $client_password);
+                    $stmt->bindParam(':client_id', $client_id);
 
-                    $rows = $stmt->fetch();
+                    // Fermeture de la connexion
                     $stmt->closeCursor();
 
-                    if ($rows['user_uid'] == $user_uid) {
-                        // L'uid ajouté existe déjà, refus
-                        $message = array(false, "Le login ajout&eacute; existe d&eacute;j&agrave; dans la base de donn&eacute;es");
+                    if ($edited) {
+                        // Le client a bien été ajouté
+                        $message = array(true, "Le client a bien &eacute;t&eacute; ajout&eacute;");
                     } else {
-                        // Ajout de l'utilisateur
-                        $stmt = $bdd->prepare("INSERT INTO  user(user_uid,  user_expirationdate) VALUES (:user_uid, :user_expirationdate)");
-                        $stmt->bindParam(':user_uid', $user_uid);
-                        $stmt->bindParam(':user_expirationdate', $user_expirationdate);
-                        $added = $stmt->execute();
-
-                        // Fermeture de la connexion
-                        $stmt->closeCursor();
-
-                        if ($edited) {
-                            // L'administrateur a bien été édité
-                            $message = array(true, "L'administrateur a bien &eacute;t&eacute; ajout&eacute;");
-                        } else {
-                            $message = array(false, "Erreur lors de l'ajout de l'administrateur/nVeuillez r&eacute;&eacute;ssayer");
-                        }
+                        $message = array(false, "Erreur lors de l'ajout du client/nVeuillez r&eacute;&eacute;ssayer");
                     }
 
                     // Gestion des exceptions
                 } catch (Exception $e) {
-                    $message = array(false, "Erreur lors de l'ajout de l'administrateur./nVeuillez r&eacute;&eacute;ssayer");
+                    $message = array(false, "Erreur lors de l'ajout du client/nVeuillez r&eacute;&eacute;ssayer");
                 }
             }
         }
@@ -142,7 +143,7 @@ if (isset($_SESSION['login'])) {
 } else {
     // L'utilisateur n'est pas connecté
     // Il est redirigé vers la page d'accueil
-    $message = array(false, "Connectez-vous pour acc&eacute;der à cette ressource");
+    $message = array(false, "Connectez-vous pour acc&eacute;der &agrave; cette ressource");
     $_SESSION['alert'] = $message;
 
     header('Content-Type: text/html; charset=utf-8');

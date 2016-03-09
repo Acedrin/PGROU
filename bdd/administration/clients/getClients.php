@@ -9,8 +9,6 @@
   Ecole Centrale de Nantes
   -------------------------------------------------- */
 
-// Démarrage de la session avant toute chose
-session_start();
 // Désactivation de l'affichage des erreurs
 ini_set("display_errors", 0);
 error_reporting(0);
@@ -20,23 +18,50 @@ require("../bdd.php");
 
 // Protection pour ne pas acceder au contrôleur sans être connecté
 if (isset($_SESSION['login'])) {
-    try {
-        // Récupération de tous les clients
-        $stmt = $bdd->prepare('SELECT * FROM client');
-        $stmt->setFetchMode(PDO::FETCH_ASSOC);
-        $stmt->execute();
 
-        // Enregistrement du résultat dans un tableau
-        $clients = $stmt->fetchAll();
-        // Fermeture de la connexion
-        $stmt->closeCursor();
+    // Vérification d'une requête GET (= demande d'information sur un client particulier)
+    // Si la valeur est 0, alors la requête est seulement d'avoir les modalities
+    if (isset($client_id) && $client_id != 0) {
+        
+        try {
+            // Récupération du clients
+            $stmt = $bdd->prepare('SELECT * FROM client WHERE client_id=:client_id');
+            $stmt->bindParam(':client_id', $client_id);
+            $stmt->setFetchMode(PDO::FETCH_ASSOC);
+            $stmt->execute();
+
+            // Enregistrement du résultat dans un tableau
+            $client = $stmt->fetchAll();
+            // Fermeture de la connexion
+            $stmt->closeCursor();
+
+            // Traitement des exceptions
+        } catch (Exception $e) {
+            $message = array(false, "Erreur lors de la r&eacute;cup&eacute;ration du client/nVeuillez r&eacute;essayer");
+
+            // Enregistrement du message
+            $_SESSION['alert'] = $message;
+        }
+    } else if (!isset($client_id)) {
+        // La requête cherche à obtenir tous les clients existants
+        try {
+            // Récupération de tous les clients
+            $stmt = $bdd->prepare('SELECT * FROM client');
+            $stmt->setFetchMode(PDO::FETCH_ASSOC);
+            $stmt->execute();
+
+            // Enregistrement du résultat dans un tableau
+            $clients = $stmt->fetchAll();
+            // Fermeture de la connexion
+            $stmt->closeCursor();
 
 // Traitement des exceptions
-    } catch (Exception $e) {
-        $message = array(false, "Erreur lors de la récupération des clients./nVeuillez rééssayer");
+        } catch (Exception $e) {
+            $message = array(false, "Erreur lors de la r&eacute;cup&eacute;ration des clients/nVeuillez r&eacute;essayer");
 
-        // Enregistrement du message
-        $_SESSION['alert'] = $message;
+            // Enregistrement du message
+            $_SESSION['alert'] = $message;
+        }
     }
     try {
         // Récupération de toutes les modalités
@@ -59,7 +84,7 @@ if (isset($_SESSION['login'])) {
 
 // Traitement des exceptions
     } catch (Exception $e) {
-        $message = array(false, "Erreur lors de la récupération des modalités./nVeuillez rééssayer" . $message[1]);
+        $message = array(false, "Erreur lors de la r&eacute;cup&eacute;ration des modalit&eacute;s/nVeuillez r&eacute;essayer/n" . $message[1]);
 
         // Enregistrement du message
         $_SESSION['alert'] = $message;
@@ -67,7 +92,7 @@ if (isset($_SESSION['login'])) {
 } else {
     // L'utilisateur n'est pas connecté
     // Il est redirigé vers la page d'accueil
-    $message = array(false, "Connectez-vous pour accéder à cette ressource");
+    $message = array(false, "Connectez-vous pour acc&eacute;der &agrave; cette ressource");
     $_SESSION['alert'] = $message;
 
     header('Content-Type: text/html; charset=utf-8');
