@@ -1,7 +1,7 @@
 <?php ini_set("soap.wsdl_cache_ttl",1);
 
 	//echo bin2hex(openssl_random_pseudo_bytes(8,true));
-
+        //salut c'est Quentin !
 	$username = "client".","."modalite";
 	$password = "password";
 	
