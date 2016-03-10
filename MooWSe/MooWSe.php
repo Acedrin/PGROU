@@ -38,8 +38,9 @@ class MooWSe {
                 //vérification des informations en base
                 $registered = $client_access == $client_database_modality &&
                         $client_database_encrypted_password = $client_password_digest &&
-                        (($$client_database_modality == "batch") || ($client_database_modality == "batch")) &&
-                        $client_IP = $client_database_ip;
+                        $client_IP = $client_database_ip &&
+                        (($client_database_modality == $client_access)); 
+                        
             } else { //le nom de client est incorrect
                 $registered = False;
             }
