@@ -62,7 +62,7 @@ if (isset($_SESSION['login'])) {
                             $correct = true;
                         } else {
                             // Les deux mots de passes ne sont pas identiques
-                            $message = array(false, "Erreur - Les mots de passes tapés sont différents/nVeuillez recommencer");
+                            $message = array(false, "Erreur - Les mots de passes tapés sont différents\nVeuillez recommencer");
                         }
                     } else {
                         $correct = true;
@@ -101,12 +101,12 @@ if (isset($_SESSION['login'])) {
                         // Le client a bien été édité
                         $message = array(true, "Le client a bien été modifié");
                     } else {
-                        $message = array(false, "Erreur lors de la modification du client/nVeuillez r&eacute;&eacute;ssayer");
+                        $message = array(false, "Erreur lors de la modification du client\nVeuillez r&eacute;&eacute;ssayer");
                     }
 
                     // Gestion des exceptions
                 } catch (Exception $e) {
-                    $message = array(false, "Erreur lors de la modification du client/nVeuillez r&eacute;&eacute;ssayer");
+                    $message = array(false, "Erreur lors de la modification du client\nVeuillez r&eacute;&eacute;ssayer");
                 }
             } else {
                 try {
@@ -125,12 +125,12 @@ if (isset($_SESSION['login'])) {
                         // Le client a bien été ajouté
                         $message = array(true, "Le client a bien &eacute;t&eacute; ajout&eacute;");
                     } else {
-                        $message = array(false, "Erreur lors de l'ajout du client/nVeuillez r&eacute;&eacute;ssayer");
+                        $message = array(false, "Erreur lors de l'ajout du client\nVeuillez r&eacute;&eacute;ssayer");
                     }
 
                     // Gestion des exceptions
                 } catch (Exception $e) {
-                    $message = array(false, "Erreur lors de l'ajout du client/nVeuillez r&eacute;&eacute;ssayer");
+                    $message = array(false, "Erreur lors de l'ajout du client\nVeuillez r&eacute;&eacute;ssayer");
                 }
             }
         }

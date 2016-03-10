@@ -84,12 +84,12 @@ if (isset($_SESSION['login'])) {
                         // L'administrateur a bien été édité
                         $message = array(true, "L'administrateur a bien été modifié");
                     } else {
-                        $message = array(false, "Erreur lors de la modification de l'administrateur/nVeuillez rééssayer");
+                        $message = array(false, "Erreur lors de la modification de l'administrateur\nVeuillez rééssayer");
                     }
 
                     // Gestion des exceptions
                 } catch (Exception $e) {
-                    $message = array(false, "Erreur lors de la modification de l'administrateur/nVeuillez rééssayer");
+                    $message = array(false, "Erreur lors de la modification de l'administrateur\nVeuillez rééssayer");
                 }
             } else {
                 try {
@@ -119,13 +119,13 @@ if (isset($_SESSION['login'])) {
                             // L'administrateur a bien été édité
                             $message = array(true, "L'administrateur a bien &eacute;t&eacute; ajout&eacute;");
                         } else {
-                            $message = array(false, "Erreur lors de l'ajout de l'administrateur/nVeuillez r&eacute;&eacute;ssayer");
+                            $message = array(false, "Erreur lors de l'ajout de l'administrateur\nVeuillez r&eacute;&eacute;ssayer");
                         }
                     }
 
                     // Gestion des exceptions
                 } catch (Exception $e) {
-                    $message = array(false, "Erreur lors de l'ajout de l'administrateur./nVeuillez r&eacute;&eacute;ssayer");
+                    $message = array(false, "Erreur lors de l'ajout de l'administrateur.\nVeuillez r&eacute;&eacute;ssayer");
                 }
             }
         }

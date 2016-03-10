@@ -15,7 +15,7 @@ session_start();
 ini_set("display_errors", 0);
 error_reporting(0);
 
-// Booléen pour vérifier la bonne suppression de l'utilisateur
+// Booléen pour vérifier la bonne suppression du client
 $deleted = false;
 
 // Connexion à la base de données
@@ -45,7 +45,7 @@ if (isset($_SESSION['login'])) {
 
         // Gestion des exceptions
         } catch (Exception $e) {
-            $message = array(false,"Une erreur a été rencontr&eacute;e lors de la suppression/nVeuillez r&eacute;essayer");
+            $message = array(false,"Une erreur a été rencontr&eacute;e lors de la suppression\nVeuillez r&eacute;essayer");
         }
     }
     
@@ -55,7 +55,7 @@ if (isset($_SESSION['login'])) {
         $message = array(true,"Le client a bien &eacute;t&eacute; supprim&eacute;");
     } else {
         // La suppression n'a pas été effectuée
-        $message = array(false,"Une erreur a été rencontr&eacute;e lors de la suppression/nVeuillez r&eacute;essayer");
+        $message = array(false,"Une erreur a été rencontr&eacute;e lors de la suppression\nVeuillez r&eacute;essayer");
     }
     
     // Enregistrement du message

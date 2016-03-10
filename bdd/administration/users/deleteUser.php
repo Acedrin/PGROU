@@ -25,13 +25,13 @@ require("../bdd.php");
 if (isset($_SESSION['login'])) {
 
     // Vérification de la requête POST
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if ($_SERVER["REQUEST_METHOD"] == "GET") {
         // Initialisation de l'id utilisateur
         $user_id = 0;
 
         // Vérification de la présence de l'id utilisateur à supprimer
-        if (isset($_POST['user_id'])) {
-            $user_id = $_POST['user_id'];
+        if (isset($_GET['user_id'])) {
+            $user_id = $_GET['user_id'];
         }
 
         try {
@@ -45,7 +45,7 @@ if (isset($_SESSION['login'])) {
 
         // Gestion des exceptions
         } catch (Exception $e) {
-            $message = array(false,"Une erreur a été rencontrée lors de la suppression./nVeuillez réessayer");
+            $message = array(false,"Une erreur a été rencontrée lors de la suppression.\nVeuillez réessayer");
         }
     }
     
@@ -55,7 +55,7 @@ if (isset($_SESSION['login'])) {
         $message = array(true,"L'utilisateur a bien été supprimé");
     } else {
         // La suppression n'a pas été effectuée
-        $message = array(false,"Une erreur a été rencontrée lors de la suppression./nVeuillez réessayer");
+        $message = array(false,"Une erreur a été rencontrée lors de la suppression.\nVeuillez réessayer");
     }
     
     // Enregistrement du message

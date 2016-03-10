@@ -24,7 +24,7 @@ if (isset($_SESSION['login'])) {
     if (isset($client_id) && $client_id != 0) {
         
         try {
-            // Récupération du clients
+            // Récupération du client
             $stmt = $bdd->prepare('SELECT * FROM client WHERE client_id=:client_id');
             $stmt->bindParam(':client_id', $client_id);
             $stmt->setFetchMode(PDO::FETCH_ASSOC);
@@ -37,7 +37,7 @@ if (isset($_SESSION['login'])) {
 
             // Traitement des exceptions
         } catch (Exception $e) {
-            $message = array(false, "Erreur lors de la r&eacute;cup&eacute;ration du client/nVeuillez r&eacute;essayer");
+            $message = array(false, "Erreur lors de la r&eacute;cup&eacute;ration du client\nVeuillez r&eacute;essayer");
 
             // Enregistrement du message
             $_SESSION['alert'] = $message;
@@ -57,7 +57,7 @@ if (isset($_SESSION['login'])) {
 
 // Traitement des exceptions
         } catch (Exception $e) {
-            $message = array(false, "Erreur lors de la r&eacute;cup&eacute;ration des clients/nVeuillez r&eacute;essayer");
+            $message = array(false, "Erreur lors de la r&eacute;cup&eacute;ration des clients\nVeuillez r&eacute;essayer");
 
             // Enregistrement du message
             $_SESSION['alert'] = $message;
@@ -84,7 +84,7 @@ if (isset($_SESSION['login'])) {
 
 // Traitement des exceptions
     } catch (Exception $e) {
-        $message = array(false, "Erreur lors de la r&eacute;cup&eacute;ration des modalit&eacute;s/nVeuillez r&eacute;essayer/n" . $message[1]);
+        $message = array(false, "Erreur lors de la r&eacute;cup&eacute;ration des modalit&eacute;s\nVeuillez r&eacute;essayer\n" . $message[1]);
 
         // Enregistrement du message
         $_SESSION['alert'] = $message;

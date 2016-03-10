@@ -23,6 +23,9 @@ if (isset($_SESSION['login'])) {
         $client_id = 0;
         require("getClients.php");
     }
+    print_r($_SESSION['alert']);
+    // Remise à zéro de la variable d'alerte
+    $_SESSION['alert'] = "";
     ?>
     <!DOCTYPE html>
     <html lang="fr-fr">
@@ -85,7 +88,7 @@ if (isset($_SESSION['login'])) {
                         <br />
 
                         <a href="gestion_clients.php"><button type="button">Annuler</button></a>
-                        <button type="button" onclick="validerFormulaire(1)">Valider</button>
+                        <button type="button" onclick="validerFormulaireClient(1)">Valider</button>
                     </form>
                     <?php
                 } else {
@@ -137,7 +140,7 @@ if (isset($_SESSION['login'])) {
                         <br />
 
                         <a href="gestion_clients.php"><button type="button">Annuler</button></a>
-                        <button type="button" onclick="validerFormulaire(2)">Valider</button>
+                        <button type="button" onclick="validerFormulaireClient(2)">Valider</button>
                     </form>
                     <?php
                 }
