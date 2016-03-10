@@ -11,8 +11,8 @@
 // Démarrage de la session avant toute chose
 session_start();
 // Désactivation de l'affichage des erreurs
-//ini_set("display_errors", 0);
-//error_reporting(0);
+ini_set("display_errors", 0);
+error_reporting(0);
 
 if (isset($_SESSION['login'])) {
     // Vérification de si un paramètre a été donné (=modification d'un client)
@@ -32,46 +32,6 @@ if (isset($_SESSION['login'])) {
             <title>MooWse - Ajout/modification d'un client</title>
         </head>
         <body>
-            <script type="text/javascript">
-                // Fonction pour valider le formulaire, vérifiant que les champs sont bien remplis
-                function validerFormulaire(){
-                    var alerte = "";
-                    if (!document.getElementsByName('client_name')[0].value.length > 0) {
-                        alerte += "Veuillez indiquer le nom du client !\n";
-                        document.getElementsByName('client_name')[0].style.backgroundColor = '#FF9900';
-                        document.getElementsByName('client_name')[0].style.color = '#000000';
-                    }
-                    if (!document.getElementsByName('client_ip')[0].value.length > 0) {
-                        alerte += "Veuillez indiquer l'ip du client !\n";
-                        document.getElementsByName('client_ip')[0].style.backgroundColor = '#FF9900';
-                        document.getElementsByName('client_ip')[0].style.color = '#000000';
-                    }
-                    if (!document.getElementsByName('modality_id')[0].value = 0) {
-                        alerte += "Veuillez indiquer le mode de connexion du client !\n";
-                        document.getElementsByName('modality_id')[0].style.backgroundColor = '#FF9900';
-                        document.getElementsByName('modality_id')[0].style.color = '#000000';
-                    }
-//                    if (type == 2) {
-//                        if (document.getElementsByName('client_password')[0].value != document.getElementsByName('client_password_verification')[0].value) {
-//                            alerte += "Veuillez renseigner deux fois le même mot de passe !\n";
-//                            document.getElementsByName('client_password')[0].reset();
-//                            document.getElementsByName('client_password_verification')[0].reset();
-//
-//                            document.getElementsByName('client_password')[0].style.backgroundColor = '#FF9900';
-//                            document.getElementsByName('client_password')[0].style.color = '#000000';
-//                            document.getElementsByName('client_password_verification')[0].style.backgroundColor = '#FF9900';
-//                            document.getElementsByName('client_password_verification')[0].style.color = '#000000';
-//                        }
-//                    }
-
-                    if (alerte == "") {
-                        document.getElementsByName('formAdd')[0].submit();
-                    } else {
-                        alert(alerte);
-                    }
-                }
-            </script>
-
             <div class="navigation">
                 <h1>Espace Administration de MooWse</h1>
                 <h2>Ajout/modification d'un client</h2>
@@ -85,6 +45,8 @@ if (isset($_SESSION['login'])) {
                     ?>
                     <form name="formAdd" action="addClient.php" method="POST">
 
+                        <input type="hidden" name="client_id" id="client_id" value="<?php print_r($client[0]['client_id']) ?>"/>
+                        
                         <label for="client_name">Nom du client :</label>
                         <input type="text" name="client_name" id="client_name" value="<?php print_r($client[0]['client_name']) ?>" placeholder="Nom" required/>
 
@@ -123,7 +85,7 @@ if (isset($_SESSION['login'])) {
                         <br />
 
                         <a href="gestion_clients.php"><button type="button">Annuler</button></a>
-                        <button type="button" onclick="validerFormulaire()">Valider</button>
+                        <button type="button" onclick="validerFormulaire(1)">Valider</button>
                     </form>
                     <?php
                 } else {
@@ -175,12 +137,14 @@ if (isset($_SESSION['login'])) {
                         <br />
 
                         <a href="gestion_clients.php"><button type="button">Annuler</button></a>
-                        <button type="button" onclick="validerFormulaire()">Valider</button>
+                        <button type="button" onclick="validerFormulaire(2)">Valider</button>
                     </form>
                     <?php
                 }
                 ?>
             </div>
+            
+            <script type="text/javascript" src="../js/functions.js"></script>
         </body>
     </html>
     <?php

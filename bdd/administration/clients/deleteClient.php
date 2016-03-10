@@ -24,14 +24,14 @@ require("../bdd.php");
 // Protection pour ne pas acceder au contrôleur sans être connecté
 if (isset($_SESSION['login'])) {
 
-    // Vérification de la requête POST
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Vérification de la requête GET
+    if ($_SERVER["REQUEST_METHOD"] == "GET") {
         // Initialisation de l'id client
         $client_id = 0;
 
         // Vérification de la présence de l'id client à supprimer
-        if (isset($_POST['client_id'])) {
-            $client_id = $_POST['client_id'];
+        if (isset($_GET['client_id'])) {
+            $client_id = $_GET['client_id'];
         }
 
         try {

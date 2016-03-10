@@ -54,13 +54,18 @@ if (isset($_SESSION['login'])) {
                 if ($_POST['modality_id'] > 0) {
                     $modality_id = htmlspecialchars($_POST['modality_id']);
 
-                    // Vérification de si les deux mots de passes sont égaux
-                    if (($_POST['client_password'] == $_POST['client_password_verification'])) {
-                        $client_password = htmlspecialchars($_POST['client_password']);
-                        $correct = true;
+                    // Si c'est ajout, vérification du mot de passe
+                    if (!isset($client_id)) {
+                        // Vérification si les deux mots de passes sont égaux
+                        if (($_POST['client_password'] == $_POST['client_password_confirmation'])) {
+                            $client_password = htmlspecialchars($_POST['client_password']);
+                            $correct = true;
+                        } else {
+                            // Les deux mots de passes ne sont pas identiques
+                            $message = array(false, "Erreur - Les mots de passes tapés sont différents/nVeuillez recommencer");
+                        }
                     } else {
-                        // Les deux mots de passes ne sont pas identiques
-                        $message = array(false, "Erreur - Les mots de passes tapés sont différents/nVeuillez recommencer");
+                        $correct = true;
                     }
                 } else {
                     // L'id de modalité n'est pas fixé
@@ -82,11 +87,10 @@ if (isset($_SESSION['login'])) {
             if ($client_id > 0) {
                 try {
                     // Modification du client
-                    $stmt = $bdd->prepare("UPDATE client SET client_name=:client_name, client_ip=:client_ip, modality_id=:modality_id, client_password=:client_password WHERE client_id=:client_id");
+                    $stmt = $bdd->prepare("UPDATE client SET client_name=:client_name, client_ip=:client_ip, modality_id=:modality_id WHERE client_id=:client_id");
                     $stmt->bindParam(':client_name', $client_name);
                     $stmt->bindParam(':client_ip', $client_ip);
                     $stmt->bindParam(':modality_id', $modality_id);
-                    $stmt->bindParam(':client_password', $client_password);
                     $stmt->bindParam(':client_id', $client_id);
                     $edited = $stmt->execute();
 
@@ -112,12 +116,12 @@ if (isset($_SESSION['login'])) {
                     $stmt->bindParam(':client_ip', $client_ip);
                     $stmt->bindParam(':modality_id', $modality_id);
                     $stmt->bindParam(':client_password', $client_password);
-                    $stmt->bindParam(':client_id', $client_id);
+                    $added = $stmt->execute();
 
                     // Fermeture de la connexion
                     $stmt->closeCursor();
 
-                    if ($edited) {
+                    if ($added) {
                         // Le client a bien été ajouté
                         $message = array(true, "Le client a bien &eacute;t&eacute; ajout&eacute;");
                     } else {
