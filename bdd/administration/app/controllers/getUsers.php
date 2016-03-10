@@ -14,7 +14,7 @@ ini_set("display_errors", 0);
 error_reporting(0);
 
 // Connexion à la base de données
-require("../bdd.php");
+require("bdd.php");
 
 // Protection pour ne pas acceder au contrôleur sans être connecté
 if (isset($_SESSION['login'])) {
@@ -68,5 +68,5 @@ if (isset($_SESSION['login'])) {
     $_SESSION['alert'] = $message;
 
     header('Content-Type: text/html; charset=utf-8');
-    header("Location:index.html");
+    header("Location:/index.html");
 }

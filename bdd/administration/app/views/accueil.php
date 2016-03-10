@@ -8,7 +8,7 @@ if (isset($_SESSION['login'])) {
     <html lang="fr-fr">
         <head>
             <title>MooWse - Accueil Administration</title>
-            <link href="accueil.css" type="text/css" rel="stylesheet" />
+            <link href="/public/css/accueil.css" type="text/css" rel="stylesheet" />
             <meta charset="UTF-8" />
         </head>
         <body>
@@ -17,10 +17,10 @@ if (isset($_SESSION['login'])) {
                 <h2>Bienvenue sur l'interface d'administration de MooWse</h2>
                 <div class="navigation2"><a href="">Modification d'un WebService</a></br></div>
                 <div class="navigation2"><a href="">Configuration de la base de données</a></br></div>
-                <div class="navigation2"><a href="users/gestion_administrateurs.php">Gestion des administrateurs de MooWse</a></br></div>
-                <div class="navigation2"><a href="clients/gestion_clients.php">Gestion des clients de MooWse</a></br></div>
+                <div class="navigation2"><a href="/app/views/gestion_administrateurs.php">Gestion des administrateurs de MooWse</a></br></div>
+                <div class="navigation2"><a href="/app/views/gestion_clients.php">Gestion des clients de MooWse</a></br></div>
                 <div class="navigation2"><a href="">Historique</a></br></div>
-                <form action="deconnexion.php" method="POST">
+                <form action="/app/controllers/deconnexion.php" method="POST">
                     <p><button type="submit">Déconnexion</button></p>
                 </form>
                 <h6>Moteur de Webservices de l'Ecole Centrale de Nantes.</h6></div>
@@ -29,6 +29,6 @@ if (isset($_SESSION['login'])) {
     <?php
 } else {
     header('Content-Type: text/html; charset=utf-8');
-    header("Location:index.html");
+    header("Location:/index.html");
 }
 ?>

@@ -1,8 +1,11 @@
-/*
+/* --------------------------------------------------
+  Projet MOOWSE
+  Fichier css
+  CSS de la page de login
 
-Style Sheet by Jean-Yves Martin
-
-*/
+  Quentin Payet
+  Ecole Centrale de Nantes
+  -------------------------------------------------- */
 
 body {
     background-color:brown; 
@@ -16,7 +19,7 @@ form {
     border-radius: 5px;
     box-shadow: 0  2px 5px rgba(0,0,0,.3);
     text-align: center;
-    background-image: url("elan.jpg");
+    background-image: url("/public/img/elan.jpg");
     background-repeat: no-repeat;
     background-position: top left;
 }

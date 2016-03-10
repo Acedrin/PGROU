@@ -23,7 +23,7 @@ $edited = false;
 $correct = false;
 
 // Connexion à la base de données
-require("../bdd.php");
+require("bdd.php");
 
 // Protection pour ne pas acceder au contrôleur sans être connecté
 if (isset($_SESSION['login'])) {
@@ -142,7 +142,7 @@ if (isset($_SESSION['login'])) {
     // Redirection vers la vue gestion_administrateurs.php
     // Passage par le controlleur getUsers.php pour avoir la liste des administrateurs
     header('Content-Type: text/html; charset=utf-8');
-    header("Location:gestion_clients.php");
+    header("Location:/app/views/gestion_clients.php");
     die();
 } else {
     // L'utilisateur n'est pas connecté
@@ -151,5 +151,6 @@ if (isset($_SESSION['login'])) {
     $_SESSION['alert'] = $message;
 
     header('Content-Type: text/html; charset=utf-8');
-    header("Location:index.html");
+    header("Location:/index.html");
+    
 }

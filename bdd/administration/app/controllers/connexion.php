@@ -9,7 +9,8 @@
   Ecole Centrale de Nantes
   -------------------------------------------------- */
 
-require 'vendor/autoload.php';
+require ("../../vendor/autoload.php");
+require("bdd.php");
 
 // on desactive l'affichage des erreurs pour ameliorer la securite et l'ergonomie
 
@@ -44,13 +45,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($LDAPBind_User) {
             // couple identifiant/login reconnu par LDAP
             // dans ce cas controle au niveau de la base de donnees
-            try {
-                // On se connecte à MySQL
-                $bdd = new PDO('mysql:host=localhost;dbname=moowse;charset=utf8', 'root', '');
-            } catch (Exception $e) {
-                // En cas d'erreur, on affiche un message et on arrête tout
-                die('Erreur : ' . $e->getMessage());
-            }
             $query = $bdd->prepare('SELECT user_uid FROM user WHERE user_uid=?');
             $query->execute(array($login));
             $rows = $query->fetch();
@@ -70,11 +64,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 if ($restart) {
     // La page
     header('Content-Type: text/html; charset=utf-8');
-    include "index.html";
+    include "/index.html";
 } else {
     // Connexion valide
-// redirection vers la page base.html
+    // redirection vers la page base.html
     header('Content-Type: text/html; charset=utf-8');
-    header("Location:accueil.php");
+    header("Location:/app/views/accueil.php");
 }
 ?>
