@@ -12,8 +12,11 @@
 //echo bin2hex(openssl_random_pseudo_bytes(8,true));
 //Ici le client entre ses mots de passe en brut (ce fichier n'est pas accessible par un pirate, seules les informations transmises le sont)
 
-$username = "client" . "," . "modalite";
-$password = "password";
+$username1 = "client1" . "," . "modalite1";
+$password1 = "password";
+
+$username2 = "client2" . "," . "modalite2";
+$password2 = "password";
 
 //Il faut maintenant hacher une premi�re fois le mot de passe (on utilisera simplement sha1 pour le moment)
 
@@ -79,7 +82,7 @@ $actor = "http://schemas.xmlsoap.org/soap/actor/next"; // le destinataire est le
 //$actor = "http://localhost/github/PGROU/testsCedric/testWStoken/server.php"; // le destinataire est ce récepteur (ne marche pas)
 //$actor = ""; // le destinataire est le dernier récepteur (marche mais lance un warning)
 
-$Username = $username;
+$Username = $username1;
 //$Password = $encryptedPassword; //on envoie le mot de passe crypt�
 //$Salt=$salt; //ajout du sel
 $crypto_strong = false;
@@ -87,20 +90,21 @@ while (!$crypto_strong) {
 	$Nonce = base64_encode(bin2hex(openssl_random_pseudo_bytes(16,$crypto_strong)));
 	$Created = time();
 }
-$Password = base64_encode(sha1($Nonce.$Created.sha1($password)));
+$Password = base64_encode(sha1($Nonce.$Created.sha1($password1)));
 
-$UsernameToken["Username"] = new SoapVar($Username, XSD_STRING, NULL, $wsse, NULL, $wsse);
+$UsernameToken = [];
+$UsernameToken["Username"] = new SoapVar($Username, XSD_STRING, NULL, $wsse, "Username", $wsse);
 //$UsernameToken["Password"] = new SoapVar($Password, XSD_STRING, "PasswordText", $wsse, NULL, $wsse);
 //$UsernameToken["Password"] = new SoapVar($Password, XSD_STRING, "PasswordText", $wsse, NULL, $wsse);
-$UsernameToken["Password"] = new SoapVar($Password, XSD_STRING, "PasswordDigest", $wsse, NULL, $wsse);
+$UsernameToken["Password"] = new SoapVar($Password, XSD_STRING, "PasswordDigest", $wsse, "Password", $wsse);
 //il faut aussi envoyer le sel
 //$UsernameToken["Salt"] = new SoapVar($Salt, XSD_STRING, "SaltText", $wsse, NULL, $wsse);
-$UsernameToken["Nonce"] = new SoapVar($Nonce, XSD_STRING, "Base64Binary", $wsse, NULL, $wsse);
-$UsernameToken["Created"] = new SoapVar($Created, XSD_STRING, NULL, $wsu, NULL, $wsu);
+$UsernameToken["Nonce"] = new SoapVar($Nonce, XSD_STRING, "Base64Binary", $wsse, "Nonce", $wsse);
+$UsernameToken["Created"] = new SoapVar($Created, XSD_STRING, NULL, $wsu, "Created", $wsu);
 
 $Security = array();
-$Security["UsernameToken"] = new SoapVar($UsernameToken, SOAP_ENC_OBJECT, NULL, $wsse, NULL, $wsse);
-$Security = new SoapVar($Security, SOAP_ENC_OBJECT, NULL, $wsse, NULL, $wsse);
+$Security["UsernameToken"] = new SoapVar($UsernameToken, SOAP_ENC_OBJECT, NULL, $wsse, "UsernameToken", $wsse);
+$Security = new SoapVar($Security, SOAP_ENC_OBJECT, NULL, $wsse, "Security", $wsse);
 $Header = array();
 $Header[] = new SoapHeader($wsse, "Security", $Security, $mustUnderstand, $actor);
 $MooWSe_client->__setSoapHeaders(NULL);
@@ -109,18 +113,65 @@ $MooWSe_client->__setSoapHeaders($Header);
 //print_r_pre($Header);
 
 try {
-    $token = $MooWSe_client->authenticate();
+    $token1 = $MooWSe_client->authenticate();
 } catch (SoapFault $fault) {
     trigger_error("SOAP Fault: (faultcode: {$fault->faultcode}, faultstring: {$fault->faultstring})", E_USER_ERROR);
 }
 
 echo getLastHTTPDialogue($MooWSe_client);
-echo "<pre>" . htmlspecialchars($token) . "</pre>";
+echo "<pre>" . htmlspecialchars($token1) . "</pre>";
+
+
+$Username = $username2;
+//$Password = $encryptedPassword; //on envoie le mot de passe crypt�
+//$Salt=$salt; //ajout du sel
+$crypto_strong = false;
+while (!$crypto_strong) {
+	$Nonce = base64_encode(bin2hex(openssl_random_pseudo_bytes(16,$crypto_strong)));
+	$Created = time();
+}
+$Password = base64_encode(sha1($Nonce.$Created.sha1($password2)));
+
+$UsernameToken = [];
+$UsernameToken["Username"] = new SoapVar($Username, XSD_STRING, NULL, $wsse, "Username", $wsse);
+//$UsernameToken["Password"] = new SoapVar($Password, XSD_STRING, "PasswordText", $wsse, NULL, $wsse);
+//$UsernameToken["Password"] = new SoapVar($Password, XSD_STRING, "PasswordText", $wsse, NULL, $wsse);
+$UsernameToken["Password"] = new SoapVar($Password, XSD_STRING, "PasswordDigest", $wsse, "Password", $wsse);
+//il faut aussi envoyer le sel
+//$UsernameToken["Salt"] = new SoapVar($Salt, XSD_STRING, "SaltText", $wsse, NULL, $wsse);
+$UsernameToken["Nonce"] = new SoapVar($Nonce, XSD_STRING, "Base64Binary", $wsse, "Nonce", $wsse);
+$UsernameToken["Created"] = new SoapVar($Created, XSD_STRING, NULL, $wsu, "Created", $wsu);
 
 $Security = array();
-$Security["BinarySecurityToken"] = new SoapVar($token, XSD_STRING, "Base64Binary", $wsse, NULL, $wsse);
-$Security = new SoapVar($Security, SOAP_ENC_OBJECT, NULL, $wsse, NULL, $wsse);
+$Security["UsernameToken"] = new SoapVar($UsernameToken, SOAP_ENC_OBJECT, NULL, $wsse, "UsernameToken", $wsse);
+$Security = new SoapVar($Security, SOAP_ENC_OBJECT, NULL, $wsse, "Security", $wsse);
 $Header = array();
+$Header[] = new SoapHeader($wsse, "Security", $Security, $mustUnderstand, $actor);
+$MooWSe_client->__setSoapHeaders(NULL);
+$MooWSe_client->__setSoapHeaders($Header);
+
+//print_r_pre($Header);
+
+try {
+    $token2 = $MooWSe_client->authenticate();
+} catch (SoapFault $fault) {
+    trigger_error("SOAP Fault: (faultcode: {$fault->faultcode}, faultstring: {$fault->faultstring})", E_USER_ERROR);
+}
+
+echo getLastHTTPDialogue($MooWSe_client);
+echo "<pre>" . htmlspecialchars($token2) . "</pre>";
+
+
+$Username = $username1;
+
+$UsernameToken = [];
+$UsernameToken["Username"] = new SoapVar($Username, XSD_STRING, NULL, $wsse, "Username", $wsse);
+
+$Security = [];
+$Security["UsernameToken"] = new SoapVar($UsernameToken, SOAP_ENC_OBJECT, NULL, $wsse, "UsernameToken", $wsse);
+$Security["BinarySecurityToken"] = new SoapVar($token1, XSD_STRING, "Base64Binary", $wsse, "BinarySecurityToken", $wsse);
+$Security = new SoapVar($Security, SOAP_ENC_OBJECT, NULL, $wsse, "Security", $wsse);
+$Header = [];
 $Header[] = new SoapHeader($wsse, "Security", $Security, $mustUnderstand, $actor);
 $MooWSe_client->__setSoapHeaders(NULL);
 $MooWSe_client->__setSoapHeaders($Header);
@@ -134,6 +185,32 @@ try {
 
 echo getLastHTTPDialogue($MooWSe_client);
 echo "<pre>" . htmlspecialchars($service_WSDL) . "</pre>";
+
+
+$Username = $username2;
+
+$UsernameToken = [];
+$UsernameToken["Username"] = new SoapVar($Username, XSD_STRING, NULL, $wsse, "Username", $wsse);
+
+$Security = [];
+$Security["UsernameToken"] = new SoapVar($UsernameToken, SOAP_ENC_OBJECT, NULL, $wsse, "UsernameToken", $wsse);
+$Security["BinarySecurityToken"] = new SoapVar($token2, XSD_STRING, "Base64Binary", $wsse, "BinarySecurityToken", $wsse);
+$Security = new SoapVar($Security, SOAP_ENC_OBJECT, NULL, $wsse, "Security", $wsse);
+$Header = [];
+$Header[] = new SoapHeader($wsse, "Security", $Security, $mustUnderstand, $actor);
+$MooWSe_client->__setSoapHeaders(NULL);
+$MooWSe_client->__setSoapHeaders($Header);
+
+try {
+    $service = "service";
+    $service_WSDL = htmlspecialchars_decode($MooWSe_client->getWSDL(new SoapParam($service, "service")), ENT_XML1);
+} catch (SoapFault $fault) {
+    trigger_error("SOAP Fault: (faultcode: {$fault->faultcode}, faultstring: {$fault->faultstring})", E_USER_ERROR);
+}
+
+echo getLastHTTPDialogue($MooWSe_client);
+echo "<pre>" . htmlspecialchars($service_WSDL) . "</pre>";
+
 
 sleep(2);
 

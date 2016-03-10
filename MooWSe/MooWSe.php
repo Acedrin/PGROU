@@ -1,5 +1,7 @@
 <?php
 	class MooWSe {
+		private $_client_name;
+		private $_client_access;
 		private $_clientAuthenticated = false;
 		private $_tokenChecked = false;
 		private $_tokenTimeToLive = 1;
@@ -19,29 +21,38 @@
 				
 				//autorisations : (client,modalite,password,ip)->enregistré?
 				$registered = 
-					$client_name == "client" && 
-					$client_access == "modalite" && 
+					($client_name == "client1" || $client_name == "client2") && 
+					($client_access == "modalite1" || $client_access == "modalite2") && 
 					//$client_password == "password" && 
 					$client_password_digest == base64_encode(sha1($client_nonce.$client_created.sha1("password"))) && 
 					$client_IP == "::1"
 				;
 				if($registered) {
 					
+					$this->_client_name = $client_name;
+					$this->_client_access = $client_access;
+					session_name($this->_client_name."_".$this->_client_access."_session");
 					session_start();
-					$_SESSION["name"] = $client_name;
-					$_SESSION["access"] = $client_access;
+					session_write_close();
 					
 					$this->_clientAuthenticated = true;
 				}
-			} elseif(isset($Security->BinarySecurityToken)) {
+			} elseif(isset($Security->UsernameToken->Username) && isset($Security->BinarySecurityToken)) {
+				list($client_name,$client_access) = explode(",",$Security->UsernameToken->Username); 
+				session_name($client_name."_".$client_access."_session");
 				session_start();
+				session_regenerate_id();
 				$token = $_SESSION["token"];
 				$token_time = $_SESSION["token_time"];
+				session_write_close();
 				
 				//sleep($this->_tokenTTL+1);
 				if(isset($token) && isset($token_time)) {
 					if($token == $Security->BinarySecurityToken) {
 						if($token_time >= (time() - $this->_tokenTimeToLive)) {
+							$this->_client_name = $client_name;
+							$this->_client_access = $client_access;
+							
 							$this->_tokenChecked = true;
 						}
 					}
@@ -55,9 +66,8 @@
 				//logs : (ip,date,client,modalite,action)->log
 				$client_IP = $_SERVER["REMOTE_ADDR"];
 				$time = time();
-				session_start();
-				$client_name = $_SESSION["name"];
-				$client_access = $_SESSION["access"];
+				$client_name = $this->_client_name;
+				$client_access = $this->_client_access;
 				$action = "authenticate";
 				
 				$crypto_strong = false;
@@ -66,9 +76,12 @@
 					$token_time = time();
 				}
 				
+				session_name($this->_client_name."_".$this->_client_access."_session");
 				session_start();
+				session_regenerate_id();
 				$_SESSION["token"] = $token;
 				$_SESSION["token_time"] = $time;
+				session_write_close();
 			}
 			return $token;
 		}
@@ -79,14 +92,13 @@
 				//logs : (ip,date,client,modalite,service,action)->log
 				$client_IP = $_SERVER["REMOTE_ADDR"];
 				$time = time();
-				session_start();
-				$client_name = $_SESSION["name"];
-				$client_access = $_SESSION["access"];
+				$client_name = $this->_client_name;
+				$client_access = $this->_client_access;
 				$service;
 				$action = "getWSDL";
 				
 				//autorisations : (client,modalite,ip)->fonctions
-				if ($client_name == "client" && $client_access == "modalite" && $client_IP == "::1") {
+				if (($client_name == "client1" || $client_name == "client2") && ($client_access == "modalite1" || $client_access == "modalite2") && $client_IP == "::1") {
 					$functions = ["fonction1","fonction2"];
 				}
 				
