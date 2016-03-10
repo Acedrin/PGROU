@@ -3,7 +3,7 @@
 /* --------------------------------------------------
   Projet MOOWSE
   Fichier de script
-  Sélection de tous les clients de MooWse dans la base de données
+  Sélection des modalités d'accès des clients de MooWse
 
   Victor Enaud
   Ecole Centrale de Nantes
@@ -19,65 +19,57 @@ require("bdd.php");
 // Protection pour ne pas acceder au contrôleur sans être connecté
 if (isset($_SESSION['login'])) {
 
-    // Vérification d'une requête GET (= demande d'information sur un client particulier)
-    // Si la valeur est 0, alors la requête est seulement d'avoir les modalities
-    if (isset($client_id) && $client_id != 0) {
+    // Vérification d'une requête GET (= demande d'information sur une modalité particulière)
+    if (isset($modality_id)) {
         
         try {
-            // Récupération du client
-            $stmt = $bdd->prepare('SELECT * FROM client WHERE client_id=:client_id');
-            $stmt->bindParam(':client_id', $client_id);
+            // Récupération de la modalité
+            $stmt = $bdd->prepare('SELECT * FROM modality WHERE modality_id=:modality_id');
+            $stmt->bindParam(':modality_id', $modality_id);
             $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $stmt->execute();
 
             // Enregistrement du résultat dans un tableau
-            $client = $stmt->fetchAll();
+            $modality = $stmt->fetchAll();
             // Fermeture de la connexion
             $stmt->closeCursor();
 
             // Traitement des exceptions
         } catch (Exception $e) {
-            $message = array(false, "Erreur lors de la r&eacute;cup&eacute;ration du client\nVeuillez r&eacute;essayer");
+            $message = array(false, "Erreur lors de la r&eacute;cup&eacute;ration de la modalit&eacute;\nVeuillez r&eacute;essayer");
 
             // Enregistrement du message
             $_SESSION['alert'] = $message;
         }
-    } else if (!isset($client_id)) {
-        // La requête cherche à obtenir tous les clients existants
+    } else {
+        // La requête cherche à obtenir toutes les modalités existantes
         try {
-            // Récupération de tous les clients
+            // Récupération de toutes les modalités
             $stmt = $bdd->prepare('SELECT * FROM client');
             $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $stmt->execute();
 
             // Enregistrement du résultat dans un tableau
-            $clients = $stmt->fetchAll();
+            $modalities = $stmt->fetchAll();
             // Fermeture de la connexion
             $stmt->closeCursor();
 
 // Traitement des exceptions
         } catch (Exception $e) {
-            $message = array(false, "Erreur lors de la r&eacute;cup&eacute;ration des clients\nVeuillez r&eacute;essayer");
+            $message = array(false, "Erreur lors de la r&eacute;cup&eacute;ration des modalit&eacute;s\nVeuillez r&eacute;essayer");
 
             // Enregistrement du message
             $_SESSION['alert'] = $message;
         }
-    }
-    try {
-        // Récupération de toutes les modalités
-        $stmt = $bdd->prepare('SELECT * FROM modality');
+        
+        try {
+        // Récupération du nombre de clients par modalité
+        $stmt = $bdd->prepare('SELECT COUNT( * ) as nb_clients FROM client GROUP BY modality_id');
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
         $stmt->execute();
 
         // Enregistrement du résultat dans un tableau
-        $modality_id = array();
-        $modality_name = array();
-        // Utilisation d'une boucle pour que le label des colonnes soit l'id
-        while ($row = $stmt->fetch()) {
-            $modality_id[] = $row['modality_id'];
-            $modality_name[] = $row['modality_name'];
-        }
-        $modalities = array_combine($modality_id, $modality_name);
+        $nb_clients = $stmt->fetchAll();
 
         // Fermeture de la connexion
         $stmt->closeCursor();
@@ -85,7 +77,7 @@ if (isset($_SESSION['login'])) {
 // Traitement des exceptions
     } catch (Exception $e) {
         $message = array(false, "Erreur lors de la r&eacute;cup&eacute;ration des modalit&eacute;s\nVeuillez r&eacute;essayer\n" . $message[1]);
-
+    }
         // Enregistrement du message
         $_SESSION['alert'] = $message;
     }

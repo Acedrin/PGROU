@@ -57,11 +57,11 @@ if (isset($_SESSION['login'])) {
                 $correct = true;
             } else {
                 // Le format de la date n'est pas correct
-                $message = array(false, "La date d'expiration ne peut contenir un 0 si d'autres paramètres sont non nuls");
+                $message = array(false, "La date d'expiration ne peut contenir un 0 si d'autres param&egrave;tres sont non nuls");
             }
         } else {
             // l'uid n'est pas fixé
-            $message = array(false, "Vous n'avez pas indiqué le login de l'administrateur à ajouter");
+            $message = array(false, "Vous n'avez pas indiqu&eacute; le login de l'administrateur à ajouter");
         }
 
         // Si le formulaire remis est correct, on enregistre
@@ -70,26 +70,39 @@ if (isset($_SESSION['login'])) {
             // Sinon c'est un ajout
             if ($user_id > 0) {
                 try {
-                    // Modification de l'utilisateur
-                    $stmt = $bdd->prepare("UPDATE user SET user_uid=:user_uid, user_expirationdate=:user_expirationdate WHERE user_id=:user_id");
+                    // Vérification de l'unicité de l'uid
+                    $stmt = $bdd->prepare('SELECT user_uid FROM user WHERE user_uid = :user_uid');
+                    $stmt->setFetchMode(PDO::FETCH_ASSOC);
                     $stmt->bindParam(':user_uid', $user_uid);
-                    $stmt->bindParam(':user_expirationdate', $user_expirationdate);
-                    $stmt->bindParam(':user_id', $user_id);
-                    $edited = $stmt->execute();
+                    $stmt->execute();
 
-                    // Fermeture de la connexion
+                    $rows = $stmt->fetch();
                     $stmt->closeCursor();
 
-                    if ($edited) {
-                        // L'administrateur a bien été édité
-                        $message = array(true, "L'administrateur a bien été modifié");
+                    if ($rows['user_uid'] == $user_uid) {
+                        // L'uid ajouté existe déjà, refus
+                        $message = array(false, "Le login ajout&eacute; existe d&eacute;j&agrave; dans la base de donn&eacute;es");
                     } else {
-                        $message = array(false, "Erreur lors de la modification de l'administrateur\nVeuillez rééssayer");
-                    }
+                        // Modification de l'utilisateur
+                        $stmt = $bdd->prepare("UPDATE user SET user_uid=:user_uid, user_expirationdate=:user_expirationdate WHERE user_id=:user_id");
+                        $stmt->bindParam(':user_uid', $user_uid);
+                        $stmt->bindParam(':user_expirationdate', $user_expirationdate);
+                        $stmt->bindParam(':user_id', $user_id);
+                        $edited = $stmt->execute();
 
+                        // Fermeture de la connexion
+                        $stmt->closeCursor();
+
+                        if ($edited) {
+                            // L'administrateur a bien été édité
+                            $message = array(true, "L'administrateur a bien &eacute;t&eacute; modifi&eacute;");
+                        } else {
+                            $message = array(false, "Erreur lors de la modification de l'administrateur\nVeuillez r&eacute;essayer");
+                        }
+                    }
                     // Gestion des exceptions
                 } catch (Exception $e) {
-                    $message = array(false, "Erreur lors de la modification de l'administrateur\nVeuillez rééssayer");
+                    $message = array(false, "Erreur lors de la modification de l'administrateur\nVeuillez r&eacute;essayer");
                 }
             } else {
                 try {
@@ -116,7 +129,7 @@ if (isset($_SESSION['login'])) {
                         $stmt->closeCursor();
 
                         if ($edited) {
-                            // L'administrateur a bien été édité
+                            // L'administrateur a bien été ajouté
                             $message = array(true, "L'administrateur a bien &eacute;t&eacute; ajout&eacute;");
                         } else {
                             $message = array(false, "Erreur lors de l'ajout de l'administrateur\nVeuillez r&eacute;&eacute;ssayer");
@@ -135,7 +148,6 @@ if (isset($_SESSION['login'])) {
     $_SESSION['alert'] = $message;
 
     // Redirection vers la vue gestion_administrateurs.php
-    // Passage par le controlleur getUsers.php pour avoir la liste des administrateurs
     header('Content-Type: text/html; charset=utf-8');
     header("Location:/app/views/gestion_administrateurs.php");
     die();
