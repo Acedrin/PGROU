@@ -6,7 +6,7 @@
 - 3 = log either in file and db*/
 $logDevice=3;
 
-//relative ora absolute path to the log file
+//relative or absolute path to the log file
 $userLog_file="./logs/userLog";
 $funcLog_file="./logs/funcLog";
 $errorLog_file="./logs/errorLog";
@@ -17,5 +17,15 @@ $user="root";
 $passwd="giano";
 $port="3306";
 
+/*LOG SPLITTING PARAMETERS
+When some log file reach the max size, it will be saved as logfile_n 
+and a new logfile will be created
+
+PARAMETERS:
+$max_filesize - max file size in MB for log files, for 
+
+*/
+$max_filesize=15;
+$variables="./settings.ini";
 
 ?>
