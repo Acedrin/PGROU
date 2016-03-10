@@ -24,20 +24,20 @@ require("../bdd.php");
 // Protection pour ne pas acceder au contrôleur sans être connecté
 if (isset($_SESSION['login'])) {
 
-    // Vérification de la requête POST
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        // Initialisation de l'id utilisateur
-        $user_id = 0;
+    // Vérification de la requête GET
+    if ($_SERVER["REQUEST_METHOD"] == "GET") {
+        // Initialisation de l'id client
+        $client_id = 0;
 
-        // Vérification de la présence de l'id utilisateur à supprimer
-        if (isset($_POST['user_id'])) {
-            $user_id = $_POST['user_id'];
+        // Vérification de la présence de l'id client à supprimer
+        if (isset($_GET['client_id'])) {
+            $client_id = $_GET['client_id'];
         }
 
         try {
             // Suppression de l'utilisateur
-            $stmt = $bdd->prepare("DELETE FROM user WHERE user_id=:user_id");
-            $stmt->bindParam(':user_id', $user_id);
+            $stmt = $bdd->prepare("DELETE FROM client WHERE client_id=:client_id");
+            $stmt->bindParam(':client_id', $client_id);
             $deleted = $stmt->execute();
 
             // Fermeture de la connexion
@@ -45,30 +45,30 @@ if (isset($_SESSION['login'])) {
 
         // Gestion des exceptions
         } catch (Exception $e) {
-            $message = array(false,"Une erreur a été rencontrée lors de la suppression./nVeuillez réessayer");
+            $message = array(false,"Une erreur a été rencontr&eacute;e lors de la suppression/nVeuillez r&eacute;essayer");
         }
     }
     
     // Enregistrement du message d'alerte
     if ($deleted) {
         // La suppression a bien été effectuée
-        $message = array(true,"L'utilisateur a bien été supprimé");
+        $message = array(true,"Le client a bien &eacute;t&eacute; supprim&eacute;");
     } else {
         // La suppression n'a pas été effectuée
-        $message = array(false,"Une erreur a été rencontrée lors de la suppression./nVeuillez réessayer");
+        $message = array(false,"Une erreur a été rencontr&eacute;e lors de la suppression/nVeuillez r&eacute;essayer");
     }
     
     // Enregistrement du message
     $_SESSION['alert'] = $message;
 
-    // Redirection vers la vue gestion_administrateurs.php
+    // Redirection vers la vue gestion_clients.php
     header('Content-Type: text/html; charset=utf-8');
     header("Location:gestion_clients.php");
     die();
 } else {
     // L'utilisateur n'est pas connecté
     // Il est redirigé vers la page d'accueil
-    $message = array(false,"Connectez-vous pour accéder à cette ressource");
+    $message = array(false,"Connectez-vous pour acc&eacute;der &agrave; cette ressource");
     $_SESSION['alert'] = $message;
     
     header('Content-Type: text/html; charset=utf-8');

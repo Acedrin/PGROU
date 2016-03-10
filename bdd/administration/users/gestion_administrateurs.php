@@ -174,7 +174,7 @@ if (isset($_SESSION['login'])) {
                                 </tr>
                                 <tr>
                                     <td>
-                                        <input type="text" size="20" name="user_uid" value="">
+                                        <input type="text" size="20" name="user_uid" placeholder="Login">
                                     </td>
                                     <td>
                                         <select name="jour">
