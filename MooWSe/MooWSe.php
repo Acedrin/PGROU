@@ -124,7 +124,7 @@ class MooWSe {
                 //connexion à la base de données 
                 $bdd = new PDO('mysql:host=localhost;dbname=webservices;charset=utf8', 'root', '', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
                 //appel des fonctions autorisées pour le client
-                $function_request = $BDD->query('SELECT function_name FROM function INNER JOIN access ON function.function_id=access.function_id
+                $function_request = $BDD->query('SELECT function.function_id FROM function INNER JOIN access ON function.function_id=access.function_id
                     INNER JOIN client ON access.client_id=client.client_id
                     INNER JOIN server ON server.server_id=function.server_id
                     WHERE client_name=\'' . $client_name . '\' ');
@@ -135,6 +135,7 @@ class MooWSe {
                 //creation d'un array
                 $functions = array($current_function);
                 while($current_function = $function_request->fetch()){
+                    //ajoute la fonction courante au array
                     array_push($functions,$current_function);
                 }                      
             }
