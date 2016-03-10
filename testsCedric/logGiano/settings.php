@@ -4,15 +4,18 @@
 - 1 = log in file
 - 2 = log in db
 - 3 = log either in file and db*/
-$logDevice=1;
+$logDevice=3;
 
 //relative ora absolute path to the log file
-$logFile="./prava.txt";
+$userLog_file="./logs/userLog";
+$funcLog_file="./logs/funcLog";
+$errorLog_file="./logs/errorLog";
 
 //credentials for the database
 $db="log";
-$user1="root";
+$user="root";
 $passwd="giano";
+$port="3306";
 
 
 ?>

@@ -2,10 +2,10 @@
 
 include('Logger.php');
 
-$bar = new Logger(1,2);
+$bar = new Logger();
 
 
-$bar->Logging("127.0.0.1","NOME","function","operation");
+$bar->LogError("NOME","127.0.0.1","token","error");
 
 echo "</br>logTest";
 

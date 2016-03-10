@@ -7,10 +7,15 @@ class Logger{
 //            3-> file+db
 
 private $LOGDEVICE;
-private $LOGFILE;
+private $USERLOG;
+private $FUNCLOG;
+private $ERRORLOG;
 private $DB;
 private $USER;
 private $PASSWD;
+private $PORT;
+
+private $time;
 
 
 public function __construct(){
@@ -18,65 +23,129 @@ public function __construct(){
     include 'settings.php';
 
     $this->LOGDEVICE=$logDevice;
-    $this->LOGFILE=$logFile;
+    $this->USERLOG=$userLog_file;
+    $this->FUNCLOG=$funcLog_file;
+    $this->ERRORLOG=$errorLog_file;
     $this->DB=$db;
     $this->USER=$user;
     $this->PASSWD=$passwd;
+    $this->PORT=$port;
 
     echo "costruttore";
 }
 
-public function Logging($ip,$nom,$function,$op){
+public function LogUser($login, $ip, $token){
+   
+    $this->time="[".date('Y/m/d - H:i:s', time())."]";
+    $txt=$this->time." ".$ip." ".$login." ".$token;
 
-    echo $this->LOGDEVICE;
-    echo $this->LOGFILE;
-
-
-    $time="[".date('Y/m/d - H:i:s', time())."]";
-    $txt=$time." ".$ip." ".$nom." ".$function." ".$op;
     echo "</br>".$txt;
     echo "</br>case";
+
     switch($this->LOGDEVICE){
         case 1:
         echo "</br>case 1";
-            $this->fileLog($txt);
+            $this->userLog_file($txt);
             break;
         case 2:
-            $this->dbLog($ip,$nom,$function,$op);
+           $this->userLog_db($login, $ip, $token);
             break;
         case 3:
-            $this->fileLog($txt);
-            $this->dbLog($ip,$nom,$function,$op);
+            $this->userLog_file($txt);
+            $this->userLog_db($login, $ip, $token);
             break;
     }
 }
 
-private function fileLog($log){
-    echo "</br>fileLog";
-    $myfile = file_put_contents($this->LOGFILE, $log.PHP_EOL , FILE_APPEND);
-}
+public function LogFunc($login, $ip, $token, $function){
+   
+    $this->time="[".date('Y/m/d - H:i:s', time())."]";
+    $txt=$this->time." ".$ip." ".$login." ".$token." ".$function;
 
-private function createTable(){
-    echo "</br>createTable";
-    $connect=mysqli_connect("localhost",$this->$USER,$this->$PASSWD,$this->$DB);
-    $val = mysqli_query($connect,'select 1 from `logTable`');
+    echo "</br>".$txt;
+    echo "</br>case";
 
-    if(!$val){
-        $sql=mysqli_query($connect,'CREATE TABLE logTable (id INT AUTO_INCREMENT PRIMARY KEY NOT NULL, time DATETIME, ip VARCHAR(15), nome VARCHAR(50), function VARCHAR(50),operation VARCHAR(50))');
-        if($sql) echo "</br>ok table created!";
+    switch($this->LOGDEVICE){
+        case 1:
+        echo "</br>case 1";
+            $this->funcLog_file($txt);
+            break;
+        case 2:
+            $this->funcLog_db($login, $ip, $token, $function);
+            break;
+        case 3:
+            $this->funcLog_file($txt);
+            $this->funcLog_db($login, $ip, $token, $function);
+            break;
     }
-    mysqli_close($connect);
 }
 
-private function dbLog($ip,$nom,$function,$op){
-    echo "</br>dbLog";
-    $this->createTable();
+public function LogError($login, $ip, $token, $error){
+   
+    $this->time="[".date('Y/m/d - H:i:s', time())."]";
+    $txt=$this->time." ".$ip." ".$login." ".$token." ".$error;
 
-    $connect=mysqli_connect("localhost",$this->$USER,$this->$PASSWD,$this->$DB);
-    $query="INSERT INTO `logTable`(`time`,`ip`, `nome`, `function`, `operation`) VALUES ( NOW(),'".$ip."','".$nom."','".$function."','".$op."')";
-    $sql = mysqli_query($connect,$query);
-    if($sql) echo "</br>inserted row";
-    else echo "</br>error query: ".$query;
+    echo "</br>".$txt;
+    echo "</br>case";
+
+    switch($this->LOGDEVICE){
+        case 1:
+        echo "</br>case 1";
+            $this->errorLog_file($txt);
+            break;
+        case 2:
+           $this->errorLog_db($login, $ip, $token,$error);
+            break;
+        case 3:
+            $this->errorLog_file($txt);
+            $this->errorLog_db($login, $ip, $token,$error);
+            break;
+    }
+}
+
+private function userLog_file($log){
+    echo "</br>fileLog";
+
+    $myfile = file_put_contents($this->USERLOG, $log.PHP_EOL , FILE_APPEND);
+}
+
+private function funcLog_file($log){
+    echo "</br>funcLog";
+
+    $myfile = file_put_contents($this->FUNCLOG, $log.PHP_EOL , FILE_APPEND);
+}
+
+private function errorLog_file($log){
+    echo "</br>errorLog";
+
+    $myfile = file_put_contents($this->ERRORLOG, $log.PHP_EOL , FILE_APPEND);
+}
+
+public function userLog_db($login, $ip, $token){
+    echo "</br>userLog_db";
+
+    $connect = new PDO('mysql:host=localhost;port='.$this->PORT.';dbname='.$this->DB, $this->USER, $this->PASSWD);
+
+    $connect->exec("INSERT INTO `userLog`(`userLog_time`,`userLog_ip`, `userLog_user`, `userLog_token`) VALUES ( NOW(),'".$ip."','".$login."','".$token."')");
+    $connect=null;
+}
+
+public function funcLog_db($login, $ip, $token, $function){
+    echo "</br>funcLog_db";
+
+    $connect = new PDO('mysql:host=localhost;port='.$this->PORT.';dbname='.$this->DB, $this->USER, $this->PASSWD);
+
+    $connect->exec("INSERT INTO `funcLog`(`funcLog_time`,`funcLog_ip`, `funcLog_user`, `funcLog_token`,`funcLog_func`) VALUES ( NOW(),'".$ip."','".$login."','".$token."','".$function."')");
+    $connect=null;
+}
+
+public function errorLog_db($login, $ip, $token, $error){
+    echo "</br>errorLog_db";
+
+    $connect = new PDO('mysql:host=localhost;port='.$this->PORT.';dbname='.$this->DB, $this->USER, $this->PASSWD);
+    
+    $connect->exec("INSERT INTO `errorLog`(`errorLog_time`,`errorLog_ip`, `errorLog_user`, `errorLog_token`,`errorLog_error`) VALUES ( NOW(),'".$ip."','".$login."','".$token."','".$error."')");
+    $connect=null;
 }
 
 }
