@@ -30,7 +30,7 @@ if (isset($_SESSION['login'])) {
     <!DOCTYPE html>
     <html lang="fr-fr">
         <head>
-            <link href="/public/css/accueil.css" type="text/css" rel="stylesheet" />
+            <link href="../../public/css/accueil.css" type="text/css" rel="stylesheet" />
             <meta charset="UTF-8" />
             <title>MooWse - Ajout/modification d'un client</title>
         </head>
@@ -46,7 +46,7 @@ if (isset($_SESSION['login'])) {
                 if (isset($client)) {
                     // Modification d'un client
                     ?>
-                    <form name="formAdd" action="/app/controllers/addClient.php" method="POST">
+                    <form name="formAdd" action="../controllers/addClient.php" method="POST">
 
                         <input type="hidden" name="client_id" id="client_id" value="<?php print_r($client[0]['client_id']) ?>"/>
                         
@@ -87,14 +87,14 @@ if (isset($_SESSION['login'])) {
                         <br />
                         <br />
 
-                        <a href="/app/views/gestion_clients.php"><button type="button">Annuler</button></a>
+                        <a href="gestion_clients.php"><button type="button">Annuler</button></a>
                         <button type="button" onclick="validerFormulaireClient(1)">Valider</button>
                     </form>
                     <?php
                 } else {
                     // Ajout d'un client
                     ?>
-                    <form name="formAdd" action="/app/controllers/addClient.php" method="POST">
+                    <form name="formAdd" action="../controllers/addClient.php" method="POST">
 
                         <label for="client_name">Nom du client :</label>
                         <input type="text" name="client_name" id="client_name" placeholder="Nom" required/>
@@ -139,7 +139,7 @@ if (isset($_SESSION['login'])) {
                         <br />
                         <br />
 
-                        <a href="/app/views/gestion_clients.php"><button type="button">Annuler</button></a>
+                        <a href="gestion_clients.php"><button type="button">Annuler</button></a>
                         <button type="button" onclick="validerFormulaireClient(2)">Valider</button>
                     </form>
                     <?php
@@ -147,12 +147,12 @@ if (isset($_SESSION['login'])) {
                 ?>
             </div>
             
-            <script type="text/javascript" src="/public/js/functions.js"></script>
+            <script type="text/javascript" src="../../public/js/functions.js"></script>
         </body>
     </html>
     <?php
 } else {
     header('Content-Type: text/html; charset=utf-8');
-    header("Location:/index.html");
+    header("Location:../../index.html");
 }
 ?>

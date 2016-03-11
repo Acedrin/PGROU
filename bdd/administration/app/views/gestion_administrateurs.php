@@ -23,7 +23,7 @@ if (isset($_SESSION['login'])) {
     <!DOCTYPE html>
     <html lang="fr-fr">
         <head>
-            <link href="/public/css/accueil.css" type="text/css" rel="stylesheet" />
+            <link href="../../public/css/accueil.css" type="text/css" rel="stylesheet" />
             <meta charset="UTF-8" />
             <title>MooWse - Gestion administrateurs</title>
         </head>
@@ -61,11 +61,11 @@ if (isset($_SESSION['login'])) {
                                     ?>
                                 </td>
                                 <td>
-                                    <a href="/app/views/ajout_user.php?user_id=<?php print_r($users[$i]['user_id']) ?>"><img src="/public/img/edit.png" title="Modifier l'administrateur" alt="Modifier"></a>
+                                    <a href="ajout_user.php?user_id=<?php print_r($users[$i]['user_id']) ?>"><img src="../../public/img/edit.png" title="Modifier l'administrateur" alt="Modifier"></a>
 
                                     &nbsp;
 
-                                    <a href="/app/controllers/deleteUser.php?user_id=<?php print_r($users[$i]['user_id']) ?>" onclick=""return confirm('Voulez vous vraiment supprimer l'administrateur <?php print_r($users[$i]['user_name']) ?>><img src="/public/img/delete.png" title="Supprimer l'administrateur" alt="Supprimer"></a>
+                                    <a href="../controllers/deleteUser.php?user_id=<?php print_r($users[$i]['user_id']) ?>" onclick=""return confirm('Voulez vous vraiment supprimer l'administrateur <?php print_r($users[$i]['user_name']) ?>><img src="../../public/img/delete.png" title="Supprimer l'administrateur" alt="Supprimer"></a>
                                 </td>
                             </tr>  
                             <?php
@@ -77,13 +77,13 @@ if (isset($_SESSION['login'])) {
                 <br />
                 <br />
 
-                <a href="/app/views/ajout_user.php"><button type="button">Ajouter un client</button></a>
+                <a href="ajout_user.php"><button type="button">Ajouter un client</button></a>
             </div>
         </body>
     </html>
     <?php
 } else {
     header('Content-Type: text/html; charset=utf-8');
-    header("Location:/index.html");
+    header("Location:../../index.html");
 }
 ?>

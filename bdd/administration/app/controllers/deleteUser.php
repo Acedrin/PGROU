@@ -63,7 +63,7 @@ if (isset($_SESSION['login'])) {
 
     // Redirection vers la vue gestion_administrateurs.php
     header('Content-Type: text/html; charset=utf-8');
-    header("Location:/app/views/gestion_administrateurs.php");
+    header("Location:../views/gestion_administrateurs.php");
     die();
 } else {
     // L'utilisateur n'est pas connecté
@@ -72,5 +72,5 @@ if (isset($_SESSION['login'])) {
     $_SESSION['alert'] = $message;
     
     header('Content-Type: text/html; charset=utf-8');
-    header("Location:/index.html");
+    header("Location:../../index.html");
 }

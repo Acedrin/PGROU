@@ -27,7 +27,7 @@ if (isset($_SESSION['login'])) {
     <!DOCTYPE html>
     <html lang="fr-fr">
         <head>
-            <link href="/public/css/accueil.css" type="text/css" rel="stylesheet" />
+            <link href="../../public/css/accueil.css" type="text/css" rel="stylesheet" />
             <meta charset="UTF-8" />
             <title>MooWse - Ajout/modification d'un administrateur</title>
         </head>
@@ -43,7 +43,7 @@ if (isset($_SESSION['login'])) {
                 if (isset($user)) {
                     // Modification d'un client
                     ?>
-                    <form name="formAdd" action="/app/controllers/addUser.php" method="POST">
+                    <form name="formAdd" action="../controllers/addUser.php" method="POST">
 
                         <input type="hidden" name="user_id" id="user_id" value="<?php print_r($user[0]['user_id']) ?>"/>
 
@@ -109,14 +109,14 @@ if (isset($_SESSION['login'])) {
                         <br />
                         <br />
 
-                        <a href="/app/views/gestion_administrateurs.php"><button type="button">Annuler</button></a>
+                        <a href="gestion_administrateurs.php"><button type="button">Annuler</button></a>
                         <button type="button" onclick="validerFormulaireUser()">Valider</button>
                     </form>
                     <?php
                 } else {
                     // Ajout d'un administrateur
                     ?>
-                    <form name="formAdd" action="/app/controllers/addUser.php" method="POST">
+                    <form name="formAdd" action="../controllers/addUser.php" method="POST">
 
                         <label for="user_uid">Login de l'administrateur :</label>
                         <input type="text" name="user_uid" id="user_uid" placeholder="Login" required/>
@@ -161,7 +161,7 @@ if (isset($_SESSION['login'])) {
                         <br />
                         <br />
 
-                        <a href="/app/views/gestion_administrateurs.php"><button type="button">Annuler</button></a>
+                        <a href="gestion_administrateurs.php"><button type="button">Annuler</button></a>
                         <button type="button" onclick="validerFormulaireUser()">Valider</button>
                     </form>
                     <?php
@@ -169,12 +169,12 @@ if (isset($_SESSION['login'])) {
                 ?>
             </div>
 
-            <script type="text/javascript" src="/public/js/functions.js"></script>
+            <script type="text/javascript" src="../../public/js/functions.js"></script>
         </body>
     </html>
     <?php
 } else {
     header('Content-Type: text/html; charset=utf-8');
-    header("Location:/index.html");
+    header("Location:../../index.html");
 }
 ?>

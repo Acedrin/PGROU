@@ -23,7 +23,7 @@ if (isset($_SESSION['login'])) {
     <!DOCTYPE html>
     <html lang="fr-fr">
         <head>
-            <link href="/public/css/accueil.css" type="text/css" rel="stylesheet" />
+            <link href="../../public/css/accueil.css" type="text/css" rel="stylesheet" />
             <meta charset="UTF-8" />
             <title>MooWse - Gestion clients</title>
         </head>
@@ -71,11 +71,11 @@ if (isset($_SESSION['login'])) {
                                     ?>
                                 </td>
                                 <td>
-                                    <a href="/app/views/ajout_client.php?client_id=<?php print_r($clients[$i]['client_id']) ?>"><img src="/public/img/edit.png" title="Modifier le client" alt="Modifier"></a>
+                                    <a href="ajout_client.php?client_id=<?php print_r($clients[$i]['client_id']) ?>"><img src="../../public/img/edit.png" title="Modifier le client" alt="Modifier"></a>
 
                                     &nbsp;
 
-                                    <a href="/app/controllers/deleteClient.php?client_id=<?php print_r($clients[$i]['client_id']) ?>" onclick=""return confirm('Voulez vous vraiment supprimer le client <?php print_r($clients[$i]['client_name']) ?>><img src="/public/img/delete.png" title="Supprimer le client" alt="Supprimer"></a>
+                                    <a href="../controllers/deleteClient.php?client_id=<?php print_r($clients[$i]['client_id']) ?>" onclick=""return confirm('Voulez vous vraiment supprimer le client <?php print_r($clients[$i]['client_name']) ?>><img src="../../public/img/delete.png" title="Supprimer le client" alt="Supprimer"></a>
                                 </td>
                             </tr>
                             <?php
@@ -87,13 +87,13 @@ if (isset($_SESSION['login'])) {
                 <br />
                 <br />
 
-                <a href="/app/views/ajout_client.php"><button type="button">Ajouter un client</button></a>
+                <a href="ajout_client.php"><button type="button">Ajouter un client</button></a>
             </div>
         </body>
     </html>
     <?php
 } else {
     header('Content-Type: text/html; charset=utf-8');
-    header("Location:/index.html");
+    header("Location:../../index.html");
 }
 ?>

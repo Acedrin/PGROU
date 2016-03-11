@@ -64,11 +64,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 if ($restart) {
     // La page
     header('Content-Type: text/html; charset=utf-8');
-    include "/index.html";
+    include "../../index.html";
 } else {
     // Connexion valide
     // redirection vers la page base.html
     header('Content-Type: text/html; charset=utf-8');
-    header("Location:/app/views/accueil.php");
+    header("Location:../views/accueil.php");
 }
 ?>
