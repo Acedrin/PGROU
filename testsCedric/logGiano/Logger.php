@@ -42,6 +42,10 @@ public function __construct(){
 
 //public function to log Users and token
 public function LogUser($login, $ip, $token){
+
+    include('logRotate.php');
+    $rotate=new LogRotate($this->USERLOG);
+    $rotate->checkFile();
    
     $this->time="[".date('Y/m/d - H:i:s', time())."]";
     $txt=$this->time." ".$ip." ".$login." ".$token;
@@ -66,6 +70,10 @@ public function LogUser($login, $ip, $token){
 
 //public function to log function and request from an user/app
 public function LogFunc($login, $ip, $token, $function){
+
+    include 'logRotate.php';
+    $rotate=new LogRotate($this->FUNCLOG);
+    $rotate->checkFile();
    
     $this->time="[".date('Y/m/d - H:i:s', time())."]";
     $txt=$this->time." ".$ip." ".$login." ".$token." ".$function;
@@ -89,6 +97,10 @@ public function LogFunc($login, $ip, $token, $function){
 
 //public function to log errors
 public function LogError($login, $ip, $token, $error){
+
+    include 'logRotate.php';
+    $rotate=new LogRotate($this->ERRORLOG);
+    $rotate->checkFile();
    
     $this->time="[".date('Y/m/d - H:i:s', time())."]";
     $txt=$this->time." ".$ip." ".$login." ".$token." ".$error;
