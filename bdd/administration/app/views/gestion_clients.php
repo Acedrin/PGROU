@@ -95,6 +95,6 @@ if (isset($_SESSION['login'])) {
     <?php
 } else {
     header('Content-Type: text/html; charset=utf-8');
-    header("Location:../../index.html");
+    header("Location:../../index.php");
 }
 ?>

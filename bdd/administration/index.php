@@ -1,3 +1,9 @@
+<?php
+session_start();
+ini_set("display_errors", 0);
+error_reporting(0);
+if (!isset($_SESSION['login'])) {
+    ?>
 <!DOCTYPE html>
 <html lang="fr-fr">
 	<head> 
@@ -14,3 +20,9 @@
 		</form>
 	</body>
 </html>
+<?php
+} else {
+    header('Content-Type: text/html; charset=utf-8');
+    header("Location:../../accueil.php");
+}
+?>

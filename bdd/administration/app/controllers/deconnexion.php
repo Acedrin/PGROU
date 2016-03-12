@@ -10,5 +10,5 @@ $logger->info("Deconnexion de " . $_SESSION['login']);
 $_SESSION = array();
 session_destroy();
 header('Content-Type: text/html; charset=utf-8');
-header("Location:../../index.html");
+header("Location:../../index.php");
 ?>
