@@ -13,7 +13,7 @@
  */
 
 try {
-    $bdd = new PDO('mysql:host=localhost;dbname=moowse;charset=utf8', 'root', 'balZacBargetonLuciensenTiment106');
+    $bdd = new PDO('mysql:host=localhost;dbname=moowse;charset=utf8', 'root', '');
 } catch (Exception $e) {
     die('Erreur : ' . $e->getMessage());
 }
