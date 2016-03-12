@@ -78,6 +78,7 @@ if (isset($_SESSION['login'])) {
                 <br />
 
                 <a href="ajout_user.php"><button type="button">Ajouter un client</button></a>
+                <?php include("../../app/views/layout.html"); ?>
             </div>
         </body>
     </html>
