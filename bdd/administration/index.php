@@ -1,4 +1,18 @@
 <?php
+
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+/**
+ * Page de connexion à l'application MooWse
+ *
+ * @author Quentin Payet
+ */
+
+
 session_start();
 ini_set("display_errors", 0);
 error_reporting(0);
@@ -22,6 +36,7 @@ if (!isset($_SESSION['login'])) {
 </html>
 <?php
 } else {
+    // si quelqu'un est deja connecte, on le renvoie directement a l'accueil
     header('Content-Type: text/html; charset=utf-8');
     header("Location:/app/views/accueil.php");
 }
