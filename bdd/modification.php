@@ -160,7 +160,7 @@ while ($data= mysql_fetch_array($reponse))
 	 
      if (isset ($_POST['valider_function']))
 	 {
-            echo "Hello";
+       
             $function_name=$_POST['function_name'];
             $server_name=$_POST['server_name'];
          
@@ -181,9 +181,8 @@ while ($data= mysql_fetch_array($reponse))
 	<div>
 	<h3>Variable</h3>
 	 <form name="variable" method="post" action="modification.php">
-	 <label for="variable_name" style="display:block;width: 150px;float:left"> Variable: </label>
+	 <label for="variable_name" style="display:block;width: 150px;float:left"> Variable : </label>
      <select name="variable_name" id="variable_name">
-
 <?php
 
 try
@@ -200,29 +199,82 @@ $reponse = mysql_query('SELECT DISTINCT variable_name FROM variable');
 while ($data= mysql_fetch_array($reponse))
 {
 ?>
-           <option value="<?php echo $data['variable_name'];?>" > <?php echo $data['variable_name']; ?></option>
+           <option value="<?php echo $data['variable_name'];?>"> <?php echo $data['variable_name']; ?></option>
 <?php
 }
 
 ?>
-
 </select> </br>
 <input type="submit" name="modifier_variable" onclick="return confirm('Confirmer?')" value="Modifier"/><input type="submit" name="supprimer_variable" onclick="return confirm('Confirmer?')" value="Supprimer"/>
-	 </form>
 	 <?php
 		
-        if (isset ($_POST['supprimer_variable'])){
-           
+        if (isset ($_POST['supprimer_variable']))
+		{
             $variable_name=$_POST['variable_name'];
 					
             connectMaBase();
-
             $sql = 'DELETE FROM Variable WHERE variable_name ="'.$variable_name.'"';
             echo "<script>alert(\"Suppression de la base de donn\351es\")</script>"; 
             mysql_query ($sql) or die ('Erreur SQL !'.$sql.'<br/>'.mysql_error());
              mysql_close();
         }
 		
+       elseif (isset ($_POST['modifier_variable']))
+	   
+	   {	     
+			 $variable_name=$_POST['variable_name'];
+			 $req_function= mysql_query('SELECT function_name FROM function, variable WHERE variable.variable_name ="'.$variable_name.'" AND variable.function_id=function.function_id');
+			 $row_function=mysql_fetch_row($req_function);
+			 $req_type= mysql_query('SELECT type_name FROM type, variable WHERE variable.variable_name ="'.$variable_name.'" AND variable.type_id=type.type_id');
+			 $row_type=mysql_fetch_row($req_type);
+			 $req_input= mysql_query('SELECT variable_input FROM variable WHERE variable.variable_name ="'.$variable_name.'"');
+			 $row_input=mysql_fetch_row($req_input);			 
+			 $req_order=mysql_query('SELECT variable_order FROM variable WHERE variable.variable_name ="'.$variable_name.'"');
+			 $row_order=mysql_fetch_row($req_order);		 
+		?>
+		</br>
+ <label style="display:block;width: 150px;float:left "> Variable choisie : </label><input type="text" readonly name="variable_name" value="<?php echo $variable_name; ?>"/><br/>
+ <label style="display:block;width: 150px;float:left "> Fonction: </label><input type="text" name="function_name" value="<?php echo $row_function[0];?>"/><br/>
+  <label style="display:block;width: 150px;float:left "> Type: </label><input type="text" name="type_name" value="<?php echo $row_type[0];?>"/><br/>
+  <label style="display:block;width: 150px;float:left "> Order: </label><input type="text" name="type_order" value="<?php echo $row_order[0];?>"/><br/>
+  <label style="display:block;width: 150px;float:left"> Input/Output: </label> 
+       <input type="radio" name="variable_input" value="1" <?php if ("$row_input[0]" == "1") { echo "checked"; }?>/> <label>Input</label>
+       <input type="radio" name="variable_input" value="0" <?php if ("$row_input[0]" == "0") { echo "checked"; }?>/> <label>Output</label><br />
+  <input type="submit" name="valider_variable" onclick="return confirm('Confirmer?')" value="OK"/>
+  </form>
+	 
+ </br>
+  <?php               
+     mysql_close();			 
+	   }
+   ?>
+   
+	 <?php
+	 
+     if (isset ($_POST['valider_variable']))
+	 {           
+            $variable_name=$_POST['variable_name'];
+            $function_name=$_POST['function_name'];
+			$type_name=$_POST['type_name'];
+			$type_order=$_POST['type_order'];
+			$variable_input=$_POST['variable_input'];
+			
+         
+       
+			connectMaBase();
+ 
+      
+         $sql = 'UPDATE variable SET variable.function_id=(SELECT function_id FROM function WHERE function.function_name="'.$function_name.'"),
+                                     variable.type_id=(SELECT type_id FROM type WHERE type.type_name="'.$type_name.'"),
+                                     variable.variable_order="'.$type_order.'",
+									 variable.variable_input="'.$variable_input.'"
+		 WHERE variable.variable_name="'.$variable_name.'"';
+  
+			echo "<script>alert(\"Ajout \340 la base de donn\351es\")</script>"; 
+            mysql_query ($sql) or die ('Erreur SQL !'.$sql.'<br />'.mysql_error());
+            
+            mysql_close();
+        }
         ?>
 	</div>
 <div>
