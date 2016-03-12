@@ -23,6 +23,6 @@ if (!isset($_SESSION['login'])) {
 <?php
 } else {
     header('Content-Type: text/html; charset=utf-8');
-    header("Location:../../accueil.php");
+    header("Location:/app/views/accueil.php");
 }
 ?>
