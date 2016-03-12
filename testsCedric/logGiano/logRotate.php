@@ -41,11 +41,11 @@ private $n=2;
 	private function createFileName($oldfile){
 
 		$name=explode("/", $oldfile);
-		$oldprefix="";
+		$path="";
 		$newname="";
 
 		for($x=0;$x<(count($name)-1);$x++){ 
-			$oldprefix.=$name[$x]."/";
+			$path.=$name[$x]."/";
 			} 
 
 		$oldfile=$name[(count($name)-1)];
@@ -61,7 +61,44 @@ private $n=2;
 		}else{
 			$newname.=$name[0].".".$this->n;
 		}
-		return $oldprefix.$newname;
+		return $path.$newname;
+	}
+
+//rimettere privata
+	public function maxAgedFile($file){
+			$fullname=explode("/", $file);
+			$path="";
+
+			for($x=0;$x<(count($fullname)-1);$x++){ 
+				$path.=$fullname[$x]."/";
+			}
+
+			$name=$fullname[count($fullname)-1];
+
+			if ($handle = opendir($path)) {
+    			echo "Directory handle: $handle</br>";
+    			// echo "Entries:</br>".$path.$name."</br>";
+
+    		//This is the correct way to loop over the directory.
+    		while (false !== ($entry = readdir($handle))) {
+					// echo "$entry</br>";
+
+				$pos=strpos($entry,$name);
+
+    			if($pos===false){
+    				//do nothing
+    			}else{
+    					if((time()-filemtime($path.$name)) > 1500){
+
+    						echo "$entry</br>";
+    					}
+    					
+    				}
+       		 	
+    			}
+
+   			 closedir($handle);
+			}
 	}
 
 
