@@ -18,24 +18,29 @@ require("bdd.php");
 
 // Protection pour ne pas acceder au contrôleur sans être connecté
 if (isset($_SESSION['login'])) {
-
-    // Vérification d'une demande d'information sur un client particulière
+    // Vérification d'une demande d'information sur un client particulier
     // Si la valeur est 0, alors la requête est seulement d'avoir
     // les modalities, les clients et les fonctions
     if (isset($client_id) && $client_id != 0) {
         
         try {
             // Récupération des droits d'accès du client
-            $stmt = $bdd->prepare('SELECT * FROM access WHERE client_id=:client_id');
+            $stmt = $bdd->prepare('SELECT access.client_id,access.function_id,access.access_right,function.server_id,function.function_name,server.server_name,client.client_name,client.client_ip,client.modality_id,modality.modality_name '
+                    . 'FROM access '
+                    . 'INNER JOIN client ON access.client_id=client.client_id '
+                    . 'INNER JOIN modality ON client.modality_id=modality.modality_id '
+                    . 'INNER JOIN function ON access.function_id=function.function_id '
+                    . 'INNER JOIN server ON function.server_id=server.server_id '
+                    . 'WHERE access.client_id=:client_id');
             $stmt->bindParam(':client_id', $client_id);
             $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $stmt->execute();
-
+     
             // Enregistrement du résultat dans un tableau
             $access = $stmt->fetchAll();
             // Fermeture de la connexion
             $stmt->closeCursor();
-
+            
             // Traitement des exceptions
         } catch (Exception $e) {
             $message = array(false, "Erreur lors de la r&eacute;cup&eacute;ration des droits d'acc&agrave;s du client\nVeuillez r&eacute;essayer");
@@ -49,7 +54,13 @@ if (isset($_SESSION['login'])) {
         // les modalities, les clients et les fonctions
         try {
             // Récupération des droits d'accès à la fonction
-            $stmt = $bdd->prepare('SELECT * FROM access WHERE function_id=:function_id');
+            $stmt = $bdd->prepare('SELECT access.client_id,access.function_id,access.access_right,function.server_id,function.function_name,server.server_name,client.client_name,client.client_ip,client.modality_id,modality.modality_name '
+                    . 'FROM access '
+                    . 'INNER JOIN client ON access.client_id=client.client_id '
+                    . 'INNER JOIN modality ON client.modality_id=modality.modality_id '
+                    . 'INNER JOIN function ON access.function_id=function.function_id '
+                    . 'INNER JOIN server ON function.server_id=server.server_id '
+                    . 'WHERE access.function_id=:function_id');
             $stmt->bindParam(':function_id', $function_id);
             $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $stmt->execute();
@@ -58,7 +69,7 @@ if (isset($_SESSION['login'])) {
             $access = $stmt->fetchAll();
             // Fermeture de la connexion
             $stmt->closeCursor();
-
+            
             // Traitement des exceptions
         } catch (Exception $e) {
             $message = array(false, "Erreur lors de la r&eacute;cup&eacute;ration des droits d'acc&agrave;s &agrave; la fonction\nVeuillez r&eacute;essayer");
@@ -72,7 +83,13 @@ if (isset($_SESSION['login'])) {
         // les modalities, les clients et les fonctions
         try {
             // Récupération des droits d'accès à la fonction
-            $stmt = $bdd->prepare('SELECT access.client_id, access.function_id, access.access_right FROM access INNER JOIN function ON access.function_id=function.function_id WHERE function.server_id=:server_id');
+            $stmt = $bdd->prepare('SELECT access.client_id,access.function_id,access.access_right,function.server_id,function.function_name,server.server_name,client.client_name,client.client_ip,client.modality_id,modality.modality_name '
+                    . 'FROM access '
+                    . 'INNER JOIN client ON access.client_id=client.client_id '
+                    . 'INNER JOIN modality ON client.modality_id=modality.modality_id '
+                    . 'INNER JOIN function ON access.function_id=function.function_id '
+                    . 'INNER JOIN server ON function.server_id=server.server_id '
+                    . 'WHERE server.server_id=:server_id');
             $stmt->bindParam(':server_id', $server_id);
             $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $stmt->execute();
