@@ -29,20 +29,20 @@ $reponse = mysql_query('SELECT DISTINCT server_name FROM server');
 while ($data= mysql_fetch_array($reponse))
 {
 ?>
-           <option value="<?php echo $data['server_name'];?>" > <?php echo $data['server_name']; ?></option>
+           <option value="<?php echo $data['server_name'];?>"> <?php echo $data['server_name']; ?></option>
 <?php
 }
 
 ?>
 </select> </br>
 <input type="submit" name="modifier_serveur" onclick="return confirm('Confirmer?')" value="Modifier"/><input type="submit" name="supprimer_serveur" onclick="return confirm('Confirmer?')" value="Supprimer"/>
-	 </form>
 	 <?php
 		
-        if (isset ($_POST['supprimer_serveur'])){
+        if (isset ($_POST['supprimer_serveur']))
+		{
            
             $server_name=$_POST['server_name'];
-					
+			
             connectMaBase();
 
             $sql = 'DELETE FROM Server WHERE server_name ="'.$server_name.'"';
@@ -51,16 +51,45 @@ while ($data= mysql_fetch_array($reponse))
             mysql_close();
         }
 		
-        ?>
-		<?php
-		
-        if (isset ($_POST['modifier_serveur'])){
+       elseif (isset ($_POST['modifier_serveur']))
+	   
+	   {	     
+			 $server_name=$_POST['server_name'];
+			 $req = mysql_query('SELECT server_soapadress FROM server WHERE server_name ="'.$server_name.'"');
+			 $row=mysql_fetch_row($req);	
 		?>
-
-
-<?php
+		</br>
+ <label style="display:block;width: 150px;float:left "> Serveur choisi : </label><input type="text" readonly name="server_name" value="<?php echo $server_name; ?>"/><br/>
+ <label style="display:block;width: 150px;float:left "> Soap_adress : </label><input type="text" name="soap_adress" value="<?php echo $row[0];?>"/><br/>
+  <input type="submit" name="valider_server" onclick="return confirm('Confirmer?')" value="OK"/>
+  </form>
+	 
+ </br>
+  <?php               
+     mysql_close();			 
+	   }
+   ?>
+	 <?php
+     if (isset ($_POST['valider_server'])){
+            //On récupère les valeurs entrées par l'utilisateur :
+            $server_name=$_POST['server_name'];
+            $server_soapadress=$_POST['soap_adress'];
+         
+            //On se connecte
+			connectMaBase();
+ 
+            //On prépare la commande sql d'insertion
+            $sql = 'UPDATE server SET server_soapadress="'.$server_soapadress.'" WHERE server_name="'.$server_name.'" ';
+       	 /*on lance la commande (mysql_query) et au cas où,
+            on rédige un petit message d'erreur si la requête ne passe pas
+            (Message qui intègrera les causes d'erreur sql)*/
+			echo "<script>alert(\"Ajout \340 la base de donn\351es\")</script>"; 
+            mysql_query ($sql) or die ('Erreur SQL !'.$sql.'<br />'.mysql_error());
+            
+            // on ferme la connexion
+            mysql_close();
         }
-?>
+        ?>
 
 	</div>
 	<div>
