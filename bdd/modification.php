@@ -69,8 +69,11 @@ while ($data= mysql_fetch_array($reponse))
      mysql_close();			 
 	   }
    ?>
+   
 	 <?php
-     if (isset ($_POST['valider_server'])){
+	 
+     if (isset ($_POST['valider_server']))
+	 {
             //On récupère les valeurs entrées par l'utilisateur :
             $server_name=$_POST['server_name'];
             $server_soapadress=$_POST['soap_adress'];
@@ -95,9 +98,8 @@ while ($data= mysql_fetch_array($reponse))
 	<div>
 	<h3>Fonction</h3>
 	 <form name="function" method="post" action="modification.php">
-	 <label for="function_name" style="display:block;width: 150px;float:left"> Function: </label>
+	 <label for="function_name" style="display:block;width: 150px;float:left"> Fonction : </label>
      <select name="function_name" id="function_name">
-
 <?php
 
 try
@@ -114,19 +116,17 @@ $reponse = mysql_query('SELECT DISTINCT function_name FROM function');
 while ($data= mysql_fetch_array($reponse))
 {
 ?>
-           <option value="<?php echo $data['function_name'];?>" > <?php echo $data['function_name']; ?></option>
+           <option value="<?php echo $data['function_name'];?>"> <?php echo $data['function_name']; ?></option>
 <?php
 }
 
 ?>
-
 </select> </br>
 <input type="submit" name="modifier_function" onclick="return confirm('Confirmer?')" value="Modifier"/><input type="submit" name="supprimer_function" onclick="return confirm('Confirmer?')" value="Supprimer"/>
-	 </form>
 	 <?php
 		
-        if (isset ($_POST['supprimer_function'])){
-           
+        if (isset ($_POST['supprimer_function']))
+		{
             $function_name=$_POST['function_name'];
 					
             connectMaBase();
@@ -137,7 +137,46 @@ while ($data= mysql_fetch_array($reponse))
              mysql_close();
         }
 		
+       elseif (isset ($_POST['modifier_function']))
+	   
+	   {	     
+			 $function_name=$_POST['function_name'];
+			 $req = mysql_query('SELECT server_name FROM server,function WHERE function.function_name ="'.$function_name.'" AND function.server_id=server.server_id');
+			 $row=mysql_fetch_row($req);
+		?>
+		</br>
+<label style="display:block;width: 150px;float:left "> Fonction choisie : </label><input type="text" readonly name="function_name" value="<?php echo $function_name; ?>"/><br/>
+ <label style="display:block;width: 150px;float:left "> Server : </label><input type="text" name="server_name" value="<?php echo $row[0];?>"/><br/>
+  <input type="submit" name="valider_function" onclick="return confirm('Confirmer?')" value="OK"/>
+  </form>
+	 
+ </br>
+  <?php               
+     mysql_close();			 
+	   }
+   ?>
+   
+	 <?php
+	 
+     if (isset ($_POST['valider_function']))
+	 {
+            echo "Hello";
+            $function_name=$_POST['function_name'];
+            $server_name=$_POST['server_name'];
+         
+    
+			connectMaBase();
+ 
+      
+         $sql = 'UPDATE function SET function.server_id=(SELECT server_id FROM server WHERE server.server_name="'.$server_name.'") WHERE function.function_name="'.$function_name.'"';
+  
+			echo "<script>alert(\"Ajout \340 la base de donn\351es\")</script>"; 
+            mysql_query ($sql) or die ('Erreur SQL !'.$sql.'<br />'.mysql_error());
+            
+            mysql_close();
+        }
         ?>
+
 	</div>
 	<div>
 	<h3>Variable</h3>
@@ -186,12 +225,11 @@ while ($data= mysql_fetch_array($reponse))
 		
         ?>
 	</div>
-	<div>
+<div>
 	<h3>Type</h3>
 	 <form name="type" method="post" action="modification.php">
 	 <label for="type_name" style="display:block;width: 150px;float:left"> Type: </label>
      <select name="type_name" id="type_name">
-
 <?php
 
 try
@@ -208,30 +246,68 @@ $reponse = mysql_query('SELECT DISTINCT type_name FROM type');
 while ($data= mysql_fetch_array($reponse))
 {
 ?>
-           <option value="<?php echo $data['type_name'];?>" > <?php echo $data['type_name']; ?></option>
+          <option value="<?php echo $data['type_name'];?>" > <?php echo $data['type_name']; ?></option>
 <?php
 }
 
 ?>
-
 </select> </br>
 <input type="submit" name="modifier_type" onclick="return confirm('Confirmer?')" value="Modifier"/><input type="submit" name="supprimer_type" onclick="return confirm('Confirmer?')" value="Supprimer"/>
-	 </form>
 	 <?php
 		
-        if (isset ($_POST['supprimer_type'])){
+        if (isset ($_POST['supprimer_type']))
+		{
            
-            $type_name=$_POST['type_name'];
-					
+            $server_name=$_POST['type_name'];
+			
             connectMaBase();
 
             $sql = 'DELETE FROM Type WHERE type_name ="'.$type_name.'"';
             echo "<script>alert(\"Suppression de la base de donn\351es\")</script>"; 
             mysql_query ($sql) or die ('Erreur SQL !'.$sql.'<br/>'.mysql_error());
-             mysql_close();
+            mysql_close();
         }
 		
+       elseif (isset ($_POST['modifier_type']))
+	   
+	   {	     
+			 $type_name=$_POST['type_name'];
+			 $req = mysql_query('SELECT type_complex FROM type WHERE type_name ="'.$type_name.'"');
+			 $row=mysql_fetch_row($req);	
+		?>
+		</br>
+ <label style="display:block;width: 150px;float:left "> Type choisi : </label><input type="text" readonly name="type_name" value="<?php echo $type_name; ?>"/><br/>
+<label style="display:block;width: 150px;float:left"> Type Complexe: </label> 
+       <input type="radio" name="type_complex" value="1" <?php if ("$row[0]" == "1") { echo "checked"; }?>/> <label>Oui</label>
+       <input type="radio" name="type_complex" value="0" <?php if ("$row[0]" == "0") { echo "checked"; }?>/> <label>Non</label><br />
+  <input type="submit" name="valider_type" onclick="return confirm('Confirmer?')" value="OK"/>
+  </form>
+	 
+ </br>
+  <?php               
+     mysql_close();			 
+	   }
+   ?>
+   
+	 <?php
+	 
+     if (isset ($_POST['valider_type']))
+	 {
+         $type_name=$_POST['type_name'];
+         $type_complex=$_POST['type_complex'];
+         
+       
+			connectMaBase();
+ 
+            $sql = 'UPDATE type SET type_complex="'.$type_complex.'" WHERE type_name="'.$type_name.'" ';
+
+			echo "<script>alert(\"Ajout \340 la base de donn\351es\")</script>"; 
+            mysql_query ($sql) or die ('Erreur SQL !'.$sql.'<br />'.mysql_error());
+
+            mysql_close();
+        }
         ?>
+
 	</div>
 </body>
 </html>
