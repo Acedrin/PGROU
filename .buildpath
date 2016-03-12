@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<buildpath>
+	<buildpathentry kind="src" path="testsCedric/testGestionnaireREST"/>
+	<buildpathentry kind="src" path="testsCedric/testREST"/>
+	<buildpathentry kind="src" path="testsCedric/testRESTsimple"/>
+	<buildpathentry kind="src" path="testsCedric/testWS"/>
+	<buildpathentry kind="src" path="testsCedric/testWStoken"/>
+	<buildpathentry kind="src" path="TestWS"/>
+	<buildpathentry kind="con" path="org.eclipse.php.core.LANGUAGE"/>
+</buildpath>
