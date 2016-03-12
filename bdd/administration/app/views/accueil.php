@@ -15,8 +15,8 @@ if (isset($_SESSION['login'])) {
 
             <div class="navigation">
                 <h2>Bienvenue sur l'interface d'administration de MooWse</h2>
-                <div class="navigation2"><a href="">Modification d'un WebService</a></br></div>
-                <div class="navigation2"><a href="">Configuration de la base de données</a></br></div>
+                <div class="navigation2"><a href="remplissage.php">Modification d'un WebService</a></br></div>
+                <div class="navigation2"><a href="modification.php">Configuration de la base de données</a></br></div>
                 <div class="navigation2"><a href="gestion_administrateurs.php">Gestion des administrateurs de MooWse</a></br></div>
                 <div class="navigation2"><a href="gestion_clients.php">Gestion des clients de MooWse</a></br></div>
                 <div class="navigation2"><a href="">Historique</a></br></div>
