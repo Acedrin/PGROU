@@ -1,0 +1,57 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 12 mars 2016, 21:04:45
+    Author     : quentin
+*/
+
+.layout {
+    text-align: center;
+    width: 100%;
+    padding: 2px;
+    background: brown;
+    border-radius: 5px;
+}
+
+a {
+    text-decoration: none;
+    color: whitesmoke;
+}
+
+a:hover {
+    text-decoration: none;
+    color: black;
+    background-color: antiquewhite;
+
+}
+
+.textfooter {
+    font-size:10px;
+    display: inline-block;
+    margin-left: 300px;
+}
+
+
+.deconnexion {
+    display: inline-block;
+    margin-left: 200px;
+}
+
+
+.boutondeconnexion
+{
+   background-image: url("../img/logout_24.png");
+   background-repeat: no-repeat;
+    border: none;
+    color: white;
+    background-color: transparent;
+    padding:2px 24px 0 0;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    cursor: pointer;
+   
+}
