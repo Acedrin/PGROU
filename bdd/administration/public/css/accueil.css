@@ -13,7 +13,7 @@ body {
 
 .navigation {
     text-align: center;
-    margin: 100px auto 0;
+    margin: 100px auto 100px;
     width: 800px;
     padding: 20px;
     background: #fff;
@@ -67,5 +67,6 @@ button {
     text-align: center;
     text-decoration: none;
     display: inline-block;
+    cursor: pointer;
 }
 
