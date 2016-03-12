@@ -18,3 +18,7 @@
 [2016-03-12 23:07:38.580528] [info] Connexion de qpayet depuis l'adresse 127.0.0.1
 [2016-03-12 23:07:42.458882] [info] Deconnexion de qpayet
 [2016-03-12 23:07:51.929510] [info] Connexion de qpayet depuis l'adresse 127.0.0.1
+[2016-03-12 23:08:41.772722] [info] Deconnexion de qpayet
+[2016-03-12 23:08:54.784380] [info] Connexion de qpayet depuis l'adresse 127.0.0.1
+[2016-03-12 23:10:03.779066] [info] Deconnexion de qpayet
+[2016-03-12 23:10:10.647017] [info] Connexion de qpayet depuis l'adresse 127.0.0.1
