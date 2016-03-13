@@ -34,7 +34,6 @@ if (isset($_SESSION['login'])) {
     // Vérification de la requête POST
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Initialisation des variables du formulaire
-        $client_id = 0;
         $client_name = "";
         $client_ip = "";
         $modality_id = 0;

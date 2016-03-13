@@ -131,7 +131,7 @@ if (isset($_SESSION['login'])) {
                         // Fermeture de la connexion
                         $stmt->closeCursor();
 
-                        if ($edited) {
+                        if ($added) {
                             // L'administrateur a bien été ajouté
                             $message = array(true, "L'administrateur a bien &eacute;t&eacute; ajout&eacute;");
                             // log d'ajout d'un user
