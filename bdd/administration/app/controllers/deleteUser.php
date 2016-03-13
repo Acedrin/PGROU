@@ -15,6 +15,10 @@ session_start();
 ini_set("display_errors", 0);
 error_reporting(0);
 
+//gestion des logs
+require ("../../vendor/autoload.php");
+
+
 // Booléen pour vérifier la bonne suppression de l'utilisateur
 $deleted = false;
 
@@ -43,21 +47,24 @@ if (isset($_SESSION['login'])) {
             // Fermeture de la connexion
             $stmt->closeCursor();
 
-        // Gestion des exceptions
+            // Gestion des exceptions
         } catch (Exception $e) {
-            $message = array(false,"Une erreur a été rencontrée lors de la suppression.\nVeuillez réessayer");
+            $message = array(false, "Une erreur a été rencontrée lors de la suppression.\nVeuillez réessayer");
         }
     }
-    
+
     // Enregistrement du message d'alerte
     if ($deleted) {
         // La suppression a bien été effectuée
-        $message = array(true,"L'utilisateur a bien été supprimé");
+        // log de suppression d'un user
+        $loggerSuppr = new Katzgrau\KLogger\Logger(__DIR__ . '../../../logs');
+        $loggerSuppr->info($_SESSION['login'] . " a supprimé l'utilisateur d'id" . $user_id);
+        $message = array(true, "L'utilisateur a bien été supprimé");
     } else {
         // La suppression n'a pas été effectuée
-        $message = array(false,"Une erreur a été rencontrée lors de la suppression.\nVeuillez réessayer");
+        $message = array(false, "Une erreur a été rencontrée lors de la suppression.\nVeuillez réessayer");
     }
-    
+
     // Enregistrement du message
     $_SESSION['alert'] = $message;
 
@@ -68,9 +75,9 @@ if (isset($_SESSION['login'])) {
 } else {
     // L'utilisateur n'est pas connecté
     // Il est redirigé vers la page d'accueil
-    $message = array(false,"Connectez-vous pour accéder à cette ressource");
+    $message = array(false, "Connectez-vous pour accéder à cette ressource");
     $_SESSION['alert'] = $message;
-    
+
     header('Content-Type: text/html; charset=utf-8');
     header("Location:../../index.php");
 }

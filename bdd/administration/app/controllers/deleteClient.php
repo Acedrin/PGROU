@@ -15,6 +15,9 @@ session_start();
 ini_set("display_errors", 0);
 error_reporting(0);
 
+//gestion des logs
+require ("../../vendor/autoload.php");
+
 // Booléen pour vérifier la bonne suppression du client
 $deleted = false;
 
@@ -43,21 +46,26 @@ if (isset($_SESSION['login'])) {
             // Fermeture de la connexion
             $stmt->closeCursor();
 
-        // Gestion des exceptions
+            // Gestion des exceptions
         } catch (Exception $e) {
-            $message = array(false,"Une erreur a été rencontr&eacute;e lors de la suppression\nVeuillez r&eacute;essayer");
+            $message = array(false, "Une erreur a été rencontr&eacute;e lors de la suppression\nVeuillez r&eacute;essayer");
         }
     }
-    
+
     // Enregistrement du message d'alerte
     if ($deleted) {
         // La suppression a bien été effectuée
-        $message = array(true,"Le client a bien &eacute;t&eacute; supprim&eacute;");
+        $message = array(true, "Le client a bien &eacute;t&eacute; supprim&eacute;");
+
+        // log de suppression d'un client
+        $loggerSuppr = new Katzgrau\KLogger\Logger(__DIR__ . '../../../logs');
+        $loggerSuppr->info($_SESSION['login'] . " a supprimé le client d'id " . $client_id);
+        
     } else {
         // La suppression n'a pas été effectuée
-        $message = array(false,"Une erreur a été rencontr&eacute;e lors de la suppression\nVeuillez r&eacute;essayer");
+        $message = array(false, "Une erreur a été rencontr&eacute;e lors de la suppression\nVeuillez r&eacute;essayer");
     }
-    
+
     // Enregistrement du message
     $_SESSION['alert'] = $message;
 
@@ -68,9 +76,9 @@ if (isset($_SESSION['login'])) {
 } else {
     // L'utilisateur n'est pas connecté
     // Il est redirigé vers la page d'accueil
-    $message = array(false,"Connectez-vous pour acc&eacute;der &agrave; cette ressource");
+    $message = array(false, "Connectez-vous pour acc&eacute;der &agrave; cette ressource");
     $_SESSION['alert'] = $message;
-    
+
     header('Content-Type: text/html; charset=utf-8');
     header("Location:../../index.php");
 }

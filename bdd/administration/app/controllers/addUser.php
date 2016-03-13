@@ -15,6 +15,9 @@ session_start();
 ini_set("display_errors", 0);
 error_reporting(0);
 
+//gestion des logs
+require ("../../vendor/autoload.php");
+
 // Booléen pour vérifier la bonne suppression de l'utilisateur
 $added = false;
 $edited = false;
@@ -131,6 +134,9 @@ if (isset($_SESSION['login'])) {
                         if ($edited) {
                             // L'administrateur a bien été ajouté
                             $message = array(true, "L'administrateur a bien &eacute;t&eacute; ajout&eacute;");
+                            // log d'ajout d'un user
+                            $loggerAjout = new Katzgrau\KLogger\Logger(__DIR__ . '../../../logs');
+                            $loggerAjout->info($_SESSION['login'] . " a ajouté l'utilisateur" . $user_uid);
                         } else {
                             $message = array(false, "Erreur lors de l'ajout de l'administrateur\nVeuillez r&eacute;&eacute;ssayer");
                         }
