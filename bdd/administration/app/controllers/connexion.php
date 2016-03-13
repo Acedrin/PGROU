@@ -52,7 +52,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if ($rows['user_uid'] == $login) {
                 $restart = false;
                 $_SESSION['login'] = $login;
-                $logger = new Katzgrau\KLogger\Logger(__DIR__.'/logs');
+                $logger = new Katzgrau\KLogger\Logger(__DIR__.'../../../logs');
                 $logger->info("Connexion de ".$login. " depuis l'adresse ". $_SERVER["REMOTE_ADDR"]);
             }
             $query->closeCursor();
