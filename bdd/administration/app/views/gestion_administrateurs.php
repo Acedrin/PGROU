@@ -77,7 +77,7 @@ if (isset($_SESSION['login'])) {
                 <br />
                 <br />
 
-                <a href="ajout_user.php"><button type="button">Ajouter un client</button></a>
+                <a href="ajout_user.php"><button type="button">Ajouter un administrateur</button></a>
                 <?php include("../../app/views/layout.html"); ?>
             </div>
         </body>
