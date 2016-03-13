@@ -15,6 +15,9 @@ session_start();
 ini_set("display_errors", 0);
 error_reporting(0);
 
+//gestion des logs
+require ("../../vendor/autoload.php");
+
 // Booléen pour vérifier la bonne suppression de l'utilisateur
 $added = false;
 $edited = false;
@@ -93,6 +96,10 @@ if (isset($_SESSION['login'])) {
                     $stmt->bindParam(':modality_id', $modality_id);
                     $stmt->bindParam(':client_id', $client_id);
                     $edited = $stmt->execute();
+                    
+                     // log d'ajout d'un client
+                    $loggerModif = new Katzgrau\KLogger\Logger(__DIR__ . '../../../logs');
+                    $loggerModif->info($_SESSION['login']. " a modifié le client d'id " .$client_id .". Nouveau nom:". $client_name . ". Nouvelle adresse ip: " .$client_ip);
 
                     // Fermeture de la connexion
                     $stmt->closeCursor();
@@ -117,6 +124,10 @@ if (isset($_SESSION['login'])) {
                     $stmt->bindParam(':modality_id', $modality_id);
                     $stmt->bindParam(':client_password', $client_password);
                     $added = $stmt->execute();
+
+                    // log d'ajout d'un client
+                    $loggerAjout = new Katzgrau\KLogger\Logger(__DIR__ . '../../../logs');
+                    $loggerAjout->info($_SESSION['login']. " a ajouté le client " . $client_name . " d'adresse ip " .$client_ip);
 
                     // Fermeture de la connexion
                     $stmt->closeCursor();
@@ -152,5 +163,4 @@ if (isset($_SESSION['login'])) {
 
     header('Content-Type: text/html; charset=utf-8');
     header("Location:../../index.php");
-    
 }
