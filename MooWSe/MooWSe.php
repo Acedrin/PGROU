@@ -7,45 +7,50 @@ class MooWSe {
     private $_clientAuthenticated = false;
     private $_tokenChecked = false;
     private $_tokenTimeToLive = 1;
+	private $_debug = "rien";
 
     public function Security($Security) {
-        //ajout d'une condition sur le sel
-        //if(isset($Security->UsernameToken->Username) && isset($Security->UsernameToken->Password)&&isset($Security->UsernameToken->Salt)) {
         if (isset($Security->UsernameToken->Username) && isset($Security->UsernameToken->Password) && isset($Security->UsernameToken->Nonce) && isset($Security->UsernameToken->Created)) {
-            //ligne ï¿½ commenter
             list($client_name, $client_access) = explode(",", $Security->UsernameToken->Username);
-            //$client_password = $Security->UsernameToken->Password;
             $client_password_digest = $Security->UsernameToken->Password;
-            //sel ajoutï¿½
             $client_salt = $Security->UsernameToken->Salt;
             $client_nonce = $Security->UsernameToken->Nonce;
             $client_created = $Security->UsernameToken->Created;
             $client_IP = $_SERVER["REMOTE_ADDR"];
 
-            //connexion à la base de données dont le nom est webservices, l'utilisateur root et sans mot de passe
+            //connexion Ã  la base de donnÃ©es dont le nom est webservices, l'utilisateur root et sans mot de passe
             $bdd = new PDO('mysql:host=localhost;dbname=webservices;charset=utf8', 'root', '', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
             //recherche du client en base
-            $recherche_client = $bdd->query('SELECT client_name,client_ip,client_password,modality_name FROM client INNER JOIN modality ON modality.modality_id=client.modality_id WHERE client_name=\'' . $client_name . '\'');
-            //vérification de table non vide (sinon le client n'existe pas
+            $recherche_client = $bdd->query('
+				SELECT client_name,client_ip,client_password,modality_name 
+				FROM client 
+					INNER JOIN modality ON modality.modality_id=client.modality_id 
+				WHERE client_name=\'' . $client_name . '\'
+			');
+            //vÃ©rification de table non vide (sinon le client n'existe pas)
             if ($info_client = $recherche_client->fetch()) {
                 //assignation des variables
                 $client_database_name = $info_client['client_name'];
                 $client_database_ip = $info_client['client_ip'];
                 $client_database_password = $info_client['client_password'];
                 $client_database_modality = $info_client['modality_name'];
-                //mot de passe encrypté
-                $client_database_encrypted_password = base64_encode(sha1($client_nonce . $client_created . sha1($client_database_password)));
-                //vérification des informations en base
-                $registered = $client_access == $client_database_modality &&
-                        $client_database_encrypted_password = $client_password_digest &&
-                        $client_IP = $client_database_ip &&
-                        (($client_database_modality == $client_access)); 
-                        
+				
+				//mot de passe hashÃ©
+				$client_database_hashed_password = sha1($client_database_password);
+                //mot de passe encryptÃ©
+                $client_database_encrypted_password = base64_encode(sha1($client_nonce . $client_created . $client_database_hashed_password));
+                //vÃ©rification des informations en base
+                $registered = 
+					$client_access == $client_database_modality &&
+					hash_equals($client_database_encrypted_password,$client_password_digest) &&
+					$client_IP == $client_database_ip &&
+					(($client_database_modality == $client_access)); 
+                $this->_debug = $client_IP.$client_database_ip;
             } else { //le nom de client est incorrect
-                $registered = False;
+                $registered = false;
             }
 
-            //si l'authentification est réusssie
+            //si l'authentification est rÃ©usssie
             if ($registered) {
 
                 $this->_client_name = $client_name;
@@ -53,7 +58,7 @@ class MooWSe {
                 session_name($this->_client_name . "_" . $this->_client_access . "_session");
                 session_start();
                 session_write_close();
-
+				
                 $this->_clientAuthenticated = true;
             }
         } elseif (isset($Security->UsernameToken->Username) && isset($Security->BinarySecurityToken)) {
@@ -115,33 +120,38 @@ class MooWSe {
             $time = time();
             $client_name = $this->_client_name;
             $client_access = $this->_client_access;
-            $service="service";
+            $service;
             $action = "getWSDL";
 
-            //renvoyer la liste des fonctions auxquelles l'utilisateur a accès 
-            //appel à la base
+            //renvoyer la liste des fonctions auxquelles l'utilisateur a accÃ¨s 
+            //appel Ã  la base
             if ($this->_tokenChecked) {
-                //connexion à la base de données 
+                //connexion Ã  la base de donnÃ©es 
                 $bdd = new PDO('mysql:host=localhost;dbname=webservices;charset=utf8', 'root', '', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
-                //appel des fonctions autorisées pour le client
-                $function_request = $BDD->query('SELECT function.function_id FROM function INNER JOIN access ON function.function_id=access.function_id
-                    INNER JOIN client ON access.client_id=client.client_id
-                    INNER JOIN server ON server.server_id=function.server_id
-                    WHERE client_name=\'' . $client_name . '\' ');
+                //appel des fonctions autorisÃ©es pour le client
+                $function_request = $bdd->query('
+					SELECT function.function_id 
+					FROM function 
+						INNER JOIN access ON function.function_id=access.function_id
+						INNER JOIN client ON access.client_id=client.client_id
+						INNER JOIN server ON server.server_id=function.server_id
+                    WHERE client_name=\'' . $client_name . '\' 
+				');
                 //obtention du nombre de fonctions auxquelles 
                 $number_function = $function_request->rowCount();
-                //extraire le premier élément                
+                //extraire le premier Ã©lÃ©ment                
                 $current_function = $function_request->fetch();
                 //creation d'un array
-                $functions = array($current_function);
+                $functions = array($current_function[0]);
                 while($current_function = $function_request->fetch()){
                     //ajoute la fonction courante au array
-                    array_push($functions,$current_function);
-                }                      
+                    array_push($functions,$current_function[0]);
+                }                      /**/
             }
 
             //gÃ©nÃ©rateur : (service,fonctions)->WSDL
             $service_WSDL = "<" . $service . ">" . implode(",", $functions) . "</" . $service . ">";
+			//$service_WSDL = "<" . $service . ">" . print_r($functions,1) . "</" . $service . ">";
         }
         return htmlspecialchars($service_WSDL, ENT_XML1);
     }
