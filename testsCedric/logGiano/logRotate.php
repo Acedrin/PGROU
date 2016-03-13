@@ -12,18 +12,18 @@ private $filesize;
 private $variables_file; // file .ini for persistent variables
 private $n=2;
 
-	public function __construct($file){
+	public function __construct(){
 
 		include './settings/settings.php';
 
-		$this->file=$file;
 		$this->filesize=$max_filesize*1048576; //from MB to bytes
 		$this->variable_file=$variables;
 	}
 
 
-	public function checkFile(){
+	public function checkFile($file){
 
+		$this->file=$file;
 
     	if(filesize($this->file) < $this->filesize){//girare disugualianza
 
@@ -65,7 +65,7 @@ private $n=2;
 	}
 
 //rimettere privata
-	public function maxAgedFile($file){
+	private function maxAgedFile($file){
 			$fullname=explode("/", $file);
 			$path="";
 

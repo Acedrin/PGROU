@@ -1,6 +1,8 @@
 <?php
 
-//@TODO control on file lenght, some sort of logrotate
+//@TODO
+//lettura/scrittura file.ini
+//girare disugualianza checkFile
 
 class Logger{
 
@@ -16,9 +18,13 @@ private $DB;
 private $USER;
 private $PASSWD;
 private $PORT;
-private $MAX_FILESIZE;
 
 private $time;
+
+private $filesize;
+private $variables_file; // file .ini for persistent variables
+private $n;
+private $FILEAGE;
 
 public $debug=true;
 
@@ -35,18 +41,18 @@ public function __construct(){
     $this->USER=$user;
     $this->PASSWD=$passwd;
     $this->PORT=$port;
-    $this->MAX_FILESIZE=$max_filesize;
+
+
+    $this->filesize=$max_filesize*1048576; //from MB to bytes
+    $this->variable_file=$variables;
+    $this->FILEAGE=$max_fileage*86400;//days to seconds
 
     if($this->debug) echo "costruttore";
 }
 
 //public function to log Users and token
 public function LogUser($login, $ip, $token){
-
-    include('logRotate.php');
-    $rotate=new LogRotate($this->USERLOG);
-    $rotate->checkFile();
-   
+ 
     $this->time="[".date('Y/m/d - H:i:s', time())."]";
     $txt=$this->time." ".$ip." ".$login." ".$token;
 
@@ -56,12 +62,14 @@ public function LogUser($login, $ip, $token){
     switch($this->LOGDEVICE){
         case 1:
         if($this->debug) echo "</br>case 1";
+            $check=$this->checkFile($this->USERLOG);
             $this->userLog_file($txt);
             break;
         case 2:
            $this->userLog_db($login, $ip, $token);
             break;
         case 3:
+            $check=$this->checkFile($this->USERLOG);
             $this->userLog_file($txt);
             $this->userLog_db($login, $ip, $token);
             break;
@@ -71,9 +79,7 @@ public function LogUser($login, $ip, $token){
 //public function to log function and request from an user/app
 public function LogFunc($login, $ip, $token, $function){
 
-    include 'logRotate.php';
-    $rotate=new LogRotate($this->FUNCLOG);
-    $rotate->checkFile();
+
    
     $this->time="[".date('Y/m/d - H:i:s', time())."]";
     $txt=$this->time." ".$ip." ".$login." ".$token." ".$function;
@@ -83,12 +89,14 @@ public function LogFunc($login, $ip, $token, $function){
 
     switch($this->LOGDEVICE){
         case 1:
+            $check=$this->checkFile($this->FUNCLOG);
             $this->funcLog_file($txt);
             break;
         case 2:
             $this->funcLog_db($login, $ip, $token, $function);
             break;
         case 3:
+            $check=$this->checkFile($this->FUNCLOG);
             $this->funcLog_file($txt);
             $this->funcLog_db($login, $ip, $token, $function);
             break;
@@ -98,9 +106,7 @@ public function LogFunc($login, $ip, $token, $function){
 //public function to log errors
 public function LogError($login, $ip, $token, $error){
 
-    include 'logRotate.php';
-    $rotate=new LogRotate($this->ERRORLOG);
-    $rotate->checkFile();
+
    
     $this->time="[".date('Y/m/d - H:i:s', time())."]";
     $txt=$this->time." ".$ip." ".$login." ".$token." ".$error;
@@ -110,12 +116,14 @@ public function LogError($login, $ip, $token, $error){
 
     switch($this->LOGDEVICE){
         case 1:
+            $check=$this->checkFile($this->ERRORLOG);
             $this->errorLog_file($txt);
             break;
         case 2:
            $this->errorLog_db($login, $ip, $token,$error);
             break;
         case 3:
+            $check=$this->checkFile($this->ERRORLOG);
             $this->errorLog_file($txt);
             $this->errorLog_db($login, $ip, $token,$error);
             break;
@@ -168,6 +176,125 @@ private function errorLog_db($login, $ip, $token, $error){
     $connect->exec("INSERT INTO `errorLog`(`errorLog_time`,`errorLog_ip`, `errorLog_user`, `errorLog_token`,`errorLog_error`) VALUES ( NOW(),'".$ip."','".$login."','".$token."','".$error."')");
     $connect=null;
 }
+
+//-------------------------logrotate funcions--------------------------------------------
+
+    public function checkFile($file){
+
+        $this->maxAgedFile($file);
+
+        if(filesize($file) > $this->filesize){
+
+            $newfile = $this->createFileName($file);
+
+            if (copy($file, $newfile)) {
+
+                file_put_contents($file,"");
+
+            }
+        }
+        
+    }
+
+    private function createFileName($oldfile){
+
+        $this->n=$this->variableOnFile("read");
+        $name=explode("/", $oldfile);
+        $path="";
+        $newname="";
+
+        for($x=0;$x<(count($name)-1);$x++){ 
+            $path.=$name[$x]."/";
+            } 
+
+        $oldfile=$name[(count($name)-1)];
+        $name=explode(".", $oldfile);
+
+        if(count(name)>1){
+            for($i=0; $i<count($name);$i++){
+
+                if($i==count($name)-1) $newname.=$this->n.".".$name[$i];
+
+                else  $newname.=$name[$i].".";
+            }
+        }else{
+            $newname.=$name[0].".".$this->n;
+        }
+        $this->variableOnFile("write",$this->n+1);
+        return $path.$newname;
+    }
+
+//function to delete file over the maxAge
+    private function maxAgedFile($file){
+            $fullname=explode("/", $file);
+            $path="";
+            $number=0;
+
+            for($x=0;$x<(count($fullname)-1);$x++){ 
+                $path.=$fullname[$x]."/";
+            }
+
+            $name=$fullname[count($fullname)-1];
+
+            if ($handle = opendir($path)) {
+
+            //This is the correct way to loop over the directory.
+            while (false !== ($entry = readdir($handle))) {
+
+                $pos=strpos($entry,$name);
+
+                if($pos===false){
+                    //do nothing
+                }else{
+                        clearstatcache();
+                        if((time()-filemtime($path.$entry)) > $this->FILEAGE){
+                        
+                        echo "</br>$entry ".date ("F d Y H:i:s.", filemtime($path.$entry))."</br>";
+                        unlink($path.$entry);
+
+                        }
+                        
+                    }
+                
+                }
+
+             closedir($handle);
+            }
+
+            //rename stocked logFiles to have a count that make sense
+            if ($handle = opendir($path)) {
+
+            //This is the correct way to loop over the directory.
+            while (false !== ($entry = readdir($handle))) {
+
+                $pos=strpos($entry,$name.'.');
+
+                if($pos===false){
+                    //do nothing
+                }else{
+                      clearstatcache();
+                      rename($path.$entry, $path.$name.".".$number);
+                      $number++;
+                    }
+                
+                }
+
+             closedir($handle);
+             $this->variableOnFile("write",$number);
+            }
+    }
+
+    private function variableOnFile($mode,$var=null){
+
+        if($mode==="write"){
+            file_put_contents($this->variable_file, "[n=".$var."]");
+        }
+        elseif($mode==="read"){
+            $str=file_get_contents($this->variable_file);
+            preg_match("/\[n=(.*?)]/",$str,$m);
+            return $m[1];
+        }
+    }
 
 }
 
