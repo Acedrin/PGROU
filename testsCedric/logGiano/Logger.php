@@ -1,9 +1,5 @@
 <?php
 
-//@TODO
-//lettura/scrittura file.ini
-//girare disugualianza checkFile
-
 class Logger{
 
 // logDevice= 1-> file
@@ -26,7 +22,7 @@ private $variables_file; // file .ini for persistent variables
 private $n;
 private $FILEAGE;
 
-public $debug=true;
+public $debug=false;
 
 
 public function __construct(){
@@ -61,7 +57,6 @@ public function LogUser($login, $ip, $token){
 
     switch($this->LOGDEVICE){
         case 1:
-        if($this->debug) echo "</br>case 1";
             $check=$this->checkFile($this->USERLOG);
             $this->userLog_file($txt);
             break;
@@ -249,7 +244,7 @@ private function errorLog_db($login, $ip, $token, $error){
                         clearstatcache();
                         if((time()-filemtime($path.$entry)) > $this->FILEAGE){
                         
-                        echo "</br>$entry ".date ("F d Y H:i:s.", filemtime($path.$entry))."</br>";
+                        if($this->debug) echo "</br>$entry ".date ("F d Y H:i:s.", filemtime($path.$entry))."</br>";
                         unlink($path.$entry);
 
                         }
