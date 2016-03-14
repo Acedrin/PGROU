@@ -37,8 +37,8 @@ class MooWSe {
                 $client_database_encrypted_password = base64_encode(sha1($client_nonce . $client_created . sha1($client_database_password)));
                 //v�rification des informations en base
                 $registered = $client_access == $client_database_modality &&
-                        $client_database_encrypted_password = $client_password_digest &&
-                        $client_IP = $client_database_ip &&
+                        $client_database_encrypted_password == $client_password_digest &&
+                        $client_IP == $client_database_ip &&
                         (($client_database_modality == $client_access)); 
                         
             } else { //le nom de client est incorrect
