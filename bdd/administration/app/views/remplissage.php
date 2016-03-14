@@ -1,18 +1,4 @@
 <?php
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- * Description of 
- *
- * @author Christophe Cleuet
- */
-
-
-
 function connectMaBase(){
     $bdd = mysql_connect ('localhost', 'root', 'root');  
     mysql_select_db ('moowse', $bdd) ;
@@ -25,8 +11,10 @@ function connectMaBase(){
 		<div>
         <h3>Ajouter un Serveur</h3>
         <form name="server" method="post" action="remplissage.php">
+		<!-- On écrit le nom du serveur --> 
             <label style="display:block;width: 150px;float:left"> Name : </label> <input type="text" name="name"/><br/>
             </br>
+			<!-- On écrit le nom de la Soap adress associée--> 
             <label style="display:block;width: 150px;float:left "> Soap_adress : </label><input type="text" name="soap_adress"/><br/>
             <input type="submit" name="valider_server" onclick="return confirm('Confirmer?')" value="OK"/>
         </form>
@@ -55,8 +43,10 @@ function connectMaBase(){
 	   <div>
 <h3>Ajouter une fonction</h3>
         <form name="server" method="post" action="remplissage.php">
+		<!-- On écrit le nom de la fonction --> 
             <label style="display:block;width: 150px;float:left"> Name : </label> <input type="text" name="name"/><br/>
             </br>
+		<!-- On choisit le nom du serveur associé--> 
             <label for="server_name" style="display:block;width: 150px;float:left"> Server: </label>
             <select name="server_name" id="server_name">
 
@@ -64,18 +54,20 @@ function connectMaBase(){
 
 try
 {
+	//On se connecte
    connectMaBase();
 }
 catch(Exception $e)
 {
             die('Erreur : '.$e->getMessage());
 }
-
+// On récupère la liste des serveurs 
 $reponse = mysql_query('SELECT DISTINCT server_name FROM server');
  
 while ($data= mysql_fetch_array($reponse))
 {
 ?>
+<!--On affiche la liste des serveurs -->
            <option value="<?php echo $data['server_name'];?>" > <?php echo $data['server_name']; ?></option>
 <?php
 }
@@ -83,23 +75,25 @@ while ($data= mysql_fetch_array($reponse))
 ?>
 
 </select> </br>
+<!--On confirme l'ajout à la base de données -->
 <input type="submit" name="valider_function" onclick="return confirm('Confirmer?')" value="OK"/>
  </form>
  
        
         <?php
-		
+		//Si on a confirmé l'ajout
         if (isset ($_POST['valider_function'])){
-           
+        //On récupère les informations entrées par l'utilisateur 
             $function_name=$_POST['name'];
 			$server_name=$_POST['server_name'];
-					
+		// On se connecte			
             connectMaBase();
-
+        // On ajoute les informations à la base de données
              $sql = 'INSERT INTO function VALUES("",(SELECT server_id FROM server WHERE server_name ="'.$server_name.'"),"'.$function_name.'")';
+		
             echo "<script>alert(\"Ajout \340 la base de donn\351es\")</script>"; 
             mysql_query ($sql) or die ('Erreur SQL !'.$sql.'<br/>'.mysql_error());
-            
+        //On ferme la connexion    
             mysql_close();
         }
 		
@@ -201,8 +195,8 @@ while ($data= mysql_fetch_array($reponse))
             <label style="display:block;width: 150px;float:left"> Name : </label> <input type="text" name="name"/><br/>
             </br>
        <label style="display:block;width: 150px;float:left"> Type Complexe: </label> 
-       <input type="radio" name="type_complex" value="1"/> <label for="moins15">Oui</label>
-       <input type="radio" name="type_complex" value="non" /> <label for="medium15-25">Non</label><br />
+       <input type="radio" name="type_complex" value="1"/> <label>Oui</label>
+       <input type="radio" name="type_complex" value="0" /> <label>Non</label><br />
             <input type="submit" name="valider_type" onclick="return confirm('Confirmer?')" value="OK"/>
         </form>
         <?php
