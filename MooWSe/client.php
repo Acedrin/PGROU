@@ -12,11 +12,13 @@
 //echo bin2hex(openssl_random_pseudo_bytes(8,true));
 //Ici le client entre ses mots de passe en brut (ce fichier n'est pas accessible par un pirate, seules les informations transmises le sont)
 
-$username1 = "client1" . "," . "modalite1";
-$password1 = "password";
+$username1 = "agap" . "," . "batch";
+$password1 = "admin";
+$service1 = "moodle";
 
-$username2 = "client2" . "," . "modalite2";
-$password2 = "password";
+$username2 = "moodle" . "," . "batch";
+$password2 = "admin";
+$service2 = "agap";
 
 //Il faut maintenant hacher une premi�re fois le mot de passe (on utilisera simplement sha1 pour le moment)
 
@@ -177,8 +179,7 @@ $MooWSe_client->__setSoapHeaders(NULL);
 $MooWSe_client->__setSoapHeaders($Header);
 
 try {
-    $service = "service";
-    $service_WSDL = htmlspecialchars_decode($MooWSe_client->getWSDL(new SoapParam($service, "service")), ENT_XML1);
+    $service_WSDL = htmlspecialchars_decode($MooWSe_client->getWSDL(new SoapParam($service1, "service")), ENT_XML1);
 } catch (SoapFault $fault) {
     trigger_error("SOAP Fault: (faultcode: {$fault->faultcode}, faultstring: {$fault->faultstring})", E_USER_ERROR);
 }
@@ -202,8 +203,7 @@ $MooWSe_client->__setSoapHeaders(NULL);
 $MooWSe_client->__setSoapHeaders($Header);
 
 try {
-    $service = "service";
-    $service_WSDL = htmlspecialchars_decode($MooWSe_client->getWSDL(new SoapParam($service, "service")), ENT_XML1);
+    $service_WSDL = htmlspecialchars_decode($MooWSe_client->getWSDL(new SoapParam($service2, "service")), ENT_XML1);
 } catch (SoapFault $fault) {
     trigger_error("SOAP Fault: (faultcode: {$fault->faultcode}, faultstring: {$fault->faultstring})", E_USER_ERROR);
 }
@@ -215,8 +215,7 @@ echo "<pre>" . htmlspecialchars($service_WSDL) . "</pre>";
 sleep(2);
 
 try {
-    $service = "service2";
-    $service_WSDL = htmlspecialchars_decode($MooWSe_client->getWSDL(new SoapParam($service, "service")), ENT_XML1);
+    $service_WSDL = htmlspecialchars_decode($MooWSe_client->getWSDL(new SoapParam($service1, "service")), ENT_XML1);
 } catch (SoapFault $fault) {
     trigger_error("SOAP Fault: (faultcode: {$fault->faultcode}, faultstring: {$fault->faultstring})", E_USER_ERROR);
 }

@@ -22,20 +22,20 @@ class MooWSe {
             $client_created = $Security->UsernameToken->Created;
             $client_IP = $_SERVER["REMOTE_ADDR"];
 
-            //connexion à la base de données dont le nom est webservices, l'utilisateur root et sans mot de passe
+            //connexion ï¿½ la base de donnï¿½es dont le nom est webservices, l'utilisateur root et sans mot de passe
             $bdd = new PDO('mysql:host=localhost;dbname=webservices;charset=utf8', 'root', '', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
             //recherche du client en base
             $recherche_client = $bdd->query('SELECT client_name,client_ip,client_password,modality_name FROM client INNER JOIN modality ON modality.modality_id=client.modality_id WHERE client_name=\'' . $client_name . '\'');
-            //vérification de table non vide (sinon le client n'existe pas
+            //vï¿½rification de table non vide (sinon le client n'existe pas
             if ($info_client = $recherche_client->fetch()) {
                 //assignation des variables
                 $client_database_name = $info_client['client_name'];
                 $client_database_ip = $info_client['client_ip'];
                 $client_database_password = $info_client['client_password'];
                 $client_database_modality = $info_client['modality_name'];
-                //mot de passe encrypté
+                //mot de passe encryptï¿½
                 $client_database_encrypted_password = base64_encode(sha1($client_nonce . $client_created . sha1($client_database_password)));
-                //vérification des informations en base
+                //vï¿½rification des informations en base
                 $registered = $client_access == $client_database_modality &&
                         $client_database_encrypted_password = $client_password_digest &&
                         $client_IP = $client_database_ip &&
@@ -45,7 +45,7 @@ class MooWSe {
                 $registered = False;
             }
 
-            //si l'authentification est réusssie
+            //si l'authentification est rï¿½usssie
             if ($registered) {
 
                 $this->_client_name = $client_name;
@@ -118,25 +118,25 @@ class MooWSe {
             $service="service";
             $action = "getWSDL";
 
-            //renvoyer la liste des fonctions auxquelles l'utilisateur a accès 
-            //appel à la base
+            //renvoyer la liste des fonctions auxquelles l'utilisateur a accï¿½s 
+            //appel ï¿½ la base
             if ($this->_tokenChecked) {
-                //connexion à la base de données 
+                //connexion ï¿½ la base de donnï¿½es 
                 $bdd = new PDO('mysql:host=localhost;dbname=webservices;charset=utf8', 'root', '', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
-                //appel des fonctions autorisées pour le client
-                $function_request = $BDD->query('SELECT function.function_id FROM function INNER JOIN access ON function.function_id=access.function_id
+                //appel des fonctions autorisï¿½es pour le client
+                $function_request = $bdd->query('SELECT function.function_id FROM function INNER JOIN access ON function.function_id=access.function_id
                     INNER JOIN client ON access.client_id=client.client_id
                     INNER JOIN server ON server.server_id=function.server_id
                     WHERE client_name=\'' . $client_name . '\' ');
                 //obtention du nombre de fonctions auxquelles 
                 $number_function = $function_request->rowCount();
-                //extraire le premier élément                
+                //extraire le premier ï¿½lï¿½ment                
                 $current_function = $function_request->fetch();
                 //creation d'un array
-                $functions = array($current_function);
+                $functions = array($current_function[0]);
                 while($current_function = $function_request->fetch()){
                     //ajoute la fonction courante au array
-                    array_push($functions,$current_function);
+                    array_push($functions,$current_function[0]);
                 }                      
             }
 
