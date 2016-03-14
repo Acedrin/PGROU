@@ -108,3 +108,16 @@ function validerFormulaireUser() {
         alert(alerte);
     }
 }
+
+// Fonction pour faire disparaitre les messages d'alerte et de succès
+window.setTimeout("closeDiv();", 5000);
+
+function closeDiv() {
+    var Temp = document.getElementById("success_message");
+    if (Temp != null)
+        Temp.style.display = "none";
+    
+    var Temp = document.getElementById("error_message");
+    if (Temp != null)
+        Temp.style.display = "none";
+}

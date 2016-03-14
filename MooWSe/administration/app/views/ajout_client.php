@@ -28,7 +28,7 @@ if (isset($_SESSION['login'])) {
     $titre_web = "MooWse - Ajout/modification d'un client";
     $titre_principal = "Espace Administration de MooWse";
     $titre_section = "Ajout/modification d'un client";
-print_r($titre_principal);
+
     require("../views/header.php");
     ?>
 
@@ -141,8 +141,6 @@ print_r($titre_principal);
             }
             ?>
         </div>
-
-        <script type="text/javascript" src="../../public/js/functions.js"></script>
         <?php include("../../app/views/layout.html"); ?>
     </body>
     </html>

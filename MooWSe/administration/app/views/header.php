@@ -14,6 +14,7 @@
     <head>
         <link href="../../public/css/accueil.css" type="text/css" rel="stylesheet" />
         <meta charset="UTF-8" />
+        <script type="text/javascript" src="../../public/js/functions.js"></script>
         <title><?php echo($titre_web); ?></title>
     </head>
     <?php
@@ -22,14 +23,14 @@
         if ($_SESSION['alert'][0] == true) {
             // Le message est un message de confirmation
             ?>
-            <div class="success_message">
+            <div id="success_message">
                 <?php print_r($_SESSION['alert'][1]) ?>
             </div>
             <?php
         } else {
             // Le message est un message d'erreur
             ?>
-            <div class="error_message">
+            <div id="error_message">
                 <?php print_r($_SESSION['alert'][1]) ?>
             </div>
             <?php

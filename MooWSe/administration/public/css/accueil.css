@@ -86,7 +86,7 @@ button {
     cursor: pointer;
 }
 
-.success_message {
+#success_message {
     width: 400px;
     border-radius: 3px;
     box-shadow: 0px 0px 10px #CCCCCC;
@@ -98,7 +98,7 @@ button {
     font-weight: bold;
 }
 
-.error_message {
+#error_message {
     width: 400px;
     border-radius: 3px;
     box-shadow: 0px 0px 10px #CCCCCC;
