@@ -47,10 +47,10 @@ public function __construct(){
 }
 
 //public function to log Users and token
-public function LogUser($login, $ip, $token){
+public function LogClient($ip,$client,$modality,$action){
  
     $this->time="[".date('Y/m/d - H:i:s', time())."]";
-    $txt=$this->time." ".$ip." ".$login." ".$token;
+    $txt=$this->time." ".$ip." ".$client." ".$modality." ".$action;
 
     if($this->debug) echo "</br>".$txt;
     if($this->debug) echo "</br>case";
@@ -61,23 +61,23 @@ public function LogUser($login, $ip, $token){
             $this->userLog_file($txt);
             break;
         case 2:
-           $this->userLog_db($login, $ip, $token);
+           $this->userLog_db($ip,$client,$modality,$action);
             break;
         case 3:
             $check=$this->checkFile($this->USERLOG);
             $this->userLog_file($txt);
-            $this->userLog_db($login, $ip, $token);
+            $this->userLog_db($ip,$client,$modality,$action);
             break;
     }
 }
 
 //public function to log function and request from an user/app
-public function LogFunc($login, $ip, $token, $function){
+public function LogServ($client, $ip, $modality, $service, $action){
 
 
    
     $this->time="[".date('Y/m/d - H:i:s', time())."]";
-    $txt=$this->time." ".$ip." ".$login." ".$token." ".$function;
+    $txt=$this->time." ".$ip." ".$client." ".$modality." ".$service." ".$action;
 
     if($this->debug) echo "</br>".$txt;
     if($this->debug) echo "</br>case";
@@ -88,12 +88,12 @@ public function LogFunc($login, $ip, $token, $function){
             $this->funcLog_file($txt);
             break;
         case 2:
-            $this->funcLog_db($login, $ip, $token, $function);
+            $this->funcLog_db($client, $ip, $modality, $service, $action);
             break;
         case 3:
             $check=$this->checkFile($this->FUNCLOG);
             $this->funcLog_file($txt);
-            $this->funcLog_db($login, $ip, $token, $function);
+            $this->funcLog_db($client, $ip, $modality, $service, $action);
             break;
     }
 }
@@ -145,30 +145,30 @@ private function errorLog_file($log){
     $myfile = file_put_contents($this->ERRORLOG, $log.PHP_EOL , FILE_APPEND);
 }
 
-private function userLog_db($login, $ip, $token){
+private function userLog_db($ip,$client,$modality,$action){
     if($this->debug) echo "</br>userLog_db";
 
     $connect = new PDO('mysql:host=localhost;port='.$this->PORT.';dbname='.$this->DB, $this->USER, $this->PASSWD);
 
-    $connect->exec("INSERT INTO `userLog`(`userLog_time`,`userLog_ip`, `userLog_user`, `userLog_token`) VALUES ( NOW(),'".$ip."','".$login."','".$token."')");
+    $connect->exec("INSERT INTO `userLog`(`userLog_time`,`userLog_ip`, `userLog_client`, `userLog_modalite`, `userLog_action`) VALUES ( NOW(),'".$ip."','".$client."','".$modality."','".$action."')");
     $connect=null;
 }
 
-private function funcLog_db($login, $ip, $token, $function){
+private function funcLog_db($client, $ip, $modality, $service, $action){
     if($this->debug) echo "</br>funcLog_db";
 
     $connect = new PDO('mysql:host=localhost;port='.$this->PORT.';dbname='.$this->DB, $this->USER, $this->PASSWD);
 
-    $connect->exec("INSERT INTO `funcLog`(`funcLog_time`,`funcLog_ip`, `funcLog_user`, `funcLog_token`,`funcLog_func`) VALUES ( NOW(),'".$ip."','".$login."','".$token."','".$function."')");
+    $connect->exec("INSERT INTO `servLog`(`servLog_time`,`servLog_ip`, `servLog_client`, `servLog_modalite`,`servLog_service`) VALUES ( NOW(),'".$ip."','".$client."','".$modality."','".$service."','".$action."')");
     $connect=null;
 }
 
-private function errorLog_db($login, $ip, $token, $error){
+private function errorLog_db($client, $ip, $token, $error){
     if($this->debug) echo "</br>errorLog_db";
 
     $connect = new PDO('mysql:host=localhost;port='.$this->PORT.';dbname='.$this->DB, $this->USER, $this->PASSWD);
 
-    $connect->exec("INSERT INTO `errorLog`(`errorLog_time`,`errorLog_ip`, `errorLog_user`, `errorLog_token`,`errorLog_error`) VALUES ( NOW(),'".$ip."','".$login."','".$token."','".$error."')");
+    $connect->exec("INSERT INTO `errorLog`(`errorLog_time`,`errorLog_ip`, `errorLog_client`, `errorLog_token`,`errorLog_error`) VALUES ( NOW(),'".$ip."','".$client."','".$token."','".$error."')");
     $connect=null;
 }
 

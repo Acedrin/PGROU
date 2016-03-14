@@ -57,6 +57,9 @@ class MooWSe {
     }
 
     public function authenticate() {
+
+        require ('./Loggeur/Logger.php');
+
         $token = "ERROR !";
         if ($this->_clientAuthenticated) {
 
@@ -66,6 +69,9 @@ class MooWSe {
             $client_name = $this->_client_name;
             $client_access = $this->_client_access;
             $action = "authenticate";
+
+            $logger= new Logger();
+            $logger->LogClient($client_IP,$client_name,$client_access,$action);
 
             $crypto_strong = false;
             while (!$crypto_strong) {
