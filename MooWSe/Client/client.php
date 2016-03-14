@@ -60,9 +60,10 @@
 		//"ssl_method" => NULL,
 	);
 
+	$MooWSe_WSDL = file_get_contents($MooWSe_WSDL_file);
+	
 	try {
-		$MooWSe_WSDL = file_get_contents($MooWSe_WSDL_file);
-		$MooWSe_client = new SoapClient($MooWSe_WSDL, $options);
+		$MooWSe_client = new SoapClient($MooWSe_WSDL_file, $options);
 	} catch (SoapFault $fault) {
 		trigger_error("SOAP Fault: (faultcode: {$fault->faultcode}, faultstring: {$fault->faultstring})", E_USER_ERROR);
 	}
@@ -101,6 +102,7 @@
 	try {
 		$token1 = $MooWSe_client->authenticate();
 	} catch (SoapFault $fault) {
+		echo getLastHTTPDialogue($MooWSe_client);
 		trigger_error("SOAP Fault: (faultcode: {$fault->faultcode}, faultstring: {$fault->faultstring})", E_USER_ERROR);
 	}
 
@@ -117,7 +119,7 @@
 	$Password = base64_encode(sha1($Nonce.$Created.$hash2));
 
 	$UsernameToken = [];
-	$UsernameToken["Username"] = new SoapVar($Username, XSD_STRING, NULL, $wsse, "Username", $wsse
+	$UsernameToken["Username"] = new SoapVar($Username, XSD_STRING, NULL, $wsse, "Username", $wsse);
 	$UsernameToken["Password"] = new SoapVar($Password, XSD_STRING, "PasswordDigest", $wsse, "Password", $wsse);
 	$UsernameToken["Nonce"] = new SoapVar($Nonce, XSD_STRING, "Base64Binary", $wsse, "Nonce", $wsse);
 	$UsernameToken["Created"] = new SoapVar($Created, XSD_STRING, NULL, $wsu, "Created", $wsu);
@@ -135,6 +137,7 @@
 	try {
 		$token2 = $MooWSe_client->authenticate();
 	} catch (SoapFault $fault) {
+		echo getLastHTTPDialogue($MooWSe_client);
 		trigger_error("SOAP Fault: (faultcode: {$fault->faultcode}, faultstring: {$fault->faultstring})", E_USER_ERROR);
 	}
 
@@ -159,6 +162,7 @@
 	try {
 		$service_WSDL = htmlspecialchars_decode($MooWSe_client->getWSDL(new SoapParam($service1, "service")), ENT_XML1);
 	} catch (SoapFault $fault) {
+		echo getLastHTTPDialogue($MooWSe_client);
 		trigger_error("SOAP Fault: (faultcode: {$fault->faultcode}, faultstring: {$fault->faultstring})", E_USER_ERROR);
 	}
 
@@ -183,6 +187,7 @@
 	try {
 		$service_WSDL = htmlspecialchars_decode($MooWSe_client->getWSDL(new SoapParam($service2, "service")), ENT_XML1);
 	} catch (SoapFault $fault) {
+		echo getLastHTTPDialogue($MooWSe_client);
 		trigger_error("SOAP Fault: (faultcode: {$fault->faultcode}, faultstring: {$fault->faultstring})", E_USER_ERROR);
 	}
 
@@ -195,12 +200,26 @@
 	try {
 		$service_WSDL = htmlspecialchars_decode($MooWSe_client->getWSDL(new SoapParam($service1, "service")), ENT_XML1);
 	} catch (SoapFault $fault) {
+		echo getLastHTTPDialogue($MooWSe_client);
 		trigger_error("SOAP Fault: (faultcode: {$fault->faultcode}, faultstring: {$fault->faultstring})", E_USER_ERROR);
 	}
 
 	echo getLastHTTPDialogue($MooWSe_client);
 	echo "<pre>" . htmlspecialchars($service_WSDL) . "</pre>";
 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	function format($xml) {
 		$dom = new DomDocument;
 		$dom->loadXML($xml);

@@ -1,7 +1,7 @@
 <?php
-	require "MooWSe.php";
+	require ".\Moteur\MooWSe.class.php";
 
-	$MooWSe_WSDL = "http://localhost/github/PGROU/MooWSe/Moteur/MooWSe.wsdl";
+	$MooWSe_WSDL = "http://localhost/github/PGROU/MooWSe/MooWSe.wsdl";
 	$MooWSe_server = new SoapServer($MooWSe_WSDL);
 	$MooWSe_server->setClass("MooWSe");
 	

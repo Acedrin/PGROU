@@ -1,4 +1,6 @@
-<?php
+<?php 
+
+require "generateWSDL.php";
 
 class MooWSe {
 
@@ -9,14 +11,10 @@ class MooWSe {
     private $_tokenTimeToLive = 1;
 
     public function Security($Security) {
-        //ajout d'une condition sur le sel
-        //if(isset($Security->UsernameToken->Username) && isset($Security->UsernameToken->Password)&&isset($Security->UsernameToken->Salt)) {
+		
         if (isset($Security->UsernameToken->Username) && isset($Security->UsernameToken->Password) && isset($Security->UsernameToken->Nonce) && isset($Security->UsernameToken->Created)) {
-            //ligne � commenter
             list($client_name, $client_access) = explode(",", $Security->UsernameToken->Username);
-            //$client_password = $Security->UsernameToken->Password;
             $client_password_digest = $Security->UsernameToken->Password;
-            //sel ajout�
             $client_salt = $Security->UsernameToken->Salt;
             $client_nonce = $Security->UsernameToken->Nonce;
             $client_created = $Security->UsernameToken->Created;
@@ -142,6 +140,8 @@ class MooWSe {
 
             //générateur : (service,fonctions)->WSDL
             $service_WSDL = "<" . $service . ">" . implode(",", $functions) . "</" . $service . ">";
+			//$service_WSDL_test = generateWSDL([1,2]);
+			//file_put_contents("test.wsdl",$service_WSDL_test);
         }
         return htmlspecialchars($service_WSDL, ENT_XML1);
     }
