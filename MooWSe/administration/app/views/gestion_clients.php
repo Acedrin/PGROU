@@ -16,22 +16,16 @@ error_reporting(0);
 
 if (isset($_SESSION['login'])) {
     require("../controllers/getClients.php");
-    print_r($_SESSION['alert']);
-    // Remise à zéro de la variable d'alerte
-    $_SESSION['alert'] = "";
+
+    // Définition des variables nécessaires pour le header
+    $titre_web = "MooWse - Gestion clients";
+    $titre_principal = "Espace Administration de MooWse";
+    $titre_section = "Gestion clients";
+
+    require("../views/header.php");
     ?>
-    <!DOCTYPE html>
-    <html lang="fr-fr">
-        <head>
-            <link href="../../public/css/accueil.css" type="text/css" rel="stylesheet" />
-            <meta charset="UTF-8" />
-            <title>MooWse - Gestion clients</title>
-        </head>
         <body>
             <div class="navigation">
-                <h1>Espace Administration de MooWse</h1>
-                <h2>Gestion clients</h2>
-
                 <table>
                     <tbody>
                         <tr>

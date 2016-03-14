@@ -11,17 +11,33 @@ body {
     background-color:brown; 
 }
 
-.navigation {
+.header {
     text-align: center;
-    margin: 100px auto 100px;
-    width: 800px;
-    padding: 20px;
+    margin-top: 100px;
+    margin-bottom: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 800px;
+    padding: 10px;
     background: #fff;
     border-radius: 5px;
     box-shadow: 0  2px 5px rgba(0,0,0,.3);
     background-image: url("../img/elan.jpg");
     background-repeat: no-repeat;
     background-position: top left;
+}
+
+.navigation {
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 100px;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 800px;
+    padding: 20px;
+    background: #fff;
+    border-radius: 5px;
+    box-shadow: 0  2px 5px rgba(0,0,0,.3);
 }
 
 .navigation2 {
@@ -70,3 +86,26 @@ button {
     cursor: pointer;
 }
 
+.success_message {
+    width: 400px;
+    border-radius: 3px;
+    box-shadow: 0px 0px 10px #CCCCCC;
+    background: url(../img/ok.png) no-repeat 5px center #d3ffde;
+    border : 1px solid green;
+    padding: 5px 5px 5px 28px;
+    margin: 20px 0px;
+    color: #1B892D;
+    font-weight: bold;
+}
+
+.error_message {
+    width: 400px;
+    border-radius: 3px;
+    box-shadow: 0px 0px 10px #CCCCCC;
+    border : 1px solid #A40000;
+    padding: 5px 5px 5px 28px;
+    background: url(../img/error.png) no-repeat 5px center #FFBBBB;
+    margin: 20px 0px;
+    color: #BA1515;
+    font-weight: bold;
+}

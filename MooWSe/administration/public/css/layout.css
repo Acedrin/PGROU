@@ -1,12 +1,11 @@
-/*
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
-*/
-/* 
-    Created on : 12 mars 2016, 21:04:45
-    Author     : quentin
-*/
+/* --------------------------------------------------
+  Projet MOOWSE
+  Fichier css
+  CSS du layout de l'application MooWse
+
+  Quentin Payet
+  Ecole Centrale de Nantes
+  -------------------------------------------------- */
 
 .layout {
     text-align: center;
@@ -43,8 +42,8 @@ a:hover {
 
 .boutondeconnexion
 {
-   background-image: url("../img/logout_24.png");
-   background-repeat: no-repeat;
+    background-image: url("../img/logout_24.png");
+    background-repeat: no-repeat;
     border: none;
     color: white;
     background-color: transparent;
@@ -53,5 +52,5 @@ a:hover {
     text-decoration: none;
     display: inline-block;
     cursor: pointer;
-   
+
 }
