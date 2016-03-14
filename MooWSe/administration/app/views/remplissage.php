@@ -5,8 +5,7 @@ function connectMaBase(){
 }
 ?>
 <html>
-    <head><title>Formulaire de remplissage</title>
-	   <link href="public/css/accueil.css" rel="stylesheet" type="text/css"/></head>
+    <head><title>Formulaire de remplissage</title></head>
     <body>
         <h2>Formulaire de remplissage :</h2>
 		<div>
@@ -100,7 +99,7 @@ while ($data= mysql_fetch_array($reponse))
 		
         ?>
 		</div>
-		 <div> 
+		 <div>
         <h3>Ajouter des variables &agrave; une fonction</h3>
         <form name="server" method="post" action="remplissage.php">
 		<!-- On écrit le nom de la variable --> 
@@ -219,7 +218,7 @@ while ($data= mysql_fetch_array($reponse))
           // On se connecte
 			connectMaBase();
 		// On ajoute les informations à la base de données          
-            $sql = 'INSERT INTO type VALUES("","'.$type_name.'","xsd:'.$type_name.'","'.$type_complex.'")';
+            $sql = 'INSERT INTO type VALUES("","'.$type_name.'","","'.$type_complex.'")';
            echo "<script>alert(\"Ajout \340 la base de donn\351es\")</script>"; 
             mysql_query ($sql) or die ('Erreur SQL !'.$sql.'<br />'.mysql_error());
       //On ferme la connexion   
@@ -227,5 +226,6 @@ while ($data= mysql_fetch_array($reponse))
         }
         ?>
        </div>
+		
     </body>
 </html>
