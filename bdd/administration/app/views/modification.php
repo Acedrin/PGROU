@@ -1,17 +1,4 @@
 <?php
-
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- * Description of connexion_bdd
- *
- * @author Christophe Cleuet
- */
-
 function connectMaBase(){
     $bdd = mysql_connect ('localhost', 'root', 'root');  
     mysql_select_db ('moowse', $bdd) ;
@@ -23,68 +10,77 @@ function connectMaBase(){
 	 <h2>Administration de la Base :</h2>
 	<div>
 	<h3>Serveur</h3>
+
 	 <form name="server" method="post" action="modification.php">
+<!-- On choisit le serveur qu'on souhaite modifier/supprimer --> 
 	 <label for="server_name" style="display:block;width: 150px;float:left"> Server : </label>
      <select name="server_name" id="server_name">
 <?php
 
 try
-{
+{ // On se connecte
    connectMaBase();
 }
 catch(Exception $e)
 {
             die('Erreur : '.$e->getMessage());
 }
-
+// On récupère la liste des serveurs 
 $reponse = mysql_query('SELECT DISTINCT server_name FROM server');
  
 while ($data= mysql_fetch_array($reponse))
 {
-?>
+?> <!--On affiche la liste des serveurs -->
            <option value="<?php echo $data['server_name'];?>"> <?php echo $data['server_name']; ?></option>
 <?php
 }
 
 ?>
 </select> </br>
+<!--On choisit de modifier ou de supprimet le serveur -->
 <input type="submit" name="modifier_serveur" onclick="return confirm('Confirmer?')" value="Modifier"/><input type="submit" name="supprimer_serveur" onclick="return confirm('Confirmer?')" value="Supprimer"/>
 	 <?php
-		
+		// Si on a choisi de supprimer
         if (isset ($_POST['supprimer_serveur']))
 		{
-           
+           // On récupère le nom du serveur
             $server_name=$_POST['server_name'];
-			
+			// On se connecte
             connectMaBase();
-
+           // On supprime le serveur de la base de données
             $sql = 'DELETE FROM Server WHERE server_name ="'.$server_name.'"';
             echo "<script>alert(\"Suppression de la base de donn\351es\")</script>"; 
             mysql_query ($sql) or die ('Erreur SQL !'.$sql.'<br/>'.mysql_error());
+			// On ferme la connexion
             mysql_close();
         }
-		
+		// Si on a choisi de modifier le serveur
        elseif (isset ($_POST['modifier_serveur']))
 	   
-	   {	     
+	   {	     // On récupère le nom du serveur choisi
 			 $server_name=$_POST['server_name'];
+			    // On récupère l'adress soap associée à ce serveur
 			 $req = mysql_query('SELECT server_soapadress FROM server WHERE server_name ="'.$server_name.'"');
 			 $row=mysql_fetch_row($req);	
 		?>
 		</br>
+		<!-- On écrit le nom du serveur --> 
  <label style="display:block;width: 150px;float:left "> Serveur choisi : </label><input type="text" readonly name="server_name" value="<?php echo $server_name; ?>"/><br/>
+ <!-- L'utilisateur peut alors modifier l'adress Soap --> 
  <label style="display:block;width: 150px;float:left "> Soap_adress : </label><input type="text" name="soap_adress" value="<?php echo $row[0];?>"/><br/>
+ <!-- On confirme la modification --> 
   <input type="submit" name="valider_server" onclick="return confirm('Confirmer?')" value="OK"/>
   </form>
 	 
  </br>
-  <?php               
+  <?php          
+// On ferme la connexion  
      mysql_close();			 
 	   }
    ?>
    
 	 <?php
-	 
+	 // Si on a confirmé la modification
      if (isset ($_POST['valider_server']))
 	 {
             //On récupère les valeurs entrées par l'utilisateur :
@@ -94,7 +90,7 @@ while ($data= mysql_fetch_array($reponse))
             //On se connecte
 			connectMaBase();
  
-            //On prépare la commande sql d'insertion
+            //On prépare la commande sql d'update
             $sql = 'UPDATE server SET server_soapadress="'.$server_soapadress.'" WHERE server_name="'.$server_name.'" ';
        	 /*on lance la commande (mysql_query) et au cas où,
             on rédige un petit message d'erreur si la requête ne passe pas
