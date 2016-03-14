@@ -49,7 +49,7 @@ function generateWSDL($array){
 if(is_array($array)){
         $a = new ArrayObject(); // Création d'un tableau d'objet
         foreach($array as $r){
-           $bdd = new PDO('mysql:host=localhost;dbname=new_schema;charset=utf8', 'root', 'admin', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+           $bdd = new PDO('mysql:host=localhost;dbname=webservices;charset=utf8', 'root', '', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
             $result = $bdd->query("SELECT DISTINCT function_name,variable_name,variable_input,type_namewsdl,server_name "
             . "FROM access,client,function,variable,type,server "
             . "WHERE client.client_id=access.client_id "
@@ -225,5 +225,5 @@ foreach($a as $q){
     $tempServer=$q->server_name;
 }
 $oXMLWriter->endDocument();
-echo $oXMLWriter->outputMemory(TRUE);
+return $oXMLWriter->outputMemory(TRUE);
 }

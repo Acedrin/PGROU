@@ -19,11 +19,14 @@
 	$password1 = "admin";
 	$hash1 = sha1($password1); //Il faut maintenant hacher une première fois le mot de passe (on utilisera simplement sha1 pour le moment)
 	$service1 = "moodle";
+	$service1_WSDL_file = "moodle.wsdl";
+	$service1_failed_WSDL_file = "moodle_error.wsdl";
 
 	$username2 = "moodle" . "," . "batch";
 	$password2 = "admin";
 	$hash2 = sha1($password2);
 	$service2 = "agap";
+	$service2_WSDL_file = "agap.wsdl";
 
 	$options = array(
 		//"location" => NULL,
@@ -160,14 +163,15 @@
 	$MooWSe_client->__setSoapHeaders($Header);
 
 	try {
-		$service_WSDL = htmlspecialchars_decode($MooWSe_client->getWSDL(new SoapParam($service1, "service")), ENT_XML1);
+		$service1_WSDL = htmlspecialchars_decode($MooWSe_client->getWSDL(new SoapParam($service1, "service")), ENT_XML1);
 	} catch (SoapFault $fault) {
 		echo getLastHTTPDialogue($MooWSe_client);
 		trigger_error("SOAP Fault: (faultcode: {$fault->faultcode}, faultstring: {$fault->faultstring})", E_USER_ERROR);
 	}
 
 	echo getLastHTTPDialogue($MooWSe_client);
-	echo "<pre>" . htmlspecialchars($service_WSDL) . "</pre>";
+	echo "<pre>" . htmlspecialchars($service1_WSDL) . "</pre>";
+	file_put_contents($service1_WSDL_file,$service1_WSDL);
 
 
 	$Username = $username2;
@@ -185,27 +189,29 @@
 	$MooWSe_client->__setSoapHeaders($Header);
 
 	try {
-		$service_WSDL = htmlspecialchars_decode($MooWSe_client->getWSDL(new SoapParam($service2, "service")), ENT_XML1);
+		$service2_WSDL = htmlspecialchars_decode($MooWSe_client->getWSDL(new SoapParam($service2, "service")), ENT_XML1);
 	} catch (SoapFault $fault) {
 		echo getLastHTTPDialogue($MooWSe_client);
 		trigger_error("SOAP Fault: (faultcode: {$fault->faultcode}, faultstring: {$fault->faultstring})", E_USER_ERROR);
 	}
 
 	echo getLastHTTPDialogue($MooWSe_client);
-	echo "<pre>" . htmlspecialchars($service_WSDL) . "</pre>";
+	echo "<pre>" . htmlspecialchars($service2_WSDL) . "</pre>";
+	file_put_contents($service2_WSDL_file,$service2_WSDL);
 
 
 	sleep(2);
 
 	try {
-		$service_WSDL = htmlspecialchars_decode($MooWSe_client->getWSDL(new SoapParam($service1, "service")), ENT_XML1);
+		$service2_WSDL = htmlspecialchars_decode($MooWSe_client->getWSDL(new SoapParam($service1, "service")), ENT_XML1);
 	} catch (SoapFault $fault) {
 		echo getLastHTTPDialogue($MooWSe_client);
 		trigger_error("SOAP Fault: (faultcode: {$fault->faultcode}, faultstring: {$fault->faultstring})", E_USER_ERROR);
 	}
 
 	echo getLastHTTPDialogue($MooWSe_client);
-	echo "<pre>" . htmlspecialchars($service_WSDL) . "</pre>";
+	echo "<pre>" . htmlspecialchars($service2_WSDL) . "</pre>";
+	file_put_contents($service1_failed_WSDL_file,$service2_WSDL);
 
 	
 	
