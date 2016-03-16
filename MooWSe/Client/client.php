@@ -1,16 +1,18 @@
 <?php
-
+        //paramètre d'intitialisation de la mise en cahce du WSDL, son time to live est de 1s (permet d'éviter la mise en cache du WSDL
 	ini_set("soap.wsdl_cache_ttl", 1);
-
+        //appel des paramètres initiaux d'erreurs
 	ini_set("display_startup_errors",true);
 	ini_set("display_errors",true);
 	ini_set("html_errors",true);
+        //extension Zend
 	//ini_set("zend_extension","C:\xampp\php\ext\php_xdebug.dll"); // inutile, Ã  activer directement dans php.ini, avant de redÃ©marrer XAMPP
 	ini_set("log_errors",false);
 	error_reporting(E_ALL);
-
+        //chargment de l'URL du dossier contenant le WSDL
 	$MooWSe_URL = "http://localhost/github/PGROU/MooWSe";
 	$MooWSe_WSDL_file = "MooWSe.wsdl";
+        //ajout du contenu du fichier WSDL
 	file_put_contents($MooWSe_WSDL_file,file_get_contents($MooWSe_URL));
 	
 	//Ici le client entre ses mots de passe en brut (ce fichier n'est pas accessible par un pirate, seules les informations transmises le sont)

@@ -9,15 +9,12 @@ class MooWSe {
     private $_tokenTimeToLive = 1;
 
     public function Security($Security) {
-        //ajout d'une condition sur le sel
-        //if(isset($Security->UsernameToken->Username) && isset($Security->UsernameToken->Password)&&isset($Security->UsernameToken->Salt)) {
+
         if (isset($Security->UsernameToken->Username) && isset($Security->UsernameToken->Password) && isset($Security->UsernameToken->Nonce) && isset($Security->UsernameToken->Created)) {
-            //ligne � commenter
+            //ligne a commenter
             list($client_name, $client_access) = explode(",", $Security->UsernameToken->Username);
             //$client_password = $Security->UsernameToken->Password;
             $client_password_digest = $Security->UsernameToken->Password;
-            //sel ajout�
-            $client_salt = $Security->UsernameToken->Salt;
             $client_nonce = $Security->UsernameToken->Nonce;
             $client_created = $Security->UsernameToken->Created;
             $client_IP = $_SERVER["REMOTE_ADDR"];
@@ -52,7 +49,6 @@ class MooWSe {
                     if ($token_time >= (time() - $this->_tokenTimeToLive)) {
                         $this->_client_name = $client_name;
                         $this->_client_access = $client_access;
-
                         $this->_tokenChecked = true;
                     }
                 }
