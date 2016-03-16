@@ -1,6 +1,8 @@
 <?php 
-
+//classe d'Elliot
 require "generateWSDL.php";
+//classe de Quentin
+require "dataBaseCall.php";
 
 class MooWSe {
 
