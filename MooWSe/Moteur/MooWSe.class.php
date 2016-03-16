@@ -1,4 +1,5 @@
-<?php 
+<?php
+
 //classe d'Elliot
 require "generateWSDL.php";
 //classe de Quentin
@@ -13,7 +14,7 @@ class MooWSe {
     private $_tokenTimeToLive = 1;
 
     public function Security($Security) {
-		
+
         if (isset($Security->UsernameToken->Username) && isset($Security->UsernameToken->Password) && isset($Security->UsernameToken->Nonce) && isset($Security->UsernameToken->Created)) {
             list($client_name, $client_access) = explode(",", $Security->UsernameToken->Username);
             $client_password_digest = $Security->UsernameToken->Password;
@@ -22,30 +23,11 @@ class MooWSe {
             $client_created = $Security->UsernameToken->Created;
             $client_IP = $_SERVER["REMOTE_ADDR"];
 
-            //connexion � la base de donn�es dont le nom est webservices, l'utilisateur root et sans mot de passe
-            $bdd = new PDO('mysql:host=localhost;dbname=webservices;charset=utf8', 'root', '', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
-            //recherche du client en base
-            $recherche_client = $bdd->query('SELECT client_name,client_ip,client_password,modality_name FROM client INNER JOIN modality ON modality.modality_id=client.modality_id WHERE client_name=\'' . $client_name . '\'');
-            //v�rification de table non vide (sinon le client n'existe pas
-            if ($info_client = $recherche_client->fetch()) {
-                //assignation des variables
-                $client_database_name = $info_client['client_name'];
-                $client_database_ip = $info_client['client_ip'];
-                $client_database_password = $info_client['client_password'];
-                $client_database_modality = $info_client['modality_name'];
-                //mot de passe encrypt�
-                $client_database_encrypted_password = base64_encode(sha1($client_nonce . $client_created . sha1($client_database_password)));
-                //v�rification des informations en base
-                $registered = $client_access == $client_database_modality &&
-                        $client_database_encrypted_password = $client_password_digest &&
-                        $client_IP = $client_database_ip &&
-                        (($client_database_modality == $client_access)); 
-                        
-            } else { //le nom de client est incorrect
-                $registered = False;
-            }
+            //on regarde si le client est enregistr�, appel de base
+            $checkingDatas = new dataBaseCall('localhost', 'webservices', 'utf8', 'root', '');
+            $registered = $checkingDatas->clientRegistered($client_nonce, $client_created, $client_access, $client_password_digest, $client_IP);
 
-            //si l'authentification est r�usssie
+//si l'authentification est r�usssie
             if ($registered) {
 
                 $this->_client_name = $client_name;
@@ -115,37 +97,25 @@ class MooWSe {
             $time = time();
             $client_name = $this->_client_name;
             $client_access = $this->_client_access;
-            $service="service";
+            $service = "service";
             $action = "getWSDL";
 
             //renvoyer la liste des fonctions auxquelles l'utilisateur a acc�s 
             //appel � la base
             if ($this->_tokenChecked) {
                 //connexion � la base de donn�es 
-                $bdd = new PDO('mysql:host=localhost;dbname=webservices;charset=utf8', 'root', '', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
-                //appel des fonctions autoris�es pour le client
-                $function_request = $bdd->query('SELECT function.function_id FROM function INNER JOIN access ON function.function_id=access.function_id
-                    INNER JOIN client ON access.client_id=client.client_id
-                    INNER JOIN server ON server.server_id=function.server_id
-                    WHERE client_name=\'' . $client_name . '\' ');
-                //obtention du nombre de fonctions auxquelles 
-                $number_function = $function_request->rowCount();
-                //extraire le premier �l�ment                
-                $current_function = $function_request->fetch();
-                //creation d'un array
-                $functions = array($current_function[0]);
-                while($current_function = $function_request->fetch()){
-                    //ajoute la fonction courante au array
-                    array_push($functions,$current_function[0]);
-                }                      
+                $gettingDatas = new dataBaseCall('localhost', 'webservices', 'utf8', 'root', '');
+                $functions=$gettingDatas->listFunction($client_name);
+                }
             }
 
             //générateur : (service,fonctions)->WSDL
             //$service_WSDL = "<" . $service . ">" . implode(",", $functions) . "</" . $service . ">";
-			$service_WSDL = generateWSDL($functions);
-			//file_put_contents("test.wsdl",$service_WSDL_test);
+            $service_WSDL = generateWSDL($functions);
+            //file_put_contents("test.wsdl",$service_WSDL_test);
+            return htmlspecialchars($service_WSDL, ENT_XML1);
         }
-        return htmlspecialchars($service_WSDL, ENT_XML1);
+        
     }
 
 }
