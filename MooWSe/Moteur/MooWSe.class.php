@@ -139,8 +139,8 @@ class MooWSe {
             }
 
             //générateur : (service,fonctions)->WSDL
-            $service_WSDL = "<" . $service . ">" . implode(",", $functions) . "</" . $service . ">";
-			$service_WSDL = generateWSDL([1,2]);
+            //$service_WSDL = "<" . $service . ">" . implode(",", $functions) . "</" . $service . ">";
+			$service_WSDL = generateWSDL($functions);
 			//file_put_contents("test.wsdl",$service_WSDL_test);
         }
         return htmlspecialchars($service_WSDL, ENT_XML1);
