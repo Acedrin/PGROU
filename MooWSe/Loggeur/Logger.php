@@ -22,7 +22,7 @@ private $variables_file; // file .ini for persistent variables
 private $n;
 private $FILEAGE;
 
-public $debug=false;
+public $debug=true;
 
 
 public function __construct(){
@@ -72,7 +72,7 @@ public function LogClient($ip,$client,$modality,$action){
 }
 
 //public function to log function and request from an user/app
-public function LogServ($client, $ip, $modality, $service, $action){
+public function LogServ($ip, $client, $modality, $service, $action){
 
 
    
@@ -99,12 +99,12 @@ public function LogServ($client, $ip, $modality, $service, $action){
 }
 
 //public function to log errors
-public function LogError($login, $ip, $token, $error){
+public function LogError($ip, $client, $error){
 
 
    
     $this->time="[".date('Y/m/d - H:i:s', time())."]";
-    $txt=$this->time." ".$ip." ".$login." ".$token." ".$error;
+    $txt=$this->time." ".$ip." ".$login." ".$error;
 
     if($this->debug) echo "</br>".$txt;
     if($this->debug) echo "</br>case";
@@ -115,12 +115,12 @@ public function LogError($login, $ip, $token, $error){
             $this->errorLog_file($txt);
             break;
         case 2:
-           $this->errorLog_db($login, $ip, $token,$error);
+           $this->errorLog_db($ip, $client, $error);
             break;
         case 3:
             $check=$this->checkFile($this->ERRORLOG);
             $this->errorLog_file($txt);
-            $this->errorLog_db($login, $ip, $token,$error);
+            $this->errorLog_db($ip, $client, $error);
             break;
     }
 }
@@ -150,7 +150,10 @@ private function userLog_db($ip,$client,$modality,$action){
 
     $connect = new PDO('mysql:host=localhost;port='.$this->PORT.';dbname='.$this->DB, $this->USER, $this->PASSWD);
 
-    $connect->exec("INSERT INTO `userLog`(`userLog_time`,`userLog_ip`, `userLog_client`, `userLog_modalite`, `userLog_action`) VALUES ( NOW(),'".$ip."','".$client."','".$modality."','".$action."')");
+    $query="INSERT INTO `userLog`(`userLog_time`,`userLog_ip`, `userLog_client`, `userLog_modalite`, `userLog_action`) VALUES ( NOW(),'".$ip."','".$client."','".$modality."','".$action."')";
+
+    $connect->exec($query);
+    if($this->debug) echo $query;
     $connect=null;
 }
 
@@ -158,17 +161,22 @@ private function funcLog_db($client, $ip, $modality, $service, $action){
     if($this->debug) echo "</br>funcLog_db";
 
     $connect = new PDO('mysql:host=localhost;port='.$this->PORT.';dbname='.$this->DB, $this->USER, $this->PASSWD);
-
-    $connect->exec("INSERT INTO `servLog`(`servLog_time`,`servLog_ip`, `servLog_client`, `servLog_modalite`,`servLog_service`) VALUES ( NOW(),'".$ip."','".$client."','".$modality."','".$service."','".$action."')");
+    $query="INSERT INTO `servLog`(`servLog_time`,`servLog_ip`, `servLog_client`, `servLog_modalite`,`servLog_service`,`servLog_action`) VALUES ( NOW(),'".$ip."','".$client."','".$modality."','".$service."','".$action."')";
+    $connect->exec($query);
+    if($this->debug) echo $query;
     $connect=null;
 }
 
-private function errorLog_db($client, $ip, $token, $error){
+private function errorLog_db($ip, $client, $error){
     if($this->debug) echo "</br>errorLog_db";
 
     $connect = new PDO('mysql:host=localhost;port='.$this->PORT.';dbname='.$this->DB, $this->USER, $this->PASSWD);
 
-    $connect->exec("INSERT INTO `errorLog`(`errorLog_time`,`errorLog_ip`, `errorLog_client`, `errorLog_token`,`errorLog_error`) VALUES ( NOW(),'".$ip."','".$client."','".$token."','".$error."')");
+    $query="INSERT INTO `errorLog`(`errorLog_time`,`errorLog_ip`, `errorLog_client`,`errorLog_error`) VALUES ( NOW(),'".$ip."','".$client."','".$error."')";
+
+    $connect->exec($query);
+
+    if($this->debug) echo $query;
     $connect=null;
 }
 

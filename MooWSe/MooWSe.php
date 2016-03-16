@@ -101,6 +101,9 @@ class MooWSe {
             $service = "service";
             $action = "getWSDL";
 
+            $logger= new Logger();
+            $logger->LogServ($client_IP,$client_name,$client_access,$service,$action);
+
             //renvoyer la liste des fonctions auxquelles l'utilisateur a acc�s 
             //appel � la base
             if ($this->_tokenChecked) {

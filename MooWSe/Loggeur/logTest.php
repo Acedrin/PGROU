@@ -1,14 +1,13 @@
 <?php
 
 include('Logger.php');
-include('logRotate.php');
 
 $bar = new Logger();
 
 
-$bar->LogError("NOME","127.0.0.1","token","error");
-$bar->LogFunc("NOME","127.0.0.1","token","function");
-$bar->LogUser("NOME","127.0.0.1","token");
+$bar->LogError("127.0.0.1","client_name","error");
+//$bar->LogServ("127.0.0.1","clent_name","modality","service","action");
+//$bar->LogClient("127.0.0.1","clent_name","modality","action");
 
 //$bar->maxAgedFile('./logs/userLog');
 

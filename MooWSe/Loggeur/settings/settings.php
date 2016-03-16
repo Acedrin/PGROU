@@ -4,11 +4,11 @@
 - 1 = log in file
 - 2 = log in db
 - 3 = log either in file and db*/
-$logDevice=1;
+$logDevice=3;
 
 //relative or absolute path to the logs file
 $userLog_file="./logs/userLog";
-$funcLog_file="./logs/funcLog";
+$funcLog_file="./logs/servLog";
 $errorLog_file="./logs/errorLog";
 
 //credentials for the database
@@ -29,7 +29,7 @@ $max_fileage  - max age of logfile in days, all log files (including stocked one
 $variables 	  - path to file to store some variables for creation of stocked log (e.g. n incremental variable) 
 */
 $max_filesize=15;
-$max_fileage=1;
+$max_fileage=30;
 $variables="./settings/settings.ini";
 
 ?>
