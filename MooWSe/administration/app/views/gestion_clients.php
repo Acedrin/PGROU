@@ -24,67 +24,76 @@ if (isset($_SESSION['login'])) {
 
     require("../views/header.php");
     ?>
-        <body>
-            <div class="navigation">
-                <table>
-                    <tbody>
-                        <tr>
-                            <th>Nom</th>
-                            <th>Adresse IP</th>
-                            <th>Modalité de connexion</th>
-                            <th>Mot de Passe</th>
-                            <th>Actions</th>
-                        </tr>
-                        <?php
-                        for ($i = 0; $i < sizeof($clients); $i++) {
-                            ?>
-                            <tr id="see_client_<?php print_r($clients[$i]['client_id']) ?>">
+    <body>
+        <div class="navigation">
+            <table>
+                <tr>
+                    <th>Nom</th>
+                    <th>Adresse IP</th>
+                    <th>Modalité de connexion</th>
+                    <th>Mot de Passe</th>
+                    <th>Actions</th>
+                </tr>
+                <?php
+                for ($i = 0; $i < sizeof($clients); $i++) {
+                    ?>
+                    <tr>
 
-                                <td>
-                                    <?php
-                                    print_r($clients[$i]['client_name']);
-                                    ?>
-                                </td>
-                                <td>
-                                    <?php
-                                    print_r($clients[$i]['client_ip']);
-                                    ?>
-                                </td>
-                                <td>
-                                    <?php
-                                    print_r($modalities[$clients[$i]['modality_id']]);
-                                    ?>
-                                </td>
-                                <td>
-                                    <?php
-                                    if ($clients[$i]['client_password'] == "") {
-                                        echo 'Non';
-                                    } else {
-                                        echo 'Oui';
-                                    }
-                                    ?>
-                                </td>
-                                <td>
-                                    <a href="ajout_client.php?client_id=<?php print_r($clients[$i]['client_id']) ?>"><img src="../../public/img/edit.png" title="Modifier le client" alt="Modifier"></a>
-
-                                    &nbsp;
-
-                                    <a href="../controllers/deleteClient.php?client_id=<?php print_r($clients[$i]['client_id']) ?>" onclick=""return confirm('Voulez vous vraiment supprimer le client <?php print_r($clients[$i]['client_name']) ?>><img src="../../public/img/delete.png" title="Supprimer le client" alt="Supprimer"></a>
-                                </td>
-                            </tr>
+                        <td>
                             <?php
-                        }
-                        ?>
-                    </tbody>
-                </table>
+                            print_r($clients[$i]['client_name']);
+                            ?>
+                        </td>
+                        <td>
+                            <?php
+                            print_r($clients[$i]['client_ip']);
+                            ?>
+                        </td>
+                        <td>
+                            <?php
+                            print_r($modalities[$clients[$i]['modality_id']]);
+                            ?>
+                        </td>
+                        <td>
+                            <?php
+                            if ($clients[$i]['client_password'] == "") {
+                                echo 'Non';
+                            } else {
+                                echo 'Oui';
+                            }
+                            ?>
+                        </td>
+                        <td>
+                            <a href="ajout_client.php?client_id=<?php print_r($clients[$i]['client_id']) ?>"><img src="../../public/img/edit.png" title="Modifier le client" alt="Modifier"></a>
 
-                <br />
-                <br />
+                            &nbsp;
 
-                <a href="ajout_client.php"><button type="button">Ajouter un client</button></a>
-                 <?php include("../../app/views/layout.html"); ?>
-            </div>
-        </body>
+                            <img src="../../public/img/key.png" title="Modifier le mot de passe du client" alt="Mot de passe">
+
+                            &nbsp;
+
+                            <a href="gestion_acces_client.php?client_id=<?php print_r($clients[$i]['client_id']) ?>"><img src="../../public/img/lock.gif" title="Gérer les droits d'accès du client" alt="Droits d'accès"></a>
+
+                            &nbsp;
+
+                            <a href="../controllers/deleteClient.php?client_id=<?php print_r($clients[$i]['client_id']) ?>" 
+                               onclick="return(confirm('Voulez vous vraiment supprimer le client <?php print_r($clients[$i]['client_name']) ?> ?'));">
+                                <img src="../../public/img/delete.png" title="Supprimer le client" alt="Supprimer">
+                            </a>
+                        </td>
+                    </tr>
+                    <?php
+                }
+                ?>
+            </table>
+
+            <br />
+            <br />
+
+            <a href="ajout_client.php"><button type="button">Ajouter un client</button></a>
+            <?php include("../../app/views/layout.html"); ?>
+        </div>
+    </body>
     </html>
     <?php
 } else {

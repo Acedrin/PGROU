@@ -33,45 +33,44 @@ if (isset($_SESSION['login'])) {
                 <h2>Gestion administrateurs</h2>
 
                 <table>
-                    <tbody>
-                        <tr>
-                            <th>Login</th>
-                            <th>Expiration</th>
-                            <th>Action</th>
-                        </tr>
-                        <?php
-                        for ($i = 0; $i < sizeof($users); $i++) {
-                            ?>
-                            <!-- Ligne de présentation d'un administrateur existant
-                            La ligne est visible par défaut -->
-                            <tr id="see_admin_<?php print_r($users[$i]['user_id']) ?>">
-
-                                <td>
-                                    <?php
-                                    print_r($users[$i]['user_uid']);
-                                    ?>
-                                </td>
-                                <td>
-                                    <?php
-                                    if ($users[$i]['user_expirationdate'] == "0000-00-00") {
-                                        echo "Pas d'expiration";
-                                    } else {
-                                        print_r($users[$i]['user_expirationdate']);
-                                    }
-                                    ?>
-                                </td>
-                                <td>
-                                    <a href="ajout_user.php?user_id=<?php print_r($users[$i]['user_id']) ?>"><img src="../../public/img/edit.png" title="Modifier l'administrateur" alt="Modifier"></a>
-
-                                    &nbsp;
-
-                                    <a href="../controllers/deleteUser.php?user_id=<?php print_r($users[$i]['user_id']) ?>" onclick=""return confirm('Voulez vous vraiment supprimer l'administrateur <?php print_r($users[$i]['user_name']) ?>><img src="../../public/img/delete.png" title="Supprimer l'administrateur" alt="Supprimer"></a>
-                                </td>
-                            </tr>  
-                            <?php
-                        }
+                    <tr>
+                        <th>Login</th>
+                        <th>Expiration</th>
+                        <th>Action</th>
+                    </tr>
+                    <?php
+                    for ($i = 0; $i < sizeof($users); $i++) {
                         ?>
-                    </tbody>
+                        <tr>
+
+                            <td>
+                                <?php
+                                print_r($users[$i]['user_uid']);
+                                ?>
+                            </td>
+                            <td>
+                                <?php
+                                if ($users[$i]['user_expirationdate'] == "0000-00-00") {
+                                    echo "Pas d'expiration";
+                                } else {
+                                    print_r($users[$i]['user_expirationdate']);
+                                }
+                                ?>
+                            </td>
+                            <td>
+                                <a href="ajout_user.php?user_id=<?php print_r($users[$i]['user_id']) ?>"><img src="../../public/img/edit.png" title="Modifier l'administrateur" alt="Modifier"></a>
+
+                                &nbsp;
+
+                                <a href="../controllers/deleteUser.php?user_id=<?php print_r($users[$i]['user_id']) ?>" 
+                                   onclick="return(confirm('Voulez vous vraiment supprimer l\'administrateur <?php print_r($users[$i]['user_uid']) ?> ?'));">
+                                    <img src="../../public/img/delete.png" title="Supprimer l'administrateur" alt="Supprimer">
+                                </a>
+                            </td>
+                        </tr>  
+                        <?php
+                    }
+                    ?>
                 </table>
 
                 <br />

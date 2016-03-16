@@ -19,28 +19,26 @@ require("bdd.php");
 // Protection pour ne pas acceder au contrôleur sans être connecté
 if (isset($_SESSION['login'])) {
     // Vérification d'une demande d'information sur un client particulier
-    // Si la valeur est 0, alors la requête est seulement d'avoir
-    // les modalities, les clients et les fonctions
-    if (isset($client_id) && $client_id != 0) {
-        
+    if (isset($client_id)) {
+
         try {
             // Récupération des droits d'accès du client
-            $stmt = $bdd->prepare('SELECT access.client_id,access.function_id,access.access_right,function.server_id,function.function_name,server.server_name,client.client_name,client.client_ip,client.modality_id,modality.modality_name '
+            $stmt = $bdd->prepare('SELECT access.function_id,function.server_id,function.function_name,server.server_name '
                     . 'FROM access '
                     . 'INNER JOIN client ON access.client_id=client.client_id '
                     . 'INNER JOIN modality ON client.modality_id=modality.modality_id '
                     . 'INNER JOIN function ON access.function_id=function.function_id '
                     . 'INNER JOIN server ON function.server_id=server.server_id '
-                    . 'WHERE access.client_id=:client_id');
+                    . 'WHERE access.client_id=:client_id AND access.access_right=1 ORDER BY server.server_name');
             $stmt->bindParam(':client_id', $client_id);
             $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $stmt->execute();
-     
+
             // Enregistrement du résultat dans un tableau
             $access = $stmt->fetchAll();
             // Fermeture de la connexion
             $stmt->closeCursor();
-            
+
             // Traitement des exceptions
         } catch (Exception $e) {
             $message = array(false, "Erreur lors de la r&eacute;cup&eacute;ration des droits d'acc&agrave;s du client\nVeuillez r&eacute;essayer");
@@ -48,19 +46,17 @@ if (isset($_SESSION['login'])) {
             // Enregistrement du message
             $_SESSION['alert'] = $message;
         }
-    } else if (isset($function_id) && $function_id != 0) {
+    } else if (isset($function_id)) {
         // Vérification d'une demande d'information sur une fonction particulière
-        // Si la valeur est 0, alors la requête est seulement d'avoir
-        // les modalities, les clients et les fonctions
         try {
             // Récupération des droits d'accès à la fonction
-            $stmt = $bdd->prepare('SELECT access.client_id,access.function_id,access.access_right,function.server_id,function.function_name,server.server_name,client.client_name,client.client_ip,client.modality_id,modality.modality_name '
+            $stmt = $bdd->prepare('SELECT access.client_id,access.function_id,function.server_id,function.function_name,server.server_name,client.client_name,client.client_ip,client.modality_id,modality.modality_name '
                     . 'FROM access '
                     . 'INNER JOIN client ON access.client_id=client.client_id '
                     . 'INNER JOIN modality ON client.modality_id=modality.modality_id '
                     . 'INNER JOIN function ON access.function_id=function.function_id '
                     . 'INNER JOIN server ON function.server_id=server.server_id '
-                    . 'WHERE access.function_id=:function_id');
+                    . 'WHERE access.function_id=:function_id AND access.access_right=1');
             $stmt->bindParam(':function_id', $function_id);
             $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $stmt->execute();
@@ -69,89 +65,14 @@ if (isset($_SESSION['login'])) {
             $access = $stmt->fetchAll();
             // Fermeture de la connexion
             $stmt->closeCursor();
-            
-            // Traitement des exceptions
-        } catch (Exception $e) {
-            $message = array(false, "Erreur lors de la r&eacute;cup&eacute;ration des droits d'acc&agrave;s &agrave; la fonction\nVeuillez r&eacute;essayer");
-
-            // Enregistrement du message
-            $_SESSION['alert'] = $message;
-        }
-    } else if (isset($server_id) && $server_id != 0) {
-        // Vérification d'une demande d'information sur un serveur particulier
-        // Si la valeur est 0, alors la requête est seulement d'avoir
-        // les modalities, les clients et les fonctions
-        try {
-            // Récupération des droits d'accès à la fonction
-            $stmt = $bdd->prepare('SELECT access.client_id,access.function_id,access.access_right,function.server_id,function.function_name,server.server_name,client.client_name,client.client_ip,client.modality_id,modality.modality_name '
-                    . 'FROM access '
-                    . 'INNER JOIN client ON access.client_id=client.client_id '
-                    . 'INNER JOIN modality ON client.modality_id=modality.modality_id '
-                    . 'INNER JOIN function ON access.function_id=function.function_id '
-                    . 'INNER JOIN server ON function.server_id=server.server_id '
-                    . 'WHERE server.server_id=:server_id');
-            $stmt->bindParam(':server_id', $server_id);
-            $stmt->setFetchMode(PDO::FETCH_ASSOC);
-            $stmt->execute();
-
-            // Enregistrement du résultat dans un tableau
-            $access = $stmt->fetchAll();
-            // Fermeture de la connexion
-            $stmt->closeCursor();
 
             // Traitement des exceptions
         } catch (Exception $e) {
-            $message = array(false, "Erreur lors de la r&eacute;cup&eacute;ration des droits d'acc&agrave;s au serveur\nVeuillez r&eacute;essayer");
+            $message = array(false, "Erreur lors de la r&eacute;cup&eacute;ration des droits d'acc&agrave;s &agrave; de la fonction\nVeuillez r&eacute;essayer");
 
             // Enregistrement du message
             $_SESSION['alert'] = $message;
         }
-    } else if (!isset($client_id) && !isset($function_id) && !isset($server_id)) {
-        // La requête cherche à obtenir tous les clients existants
-        try {
-            // Récupération de tous les clients
-            $stmt = $bdd->prepare('SELECT * FROM access');
-            $stmt->setFetchMode(PDO::FETCH_ASSOC);
-            $stmt->execute();
-
-            // Enregistrement du résultat dans un tableau
-            $access = $stmt->fetchAll();
-            // Fermeture de la connexion
-            $stmt->closeCursor();
-
-// Traitement des exceptions
-        } catch (Exception $e) {
-            $message = array(false, "Erreur lors de la r&eacute;cup&eacute;ration des droits d'acc&egrave;s\nVeuillez r&eacute;essayer");
-
-            // Enregistrement du message
-            $_SESSION['alert'] = $message;
-        }
-    }
-    try {
-        // Récupération de toutes les fonctions
-        $stmt = $bdd->prepare('SELECT * FROM functions');
-        $stmt->setFetchMode(PDO::FETCH_ASSOC);
-        $stmt->execute();
-
-        // Enregistrement du résultat dans un tableau
-        $modality_id = array();
-        $modality_name = array();
-        // Utilisation d'une boucle pour que le label des colonnes soit l'id
-        while ($row = $stmt->fetch()) {
-            $modality_id[] = $row['modality_id'];
-            $modality_name[] = $row['modality_name'];
-        }
-        $modalities = array_combine($modality_id, $modality_name);
-
-        // Fermeture de la connexion
-        $stmt->closeCursor();
-
-// Traitement des exceptions
-    } catch (Exception $e) {
-        $message = array(false, "Erreur lors de la r&eacute;cup&eacute;ration des modalit&eacute;s\nVeuillez r&eacute;essayer\n" . $message[1]);
-
-        // Enregistrement du message
-        $_SESSION['alert'] = $message;
     }
 } else {
     // L'utilisateur n'est pas connecté
