@@ -9,7 +9,7 @@ function connectMaBase(){
 	   <link href="public/css/accueil.css" rel="stylesheet" type="text/css"/></head>
     <body>
         <h2>Formulaire de remplissage :</h2>
-		<div>
+		<div style="background-color:darksalmon">
         <h3>Ajouter un Serveur</h3>
         <form name="server" method="post" action="remplissage.php">
 		<!-- On écrit le nom du serveur --> 
@@ -100,7 +100,7 @@ while ($data= mysql_fetch_array($reponse))
 		
         ?>
 		</div>
-		 <div> 
+		 <div style="background-color:darksalmon"> 
         <h3>Ajouter des variables &agrave; une fonction</h3>
         <form name="server" method="post" action="remplissage.php">
 		<!-- On écrit le nom de la variable --> 

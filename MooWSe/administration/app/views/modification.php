@@ -6,9 +6,10 @@ function connectMaBase(){
 ?>
 <html>
     <head><title>Administration de la Base</title></head>
+	 <link href="public/css/accueil.css" rel="stylesheet" type="text/css"/></head>
     <body>
 	 <h2>Administration de la Base :</h2>
-	<div>
+	<div style="background-color:darksalmon">
 	<h3>Serveur</h3>
 
 	 <form name="server" method="post" action="modification.php">
@@ -107,7 +108,7 @@ while ($data= mysql_fetch_array($reponse))
 	<div>
 	<h3>Fonction</h3>
 	 <form name="function" method="post" action="modification.php">
-	 <!-- On choisit la fonction qu'on souhaite modifier/supprimer --> 
+	 <!-- On choisit la fonction u'on souhaite modifier/supprimer --> 
 	 <label for="function_name" style="display:block;width: 150px;float:left"> Fonction : </label>
      <select name="function_name" id="function_name">
 <?php
@@ -161,7 +162,33 @@ while ($data= mysql_fetch_array($reponse))
 		<!-- On écrit le nom de la fonction --> 
 <label style="display:block;width: 150px;float:left "> Fonction choisie : </label><input type="text" readonly name="function_name" value="<?php echo $function_name; ?>"/><br/>
         <!-- L'utilisateur peut alors modifier le serveur --> 
- <label style="display:block;width: 150px;float:left "> Server : </label><input type="text" name="server_name" value="<?php echo $row[0];?>"/><br/>
+ <label style="display:block;width: 150px;float:left "> Server : </label>
+ <select name="server_name" id="server_name">
+   <!-- On affiche le serveur associé --> 
+ <option value="<?php echo $row[0];?>"> <?php echo $row[0];?></option>
+<?php
+
+try
+{ // On se connecte
+   connectMaBase();
+}
+catch(Exception $e)
+{
+            die('Erreur : '.$e->getMessage());
+}
+// On récupère la liste des serveurs 
+$reponse = mysql_query('SELECT DISTINCT server_name FROM server');
+ 
+while ($data= mysql_fetch_array($reponse))
+{
+?> <!--On affiche la liste des serveurs -->
+            
+           <option value="<?php echo $data['server_name'];?>"> <?php echo $data['server_name']; ?></option>
+<?php
+}
+
+?>
+</select>
    <!-- On confirme la modification --> 
   <input type="submit" name="valider_function" onclick="return confirm('Confirmer?')" value="OK"/>
   </form>
@@ -197,11 +224,12 @@ while ($data= mysql_fetch_array($reponse))
         ?>
 
 	</div>
-	<div>
+	<div style="background-color:darksalmon">
 	<h3>Variable</h3>
 	<!-- On choisit la variable qu'on souhaite modifier/supprimer --> 
 	 <form name="variable" method="post" action="modification.php">
 	 <label for="variable_name" style="display:block;width: 150px;float:left"> Variable : </label>
+
      <select name="variable_name" id="variable_name">
 <?php
 
@@ -261,8 +289,59 @@ while ($data= mysql_fetch_array($reponse))
 		</br>
  <label style="display:block;width: 150px;float:left "> Variable choisie : </label><input type="text" readonly name="variable_name" value="<?php echo $variable_name; ?>"/><br/>
   <!-- L'utilisateur peut alors modifier toutes les autres informations -->
- <label style="display:block;width: 150px;float:left "> Fonction: </label><input type="text" name="function_name" value="<?php echo $row_function[0];?>"/><br/>
-  <label style="display:block;width: 150px;float:left "> Type: </label><input type="text" name="type_name" value="<?php echo $row_type[0];?>"/><br/>
+ <label style="display:block;width: 150px;float:left "> Fonction: </label>
+ <select name="function_name" id="function_name">
+ 	 <!--On affiche la fonction associée-->
+  <option value="<?php echo $row_function[0];?>"> <?php echo $row_function[0];?></option>
+<?php
+
+try
+{ // On se connecte
+   connectMaBase();
+}
+catch(Exception $e)
+{
+            die('Erreur : '.$e->getMessage());
+}
+// On récupère la liste des fonctions
+$reponse = mysql_query('SELECT DISTINCT function_name FROM function');
+ 
+while ($data= mysql_fetch_array($reponse))
+{
+?> <!--On affiche la liste des fonctions -->
+           <option value="<?php echo $data['function_name'];?>"> <?php echo $data['function_name']; ?></option>
+<?php
+}
+
+?>
+</select>
+</br>
+  <label style="display:block;width: 150px;float:left "> Type: </label>
+  	 <!--On affiche le type associé-->
+   <select name="type_name" id="type_name">
+    <option value="<?php echo $row_type[0];?>" > <?php echo $row_type[0];?></option>
+<?php
+
+try
+{ // On se connecte
+   connectMaBase();
+}
+catch(Exception $e)
+{
+            die('Erreur : '.$e->getMessage());
+}
+// On récupère la liste des types
+$reponse = mysql_query('SELECT DISTINCT type_name FROM type');
+ 
+while ($data= mysql_fetch_array($reponse))
+{
+?>  <!--On affiche la liste des types -->
+          <option value="<?php echo $data['type_name'];?>" > <?php echo $data['type_name']; ?></option>
+<?php
+}
+
+?>
+</select> </br>
   <label style="display:block;width: 150px;float:left "> Order: </label><input type="text" name="type_order" value="<?php echo $row_order[0];?>"/><br/>
   <label style="display:block;width: 150px;float:left"> Input/Output: </label> 
        <input type="radio" name="variable_input" value="1" <?php if ("$row_input[0]" == "1") { echo "checked"; }?>/> <label>Input</label>

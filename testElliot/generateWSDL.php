@@ -1,10 +1,7 @@
 <?php
-
 /*
  * Classe qui permet de créer un objet pour stocker les résultat des requetes sql
  */
-
-
 class resultat {
     
     public $function_name;
@@ -12,7 +9,6 @@ class resultat {
     public $variable_input;
     public $type_namesdl;
     public $server_name;
-
     /*
      * Constructeur par défaut sans paramètre
      */
@@ -35,16 +31,11 @@ class resultat {
         $this->server_name = $row[4];
     }
 }
-
-
-
 //function results($array){
 //    
 //    return $a;
 //}
-
 function generateWSDL($array){
-
     
 if(is_array($array)){
         $a = new ArrayObject(); // Création d'un tableau d'objet
@@ -77,7 +68,6 @@ $tempResponse = "";  // variable utile pour la création du fichier WSDL
 $tempServer=""; // On va stocker plus tard le nom de serveur dans cette variable
 $tempFunction = "";
 $parcours = 0;    
-
 /*
  * on commence l'écriture du WSDL au format XML
  */
@@ -90,7 +80,6 @@ $oXMLWriter->setIndent(true);
 foreach($a as $q){
     
     if(strcmp($q->server_name, $tempServer)!=0){
-
         /*
          * écriture de la balise d'ouverture "definition"
          */
@@ -100,7 +89,6 @@ foreach($a as $q){
         $oXMLWriter->writeAttributeNs('xmlns', 'xsd', NULL, 'http://www.w3.org/2001/XMLSchema');
         $oXMLWriter->writeAttributeNs('xmlns', 'soapenc', NULL, 'http://schemas.xmlsoap.org/soap/encoding/');
         $oXMLWriter->writeAttribute('xmlns', 'http://schemas.xmlsoap.org/wsdl/');
-
         //on utilise une boucle foreach pour parcourir l'ensemble des résultats
             foreach ($a as $r) {
                 //ecriture de la premiere balise request
@@ -130,12 +118,10 @@ foreach($a as $q){
                             $oXMLWriter->endElement();
                         }
                     }
-
                     $oXMLWriter->endElement();
                 }
                 $tempResponse = $r->function_name;
             }
-
             foreach ($a as $r) {
                 if (strcmp($r->function_name, $tempFunction) != 0) {
                     $oXMLWriter->startElementNS('wsdl', 'portType', NULL);
@@ -161,7 +147,6 @@ foreach($a as $q){
                 $tempFunction = $r->function_name;
                 $parcours = 0;
             }
-
         $tempFunction="";
             foreach ($a as $r) {
                 if (strcmp($r->function_name, $tempFunction) != 0) {
@@ -225,5 +210,8 @@ foreach($a as $q){
     $tempServer=$q->server_name;
 }
 $oXMLWriter->endDocument();
-echo $oXMLWriter->outputMemory(TRUE);
+$wsdl = '';
+$wsdl = $oXMLWriter->outputMemory(TRUE);
+//echo $oXMLWriter->outputMemory(TRUE);
+return $wsdl;
 }
