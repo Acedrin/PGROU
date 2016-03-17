@@ -107,7 +107,7 @@ while ($data= mysql_fetch_array($reponse))
 	<div>
 	<h3>Fonction</h3>
 	 <form name="function" method="post" action="modification.php">
-	 <!-- On choisit la fonction u'on souhaite modifier/supprimer --> 
+	 <!-- On choisit la fonction qu'on souhaite modifier/supprimer --> 
 	 <label for="function_name" style="display:block;width: 150px;float:left"> Fonction : </label>
      <select name="function_name" id="function_name">
 <?php
