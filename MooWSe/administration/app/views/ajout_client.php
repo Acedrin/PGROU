@@ -139,9 +139,9 @@ if (isset($_SESSION['login'])) {
                 </form>
                 <?php
             }
+            include("../../app/views/layout.html")
             ?>
         </div>
-        <?php include("../../app/views/layout.html"); ?>
     </body>
     </html>
     <?php

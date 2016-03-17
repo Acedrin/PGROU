@@ -15,7 +15,6 @@ ini_set("display_errors", 0);
 error_reporting(0);
 
 if (isset($_SESSION['login'])) {
-    // Vérification de si un paramètre a été donné (=modification d'un client)
     if (isset($_GET['client_id'])) {
         $client_id = $_GET['client_id'];
         require("../controllers/getClients.php");
@@ -139,9 +138,9 @@ if (isset($_SESSION['login'])) {
                 </form>
                 <?php
             }
+            include("../../app/views/layout.html");
             ?>
         </div>
-        <?php include("../../app/views/layout.html"); ?>
     </body>
     </html>
     <?php

@@ -20,7 +20,7 @@ if (isset($_SESSION['login'])) {
     // Définition des variables nécessaires pour le header
     $titre_web = "MooWse - Gestion fonctions";
     $titre_principal = "Espace Administration de MooWse";
-    $titre_section = "Gestion fontions";
+    $titre_section = "Gestion fonctions";
 
     require("../views/header.php");
     ?>

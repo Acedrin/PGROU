@@ -27,7 +27,7 @@
                 <?php print_r($_SESSION['alert'][1]) ?>
             </div>
             <?php
-        } else {
+        } else if ($_SESSION['alert'][0] == false) {
             // Le message est un message d'erreur
             ?>
             <div id="error_message">

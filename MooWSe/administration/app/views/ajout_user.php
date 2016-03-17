@@ -166,11 +166,12 @@ if (isset($_SESSION['login'])) {
                     </form>
                     <?php
                 }
+                include("../../app/views/layout.html");
                 ?>
             </div>
 
             <script type="text/javascript" src="../../public/js/functions.js"></script>
-             <?php include("../../app/views/layout.html"); ?>
+
         </body>
     </html>
     <?php
