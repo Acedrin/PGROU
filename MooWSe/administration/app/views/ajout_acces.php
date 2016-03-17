@@ -11,24 +11,36 @@
 // Démarrage de la session avant toute chose
 session_start();
 // Désactivation de l'affichage des erreurs
-ini_set("display_errors", 0);
-error_reporting(0);
+//ini_set("display_errors", 0);
+//error_reporting(0);
 
 if (isset($_SESSION['login'])) {
     if (isset($_GET['client_id'])) {
         $client_id = $_GET['client_id'];
         require("../controllers/getClients.php");
-    } else {
-        $client_id = 0;
-        require("../controllers/getClients.php");
     }
 
+    if (isset($_GET['server_id'])) {
+        $server_id = $_GET['server_id'];
+    }
+    require("../controllers/getFunctions.php");
+
+    require("../controllers/getAccess.php");
+
     // Définition des variables nécessaires pour le header
-    $titre_web = "MooWse - Ajout/modification d'un client";
+    $titre_web = "MooWse - Ajout de droits d'acc&egrave;s";
     $titre_principal = "Espace Administration de MooWse";
-    $titre_section = "Ajout/modification d'un client";
+    $titre_section = "Ajout de droits d'acc&egrave;s";
 
     require("../views/header.php");
+    ?>
+
+    <?php
+    // Récupération des function_id auxquelles le client a accès
+    $acces_function = array();
+    for ($i = 0; $i < sizeof($access); $i++) {
+        $acces_function[] = $access[$i]['function_id'];
+    }
     ?>
 
     <body>
@@ -37,52 +49,83 @@ if (isset($_SESSION['login'])) {
             // Vérification de l'existence de $client
             // Son existence implique une modification d'un client existant
 
-            if (isset($client)) {
-                // Modification d'un client
+            if (isset($client_id)) {
+                // Ajout d'un droit d'accès à partir d'un client
                 ?>
-                <form name="formAdd" action="../controllers/addClient.php" method="POST">
 
-                    <input type="hidden" name="client_id" id="client_id" value="<?php print_r($client[0]['client_id']) ?>"/>
+                <table>
+                    <tr>
+                        <th>Nom</th>
+                        <th>Adresse IP</th>
+                        <th>Modalit&eacute; de connexion</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <?php
+                            print_r($client[0]['client_name']);
+                            ?>
+                        </td>
+                        <td>
+                            <?php
+                            print_r($client[0]['client_ip']);
+                            ?>
+                        </td>
+                        <td>
+                            <?php
+                            print_r($modalities[$client[0]['modality_id']]);
+                            ?>
+                        </td>
+                    </tr>
+                </table>
 
-                    <label for="client_name">Nom du client :</label>
-                    <input type="text" name="client_name" id="client_name" value="<?php print_r($client[0]['client_name']) ?>" placeholder="Nom" required/>
 
-                    <br />
+                <p>
+                    Ajouter les droits d'acc&egrave;s suivants :
+                </p>
 
-                    <label for="client_ip">IP du client :</label>
-                    <input type="text" name="client_ip" id="client_ip" value="<?php print_r($client[0]['client_ip']) ?>" placeholder="IP" required/>
+                <form name="formAdd" action="../controllers/addAccess.php" method="POST">
 
-                    <br />
+                    <input type="hidden" name="client_id[]" value="<?php print_r($client[0]['client_id']) ?>"/>
 
-                    <label for="modality_id">Modalit&eacute; de connexion du client :</label>
-                    <?php
-                    $keys = array_keys($modalities);
-                    ?>
-                    <select name="modality_id">
+                    <table>
+                        <tr>
+                            <th>Serveur</th>
+                            <th>Fonction</th>
+                            <th>Droit d'acc&egrave;s</th>
+                        </tr>
                         <?php
-                        // Récupération des ids des modalités
-                        $keys = array_keys($modalities);
+                        for ($i = 0; $i < sizeof($functions); $i++) {
+                            ?>
+                            <?php
+                            if (!in_array($functions[$i]['function_id'], $acces_function)) {
+                                ?>
+                                <tr>
 
-                        for ($j = 0; $j < sizeof($modalities); $j++) {
-                            $modality_id = $keys[$j];
-                            if ($modality_id == $client[0]['modality_id']) {
-                                ?>
-                                <option value=<?php echo $modality_id ?> selected><?php print_r($modalities[$modality_id]) ?></option>
-                                <?php
-                            } else {
-                                ?>
-                                <option value=<?php echo $modality_id ?>><?php print_r($modalities[$modality_id]) ?></option>
+                                    <td>
+                                        <?php
+                                        print_r($functions[$i]['server_name']);
+                                        ?>
+                                    </td>
+                                    <td>
+                                        <?php
+                                        print_r($functions[$i]['function_name']);
+                                        ?>
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" name="function_id[]" value="<?php print_r($functions[$i]['function_id']) ?>">
+                                    </td>
+                                </tr>
                                 <?php
                             }
                         }
                         ?>
-                    </select>
+                    </table>
 
                     <br />
                     <br />
 
-                    <a href="gestion_clients.php"><button type="button">Annuler</button></a>
-                    <button type="button" onclick="validerFormulaireClient(1)">Valider</button>
+                    <a href="gestion_acces_client.php?client_id=<?php print_r($client[0]['client_id']) ?>"><button type="button">Annuler</button></a>
+                    <button type="submit">Valider</button>
                 </form>
                 <?php
             } else {

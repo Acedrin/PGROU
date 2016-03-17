@@ -32,7 +32,7 @@ if (isset($_SESSION['login'])) {
         // Initialisation de l'id client et de la fonction
         $client_id = 0;
         $function_id = 0;
-        
+
         // Vérification de la présence de l'id client à supprimer
         if (isset($_GET['client_id'])) {
             $client_id = $_GET['client_id'];
@@ -40,7 +40,7 @@ if (isset($_SESSION['login'])) {
         // Vérification de la présence de l'id fonction à supprimer
         if (isset($_GET['function_id'])) {
             $function_id = $_GET['function_id'];
-        }        
+        }
 
         try {
             // Suppression du droit d'accès
@@ -61,12 +61,7 @@ if (isset($_SESSION['login'])) {
     // Enregistrement du message d'alerte
     if ($deleted) {
         // La suppression a bien été effectuée
-        $message = array(true, "Le client a bien &eacute;t&eacute; supprim&eacute;");
-
-        // log de suppression d'un client
-        $loggerSuppr = new Katzgrau\KLogger\Logger(__DIR__ . '../../../logs');
-        $loggerSuppr->info($_SESSION['login'] . " a supprimé le client d'id " . $client_id);
-        
+        $message = array(true, "L'acc&egrave;s a bien &eacute;t&eacute; supprim&eacute;");
     } else {
         // La suppression n'a pas été effectuée
         $message = array(false, "Une erreur a été rencontr&eacute;e lors de la suppression\nVeuillez r&eacute;essayer");
@@ -75,9 +70,21 @@ if (isset($_SESSION['login'])) {
     // Enregistrement du message
     $_SESSION['alert'] = $message;
 
-    // Redirection vers la vue gestion_clients.php
-    header('Content-Type: text/html; charset=utf-8');
-    header("Location:../views/gestion_clients.php");
+    // Récupération de la destination de retour
+    $retour = $_GET['retour'];
+
+    if ($retour == "client") {
+        // Ajout à partir d'un client, retour à la page gestion accès client
+        header('Content-Type: text/html; charset=utf-8');
+        header("Location:../views/gestion_acces_client.php?client_id=" . $client_id);
+    } else if ($retour == "fonction") {
+        // Ajout à partir d'une fonction, retour à la page gestion accès fonction
+        header('Content-Type: text/html; charset=utf-8');
+        header("Location:../views/gestion_acces_fonction.php?function_id=" . $function_id);
+    } else {
+        header('Content-Type: text/html; charset=utf-8');
+        header("Location:../views/accueil.php");
+    }
     die();
 } else {
     // L'utilisateur n'est pas connecté

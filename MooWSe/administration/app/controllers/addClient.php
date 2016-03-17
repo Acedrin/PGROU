@@ -150,7 +150,6 @@ if (isset($_SESSION['login'])) {
     $_SESSION['alert'] = $message;
 
     // Redirection vers la vue gestion_administrateurs.php
-    // Passage par le controlleur getUsers.php pour avoir la liste des administrateurs
     header('Content-Type: text/html; charset=utf-8');
     header("Location:../views/gestion_clients.php");
     die();

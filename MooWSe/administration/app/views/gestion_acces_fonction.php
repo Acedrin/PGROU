@@ -50,7 +50,10 @@ if (isset($_SESSION['login']) && isset($_GET['function_id'])) {
             </table>
 
 
-            <p> Les clients suivants ont acc&egrave;s &agrave; cette fonction :
+            <p>
+                Les clients suivants ont acc&egrave;s &agrave; cette fonction :
+            </p>
+            
             <table>
                 <tr>
                     <th>Client</th>
@@ -79,7 +82,7 @@ if (isset($_SESSION['login']) && isset($_GET['function_id'])) {
                             ?>
                         </td>
                         <td>
-                            <a href="../controllers/deleteAccess.php?client_id=<?php print_r($access[$i]['client_id']) ?>&function_id=<?php print_r($function[0]['function_id']) ?>" 
+                            <a href="../controllers/deleteAccess.php?client_id=<?php print_r($access[$i]['client_id']) ?>&function_id=<?php print_r($function[0]['function_id']) ?>&retour=fonction" 
                                onclick="return(confirm('Voulez vous vraiment supprimer l''accès du client <?php print_r($access[$i]['client_name']) ?> \n\
                                     à la fonction <?php print_r($access[$i]['function_name']) ?> \n\
                                     du serveur <?php print_r($access[$i]['server_name']) ?> ?'));">
