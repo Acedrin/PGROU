@@ -49,7 +49,7 @@ if (isset($_SESSION['login'])) {
 
             // Gestion des exceptions
         } catch (Exception $e) {
-            $message = array(false, "Une erreur a été rencontrée lors de la suppression.\nVeuillez réessayer");
+            $message = array(false, "Une erreur a &eacute;t&eacute; rencontr&eacute;e lors de la suppression.\nVeuillez r&eacute;essayer");
         }
     }
 
@@ -62,7 +62,7 @@ if (isset($_SESSION['login'])) {
         $message = array(true, "L'utilisateur a bien été supprimé");
     } else {
         // La suppression n'a pas été effectuée
-        $message = array(false, "Une erreur a été rencontrée lors de la suppression.\nVeuillez réessayer");
+        $message = array(false, "Une erreur a &eacute;t&eacute; rencontr&eacute;e lors de la suppression.\nVeuillez r&eacute;essayer");
     }
 
     // Enregistrement du message
@@ -75,7 +75,7 @@ if (isset($_SESSION['login'])) {
 } else {
     // L'utilisateur n'est pas connecté
     // Il est redirigé vers la page d'accueil
-    $message = array(false, "Connectez-vous pour accéder à cette ressource");
+    $message = array(false, "Connectez-vous pour acc&egrave;der à cette ressource");
     $_SESSION['alert'] = $message;
 
     header('Content-Type: text/html; charset=utf-8');

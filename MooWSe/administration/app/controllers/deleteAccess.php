@@ -3,7 +3,7 @@
 /* --------------------------------------------------
   Projet MOOWSE
   Fichier de script
-  Suppression d'un client de MooWse de la base de données
+  Suppression d'un droit d'accès de la base de données
 
   Victor Enaud
   Ecole Centrale de Nantes
@@ -29,18 +29,24 @@ if (isset($_SESSION['login'])) {
 
     // Vérification de la requête GET
     if ($_SERVER["REQUEST_METHOD"] == "GET") {
-        // Initialisation de l'id client
+        // Initialisation de l'id client et de la fonction
         $client_id = 0;
-
+        $function_id = 0;
+        
         // Vérification de la présence de l'id client à supprimer
         if (isset($_GET['client_id'])) {
             $client_id = $_GET['client_id'];
         }
+        // Vérification de la présence de l'id fonction à supprimer
+        if (isset($_GET['function_id'])) {
+            $function_id = $_GET['function_id'];
+        }        
 
         try {
-            // Suppression du client
-            $stmt = $bdd->prepare("DELETE FROM client WHERE client_id=:client_id");
+            // Suppression du droit d'accès
+            $stmt = $bdd->prepare("DELETE FROM access WHERE client_id=:client_id AND function_id=:function_id");
             $stmt->bindParam(':client_id', $client_id);
+            $stmt->bindParam(':function_id', $function_id);
             $deleted = $stmt->execute();
 
             // Fermeture de la connexion
@@ -48,7 +54,7 @@ if (isset($_SESSION['login'])) {
 
             // Gestion des exceptions
         } catch (Exception $e) {
-            $message = array(false, "Une erreur a &eacute;t&eacute; rencontr&eacute;e lors de la suppression\nVeuillez r&eacute;essayer");
+            $message = array(false, "Une erreur a été rencontr&eacute;e lors de la suppression\nVeuillez r&eacute;essayer");
         }
     }
 
@@ -63,7 +69,7 @@ if (isset($_SESSION['login'])) {
         
     } else {
         // La suppression n'a pas été effectuée
-        $message = array(false, "Une erreur a &eacute;t&eacute; rencontr&eacute;e lors de la suppression\nVeuillez r&eacute;essayer");
+        $message = array(false, "Une erreur a été rencontr&eacute;e lors de la suppression\nVeuillez r&eacute;essayer");
     }
 
     // Enregistrement du message
