@@ -10,12 +10,10 @@ include('generateWSDL.php');
 
 
 
-$array=array(
-    1=>1,
-    2=>2
-    //3=>3
-    );
+$array=[1];
+$wsdl = generateWSDL($array);
 
-generateWSDL($array);
+echo $wsdl;
+
 
 
