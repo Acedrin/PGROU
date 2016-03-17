@@ -58,7 +58,7 @@ if (isset($_SESSION['login'])) {
             $stmt->execute();
 
             // Enregistrement du résultat dans un tableau
-            $functions = $stmt->fetchAll();
+            $function = $stmt->fetchAll();
             // Fermeture de la connexion
             $stmt->closeCursor();
 

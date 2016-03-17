@@ -19,6 +19,7 @@ if (isset($_SESSION['login'])) {
                 <div class="navigation2"><a href="modification.php">Configuration de la base de données</a></br></div>
                 <div class="navigation2"><a href="gestion_administrateurs.php">Gestion des administrateurs de MooWse</a></br></div>
                 <div class="navigation2"><a href="gestion_clients.php">Gestion des clients de MooWse</a></br></div>
+                <div class="navigation2"><a href="gestion_fonctions.php">Gestion des fonctions des serveurs de MooWse</a></br></div>
                 <form action="../controllers/deconnexion.php" method="POST">
                     <p><button type="submit">Déconnexion</button></p>
                 </form>
