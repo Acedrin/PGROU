@@ -4,7 +4,7 @@
 - 1 = log in file
 - 2 = log in db
 - 3 = log either in file and db*/
-$logDevice=3;
+$logDevice=1;
 
 //relative or absolute path to the logs file
 $userLog_file="./logs/userLog";
