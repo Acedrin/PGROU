@@ -50,13 +50,13 @@ class dataBaseCall {
     }
 
     //prend en argument le nom du client et renvoit un array contenant les ids des fonctions auxquelles le client peut accèder
-    function listFunction($client_name) {
+    function listFunction($client_name, $service) {
         //appel des fonctions autorisees pour le client
         $base = $this->bdd;
         $function_request = $base->query('SELECT function.function_id FROM function INNER JOIN access ON function.function_id=access.function_id
                     INNER JOIN client ON access.client_id=client.client_id
                     INNER JOIN server ON server.server_id=function.server_id
-                    WHERE client_name=\'' . $client_name . '\' ');
+                    WHERE client_name=\'' . $client_name . '\' AND server_name=\'' . $service . '\'');
         //extraire le premier element              
         $current_function = $function_request->fetch();
         //creation d'un array
@@ -91,15 +91,29 @@ class dataBaseCall {
         echo '</br>';
         echo '<u><b>Listing des fonctions :</u></b>';
         echo '</br>';
-        $last_function=NULL;
+        $last_function = NULL;
         while ($function_recup = $function_request->fetch()) {
-            if($function_recup!=$last_function){
+            if ($function_recup != $last_function) {
                 echo 'fonction numero: ' . $function_recup["function_id"] . ' ' . $function_recup["function_name"] . ' du serveur ' . $function_recup["server_name"];
                 echo '</br>';
+                echo 'qui prend en argument : ';
+                echo '</br>';
+                //aller chercher les variables de la fonction
+                $variable_request = $base->query('SELECT variable.variable_name,type.type_name FROM variable INNER JOIN type ON type.type_id=variable.variable_id
+                    WHERE variable.function_id=\'' . $function_recup["function_id"] . '\' ');
+                while ($variable_recup = $variable_request->fetch()) {
+                    $variable_name = $variable_recup["variable_name"];
+                    $type_name = $variable_recup["type_name"];
+                    echo 'variable ' . $variable_name . ' de type ' . $type_name;
+                    echo '</br>';
+                }
+                echo '</br>';
+                //fin de recherche des variables
             }
-            $last_function=$function_recup;
+            $last_function = $function_recup;
         }
     }
 
 }
+
 ?>
