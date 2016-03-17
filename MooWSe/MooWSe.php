@@ -57,6 +57,9 @@ class MooWSe {
     }
 
     public function authenticate() {
+
+        //require ('./Loggeur/Logger.php'); --> giano
+
         $token = "ERROR !";
         if ($this->_clientAuthenticated) {
 
@@ -66,6 +69,9 @@ class MooWSe {
             $client_name = $this->_client_name;
             $client_access = $this->_client_access;
             $action = "authenticate";
+
+/*            $logger= new Logger();
+            $logger->LogClient($client_IP,$client_name,$client_access,$action);  --> giano*/
 
             $crypto_strong = false;
             while (!$crypto_strong) {
@@ -94,6 +100,9 @@ class MooWSe {
             $client_access = $this->_client_access;
             $service = "service";
             $action = "getWSDL";
+
+/*            $logger= new Logger();
+            $logger->LogServ($client_IP,$client_name,$client_access,$service,$action);  --> giano*/
 
             //renvoyer la liste des fonctions auxquelles l'utilisateur a acc�s 
             //appel � la base

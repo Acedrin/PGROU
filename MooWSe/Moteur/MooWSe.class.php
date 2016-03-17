@@ -4,6 +4,8 @@
 require "generateWSDL.php";
 //classe de Quentin
 require "dataBaseCall.php";
+//fichier avec data de configuration
+require "settings.php";//---> Insert giano
 
 class MooWSe {
 
@@ -24,7 +26,11 @@ class MooWSe {
             $client_IP = $_SERVER["REMOTE_ADDR"];
 
             //on regarde si le client est enregistré, appel de base
-            $checkingDatas = new dataBaseCall('localhost', 'webservices', 'utf8', 'root', '');
+
+            /*$checkingDatas = new dataBaseCall('localhost', 'webservices', 'utf8', 'root', '');  --> giano*/
+
+            $checkingDatas = new dataBaseCall($dbms_address, $db, 'utf8', $user, $passwd);
+
             $registered = $checkingDatas->clientRegistered($client_nonce, $client_created, $client_access, $client_password_digest, $client_IP);
 
 //si l'authentification est rï¿½usssie
@@ -104,8 +110,11 @@ class MooWSe {
             //appel ï¿½ la base
             if ($this->_tokenChecked) {
                 //connexion ï¿½ la base de donnï¿½es 
-                $gettingDatas = new dataBaseCall('localhost', 'webservices', 'utf8', 'root', '');
-                $functions=$gettingDatas->listFunction($client_name,$service);
+
+                /*$checkingDatas = new dataBaseCall('localhost', 'webservices', 'utf8', 'root', '');  --> giano*/
+                
+                $gettingDatas = new dataBaseCall($dbms_address, $db, 'utf8', $user, $passwd);
+                $functions=$gettingDatas->listFunction($client_name);
                 }
             }
 
