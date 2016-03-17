@@ -6,7 +6,7 @@ function connectMaBase(){
 ?>
 <html>
     <head><title>Administration de la Base</title></head>
-	 <link href="accueil.css" rel="stylesheet" type="text/css"/></head>
+	 <link href="public/css/accueil.css" rel="stylesheet" type="text/css"/></head>
     <body>
 	 <h2>Administration de la Base :</h2>
 	<div style="background-color:darksalmon">
