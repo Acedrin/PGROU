@@ -105,7 +105,7 @@ class MooWSe {
             if ($this->_tokenChecked) {
                 //connexion � la base de donn�es 
                 $gettingDatas = new dataBaseCall('localhost', 'webservices', 'utf8', 'root', '');
-                $functions=$gettingDatas->listFunction($client_name);
+                $functions=$gettingDatas->listFunction($client_name,$service);
                 }
             }
 
