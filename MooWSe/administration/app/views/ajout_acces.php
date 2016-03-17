@@ -17,14 +17,14 @@ session_start();
 if (isset($_SESSION['login'])) {
     if (isset($_GET['client_id'])) {
         $client_id = $_GET['client_id'];
-        require("../controllers/getClients.php");
     }
 
-    if (isset($_GET['server_id'])) {
-        $server_id = $_GET['server_id'];
+    if (isset($_GET['function_id'])) {
+        $function_id = $_GET['function_id'];
     }
+
+    require("../controllers/getClients.php");
     require("../controllers/getFunctions.php");
-
     require("../controllers/getAccess.php");
 
     // Définition des variables nécessaires pour le header
@@ -40,6 +40,12 @@ if (isset($_SESSION['login'])) {
     $acces_function = array();
     for ($i = 0; $i < sizeof($access); $i++) {
         $acces_function[] = $access[$i]['function_id'];
+    }
+
+    // Récupération des client_id qui ont accès à la fonction
+    $acces_client = array();
+    for ($i = 0; $i < sizeof($access); $i++) {
+        $acces_client[] = $access[$i]['client_id'];
     }
     ?>
 
@@ -86,6 +92,7 @@ if (isset($_SESSION['login'])) {
                 <form name="formAdd" action="../controllers/addAccess.php" method="POST">
 
                     <input type="hidden" name="client_id[]" value="<?php print_r($client[0]['client_id']) ?>"/>
+                    <input type="hidden" name="retour" value="client"/>
 
                     <table>
                         <tr>
@@ -129,55 +136,83 @@ if (isset($_SESSION['login'])) {
                 </form>
                 <?php
             } else {
-                // Ajout d'un client
+                // Ajout d'un droit d'accès à partir d'une fonction
                 ?>
-                <form name="formAdd" action="../controllers/addClient.php" method="POST">
 
-                    <label for="client_name">Nom du client :</label>
-                    <input type="text" name="client_name" id="client_name" placeholder="Nom" required/>
-
-                    <br />
-
-                    <label for="client_ip">IP du client :</label>
-                    <input type="text" name="client_ip" id="client_ip" placeholder="IP" required/>
-
-                    <br />
-
-                    <label for="modality_id">Modalit&eacute; de connexion du client :</label>
-                    <?php
-                    $keys = array_keys($modalities);
-                    ?>
-                    <select name="modality_id">
-                        <option value=0>&nbsp;</option>
-                        <?php
-                        // Récupération des ids des modalités
-                        $keys = array_keys($modalities);
-
-                        for ($j = 0; $j < sizeof($modalities); $j++) {
-                            $modality_id = $keys[$j];
-                            ?>
-                            <option value=<?php echo $modality_id ?>><?php print_r($modalities[$modality_id]) ?></option>
+                <table>
+                    <tr>
+                        <th>Serveur</th>
+                        <th>Fonction</th>
+                    </tr>
+                    <tr>
+                        <td>
                             <?php
+                            print_r($function[0]['server_name']);
+                            ?>
+                        </td>
+                        <td>
+                            <?php
+                            print_r($function[0]['function_name']);
+                            ?>
+                        </td>
+                    </tr>
+                </table>
+
+
+                <p>
+                    Ajouter les droits d'acc&egrave;s suivants :
+                </p>
+
+                <form name="formAdd" action="../controllers/addAccess.php" method="POST">
+
+                    <input type="hidden" name="function_id[]" value="<?php print_r($function[0]['function_id']) ?>"/>
+                    <input type="hidden" name="retour" value="fonction"/>
+                    
+                    <table>
+                        <tr>
+                            <th>Nom</th>
+                            <th>IP</th>
+                            <th>Modalit&eacute; de connexion</th>
+                            <th>Droit d'acc&egrave;s</th>
+                        </tr>
+                        <?php
+                        for ($i = 0; $i < sizeof($clients); $i++) {
+                            ?>
+                            <?php
+                            if (!in_array($clients[$i]['client_id'], $acces_client)) {
+                                ?>
+                                <tr>
+
+                                    <td>
+                                        <?php
+                                        print_r($clients[$i]['client_name']);
+                                        ?>
+                                    </td>
+                                    <td>
+                                        <?php
+                                        print_r($clients[$i]['client_ip']);
+                                        ?>
+                                    </td>
+                                    <td>
+                                        <?php
+                                        print_r($modalities[$clients[$i]['modality_id']]);
+                                        ?>
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" name="client_id[]" value="<?php print_r($clients[$i]['client_id']) ?>">
+                                    </td>
+                                </tr>
+                                <?php
+                            }
                         }
                         ?>
-                    </select>
+                    </table>
 
                     <br />
                     <br />
 
-                    <label for="client_password">Mot de passe du client :</label>
-                    <input type="password" name="client_password" id="client_password" placeholder="Password" required/>
-
-                    <br />
-
-                    <label for="client_password_confirmation">Confirmation du mot de passe du client :</label>
-                    <input type="password" name="client_password_confirmation" id="client_password_confirmation" placeholder="Retype password" required/>
-
-                    <br />
-                    <br />
-
-                    <a href="gestion_clients.php"><button type="button">Annuler</button></a>
-                    <button type="button" onclick="validerFormulaireClient(2)">Valider</button>
+                    <a href="gestion_acces_fonction.php?function_id=<?php print_r($function[0]['function_id']) ?>"><button type="button">Annuler</button></a>
+                    <button type="submit">Valider</button>
                 </form>
                 <?php
             }

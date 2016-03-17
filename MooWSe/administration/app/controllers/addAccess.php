@@ -140,14 +140,18 @@ if (isset($_SESSION['login'])) {
     $_SESSION['alert'] = $message;
 
     // Redirection vers la vue de gestion des accès
-    if (sizeof($client_ids) == 1) {
+    $retour = $_POST['retour'];
+    if ($retour == "client") {
         // Ajout à partir d'un client, retour à la page gestion accès client
         header('Content-Type: text/html; charset=utf-8');
         header("Location:../views/gestion_acces_client.php?client_id=" . $client_ids[0]);
-    } else {
+    } else if ($retour == "fonction") {
         // Ajout à partir d'une fonction, retour à la page gestion accès fonction
         header('Content-Type: text/html; charset=utf-8');
         header("Location:../views/gestion_acces_fonction.php?function_id=" . $function_ids[0]);
+    } else {
+        header('Content-Type: text/html; charset=utf-8');
+        header("Location:../views/accueil.php");
     }
     die();
 } else {

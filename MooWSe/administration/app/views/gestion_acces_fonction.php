@@ -98,7 +98,7 @@ if (isset($_SESSION['login']) && isset($_GET['function_id'])) {
             <br />
             <br />
 
-            <a href=""><button type="button">Ajouter un droit d'accès</button></a>
+            <a href="ajout_acces.php?function_id=<?php print_r($function[0]['function_id']) ?>"><button type="button">Ajouter un droit d'accès</button></a>
             <?php include("../../app/views/layout.html"); ?>
         </div>
     </body>
