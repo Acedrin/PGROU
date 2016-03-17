@@ -1,4 +1,4 @@
 /MooWse/administration/nbproject/private/
 /MooWse/administration/logs/*.txt
-/MooWSe/Loggeur/logs/
-/mooWSe/Loggeur/logTest.php
+/MooWSe/Loggeur/logs/*
+!/MooWSe/Loggeur/logs/.gitkeep
