@@ -103,7 +103,6 @@ class MooWSe {
             $time = time();
             $client_name = $this->_client_name;
             $client_access = $this->_client_access;
-            $service = "service";
             $action = "getWSDL";
 
             //renvoyer la liste des fonctions auxquelles l'utilisateur a acc�s 
@@ -114,7 +113,7 @@ class MooWSe {
                 /* $checkingDatas = new dataBaseCall('localhost', 'webservices', 'utf8', 'root', '');  --> giano */
 
                 $gettingDatas = new dataBaseCall($dbms_address, $db, 'utf8', $user, $passwd);
-                $functions = $gettingDatas->listFunction($client_name);
+                $functions = $gettingDatas->listFunction($client_name,$service);
             }
         }
 
