@@ -101,21 +101,34 @@ class dataBaseCall {
                     INNER JOIN client ON access.client_id=client.client_id
                     INNER JOIN server ON server.server_id=function.server_id
                     WHERE client_name=\'' . $client_name . '\' ');
-        //obtention du nombre de fonctions auxquelles le cl
-        $number_function = $function_request->rowCount();
-        echo '<h2>Affichage des fonctions auxquelles ' . $client_name . ' vous peut acceder</h2>';
-        echo '</br>';
-        echo 'Le client ' . $client_name . ' peut acceder a ' . $number_function . ' fonction(s)';
+
+        echo '<h2>Affichage des fonctions auxquelles le client ' . $client_name . ' peut acceder</h2>';
         echo '</br>';
         echo '<u><b>Listing des fonctions :</u></b>';
         echo '</br>';
-        $last_function=NULL;
+        $last_function = NULL;
         while ($function_recup = $function_request->fetch()) {
-            if($function_recup!=$last_function){
+            if ($function_recup != $last_function) {
                 echo 'fonction numero: ' . $function_recup["function_id"] . ' ' . $function_recup["function_name"] . ' du serveur ' . $function_recup["server_name"];
                 echo '</br>';
+                //aller chercher les variables de la fonction
+                $variable_request = $base->query('SELECT variable.variable_name,type.type_name,variable.variable_input FROM variable INNER JOIN type ON type.type_id=variable.type_id
+                    WHERE variable.function_id=\'' . $function_recup["function_id"] . '\' ');
+                while ($variable_recup = $variable_request->fetch()) {
+                    $variable_name = $variable_recup["variable_name"];
+                    $type_name = $variable_recup["type_name"];
+                    $variable_input = $variable_recup["variable_input"];
+                    if ($variable_input == 1) {
+                        echo'<div style="text-indent: 15px;">Argument(s) :</div>';
+                    } else {
+                        echo'<div style="text-indent: 15px;">Sortie :</div>';
+                    }
+                    echo '<div style="text-indent: 30px;">variable ' . $variable_name . ' de type ' . $type_name . '</div>';
+                }
+                echo '</br>';
+                //fin de recherche des variables
             }
-            $last_function=$function_recup;
+            $last_function = $function_recup;
         }
     }
 
@@ -137,9 +150,6 @@ $client_name = 'agap';
 $result = $dataBase->clientRegistered($client_name, $Nonce, $Created, $client_access, $client_password_digest, $client_IP);
 //agap: kangourou87
 //forumprepa: tortue62
-
-
-
 //test d'affichage
 $dataBase->affichage('forumprepa');
 ?>

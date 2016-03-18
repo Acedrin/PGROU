@@ -5,7 +5,7 @@ require "generateWSDL.php";
 //classe de Quentin
 require "dataBaseCall.php";
 //fichier avec data de configuration
-require "settings.php";//---> Insert giano
+require "settings.php"; //---> Insert giano
 
 class MooWSe {
 
@@ -27,7 +27,7 @@ class MooWSe {
 
             //on regarde si le client est enregistr�, appel de base
 
-            /*$checkingDatas = new dataBaseCall('localhost', 'webservices', 'utf8', 'root', '');  --> giano*/
+            /* $checkingDatas = new dataBaseCall('localhost', 'webservices', 'utf8', 'root', '');  --> giano */
 
             $checkingDatas = new dataBaseCall($dbms_address, $db, 'utf8', $user, $passwd);
 
@@ -111,20 +111,18 @@ class MooWSe {
             if ($this->_tokenChecked) {
                 //connexion � la base de donn�es 
 
-                /*$checkingDatas = new dataBaseCall('localhost', 'webservices', 'utf8', 'root', '');  --> giano*/
-                
-                $gettingDatas = new dataBaseCall($dbms_address, $db, 'utf8', $user, $passwd);
-                $functions=$gettingDatas->listFunction($client_name);
-                }
-            }
+                /* $checkingDatas = new dataBaseCall('localhost', 'webservices', 'utf8', 'root', '');  --> giano */
 
-            //générateur : (service,fonctions)->WSDL
-            //$service_WSDL = "<" . $service . ">" . implode(",", $functions) . "</" . $service . ">";
-            $service_WSDL = generateWSDL($functions);
-            //file_put_contents("test.wsdl",$service_WSDL_test);
-            return htmlspecialchars($service_WSDL, ENT_XML1);
+                $gettingDatas = new dataBaseCall($dbms_address, $db, 'utf8', $user, $passwd);
+                $functions = $gettingDatas->listFunction($client_name);
+            }
         }
-        
+
+        //générateur : (service,fonctions)->WSDL
+        //$service_WSDL = "<" . $service . ">" . implode(",", $functions) . "</" . $service . ">";
+        $service_WSDL = generateWSDL($functions);
+        //file_put_contents("test.wsdl",$service_WSDL_test);
+        return htmlspecialchars($service_WSDL, ENT_XML1);
     }
 
 }
