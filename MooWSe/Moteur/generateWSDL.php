@@ -4,9 +4,8 @@
  * Classe qui permet de créer un objet pour stocker les résultat des requetes sql
  */
 
-
 class resultat {
-    
+
     public $function_name;
     public $variable_name;
     public $variable_input;
@@ -16,6 +15,7 @@ class resultat {
     /*
      * Constructeur par défaut sans paramètre
      */
+
     function __construct() {
         $this->function_name = "";
         $this->variable_name = "";
@@ -23,10 +23,11 @@ class resultat {
         $this->type_namesdl = "";
         $this->server_name = "";
     }
-    
+
     /*
      * Permet de rentrer les resultats de la requete dans les attributs
      */
+
     function population(Array $row) {
         $this->function_name = $row[0];
         $this->variable_name = $row[1];
@@ -34,30 +35,30 @@ class resultat {
         $this->type_namewsdl = $row[3];
         $this->server_name = $row[4];
     }
+
 }
-
-
 
 //function results($array){
 //    
 //    return $a;
 //}
 
-function generateWSDL($array){
+function generateWSDL($array) {
 
-    
-if(is_array($array)){
+
+    if (is_array($array)) {
         $a = new ArrayObject(); // Création d'un tableau d'objet
-        foreach($array as $r){
-           $bdd = new PDO('mysql:host=localhost;dbname=webservices;charset=utf8', 'root', '', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+        foreach ($array as $r) {
+            //dangereux appel de base dans une boucle
+            $bdd = new PDO('mysql:host=localhost;dbname=webservices;charset=utf8', 'root', '', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
             $result = $bdd->query("SELECT DISTINCT function_name,variable_name,variable_input,type_namewsdl,server_name "
-            . "FROM access,client,function,variable,type,server "
-            . "WHERE client.client_id=access.client_id "
-            . "AND function.function_id=access.function_id "
-            . "AND function.server_id=server.server_id "
-            . "AND function.function_id=$r "
-            . "AND function.function_id=variable.function_id "
-            . "AND variable.type_id=type.type_id ");
+                    . "FROM access,client,function,variable,type,server "
+                    . "WHERE client.client_id=access.client_id "
+                    . "AND function.function_id=access.function_id "
+                    . "AND function.server_id=server.server_id "
+                    . "AND function.function_id=$r "
+                    . "AND function.function_id=variable.function_id "
+                    . "AND variable.type_id=type.type_id ");
             while ($row = $result->fetch()) {
                 //On définit une nouvelle instance de la classe resultat
                 $ligne = new resultat($row);
@@ -68,40 +69,40 @@ if(is_array($array)){
             }
             $bdd = null;
         }
-}
-/*
- *  definition des variables utiles pour écrire le WSDL  
- */
-$tempRequest = "";  // variable utile pour la création du fichier WSDL
-$tempResponse = "";  // variable utile pour la création du fichier WSDL
-$tempServer=""; // On va stocker plus tard le nom de serveur dans cette variable
-$tempFunction = "";
-$parcours = 0;    
+    }
+    /*
+     *  definition des variables utiles pour écrire le WSDL  
+     */
+    $tempRequest = "";  // variable utile pour la création du fichier WSDL
+    $tempResponse = "";  // variable utile pour la création du fichier WSDL
+    $tempServer = ""; // On va stocker plus tard le nom de serveur dans cette variable
+    $tempFunction = "";
+    $parcours = 0;
 
-/*
- * on commence l'écriture du WSDL au format XML
- */
-header('Content-type: text/xml; charset=UTF-8');
-$oXMLWriter = new XMLWriter;
-$oXMLWriter->openMemory();
-$oXMLWriter->startDocument('1.0', 'UTF-8');
-$oXMLWriter->setIndent(true);
-    
-foreach($a as $q){
-    
-    if(strcmp($q->server_name, $tempServer)!=0){
+    /*
+     * on commence l'écriture du WSDL au format XML
+     */
+    header('Content-type: text/xml; charset=UTF-8');
+    $oXMLWriter = new XMLWriter;
+    $oXMLWriter->openMemory();
+    $oXMLWriter->startDocument('1.0', 'UTF-8');
+    $oXMLWriter->setIndent(true);
 
-        /*
-         * écriture de la balise d'ouverture "definition"
-         */
-        $oXMLWriter->startElementNS('wsdl', 'definition', 'http://schemas.xmlsoap.org/wsdl/');
-        $oXMLWriter->writeAttribute('name', $q->server_name);
-        $oXMLWriter->writeAttributeNs('xmlns', 'soap', NULL, 'http://schemas.xmlsoap.org/wsdl/soap/');
-        $oXMLWriter->writeAttributeNs('xmlns', 'xsd', NULL, 'http://www.w3.org/2001/XMLSchema');
-        $oXMLWriter->writeAttributeNs('xmlns', 'soapenc', NULL, 'http://schemas.xmlsoap.org/soap/encoding/');
-        $oXMLWriter->writeAttribute('xmlns', 'http://schemas.xmlsoap.org/wsdl/');
+    foreach ($a as $q) {
 
-        //on utilise une boucle foreach pour parcourir l'ensemble des résultats
+        if (strcmp($q->server_name, $tempServer) != 0) {
+
+            /*
+             * écriture de la balise d'ouverture "definition"
+             */
+            $oXMLWriter->startElementNS('wsdl', 'definition', 'http://schemas.xmlsoap.org/wsdl/');
+            $oXMLWriter->writeAttribute('name', $q->server_name);
+            $oXMLWriter->writeAttributeNs('xmlns', 'soap', NULL, 'http://schemas.xmlsoap.org/wsdl/soap/');
+            $oXMLWriter->writeAttributeNs('xmlns', 'xsd', NULL, 'http://www.w3.org/2001/XMLSchema');
+            $oXMLWriter->writeAttributeNs('xmlns', 'soapenc', NULL, 'http://schemas.xmlsoap.org/soap/encoding/');
+            $oXMLWriter->writeAttribute('xmlns', 'http://schemas.xmlsoap.org/wsdl/');
+
+            //on utilise une boucle foreach pour parcourir l'ensemble des résultats
             foreach ($a as $r) {
                 //ecriture de la premiere balise request
                 // Dans la boucle if, si lors d'une nouvelle itération la fonction est toujours la meme on ne rentre pas dedans.
@@ -162,7 +163,7 @@ foreach($a as $q){
                 $parcours = 0;
             }
 
-        $tempFunction="";
+            $tempFunction = "";
             foreach ($a as $r) {
                 if (strcmp($r->function_name, $tempFunction) != 0) {
                     $oXMLWriter->startElementNS('wsdl', 'binding', NULL);
@@ -204,7 +205,7 @@ foreach($a as $q){
                 $tempFunction = $r->function_name;
                 $parcours = 0;
             }
-        $tempFunction="";    
+            $tempFunction = "";
             foreach ($a as $r) {
                 if (strcmp($r->function_name, $tempFunction) != 0) {
                     $oXMLWriter->startElementNS('wsdl', 'service', NULL);
@@ -220,10 +221,41 @@ foreach($a as $q){
                 }
                 $tempFunction = $r->function_name;
             }
-    $oXMLWriter->endElement();
+            $oXMLWriter->endElement();
+        }
+        $tempServer = $q->server_name;
     }
-    $tempServer=$q->server_name;
+    $oXMLWriter->endDocument();
+    return $oXMLWriter->outputMemory(TRUE);
 }
-$oXMLWriter->endDocument();
-return $oXMLWriter->outputMemory(TRUE);
+
+function generateFakeWSDL() {
+    
+    /*
+     * on commence l'écriture du WSDL au format XML
+     */
+    header('Content-type: text/xml; charset=UTF-8');
+    $oXMLWriter = new XMLWriter;
+    $oXMLWriter->openMemory();
+    $oXMLWriter->startDocument('1.0', 'UTF-8');
+    $oXMLWriter->setIndent(true);
+    
+            /*
+             * écriture de la balise d'ouverture "definition"
+             */
+            $oXMLWriter->startElementNS('wsdl', 'definition', 'http://schemas.xmlsoap.org/wsdl/');
+            $oXMLWriter->writeAttribute('name', $q->server_name);
+            $oXMLWriter->writeAttributeNs('xmlns', 'soap', NULL, 'http://schemas.xmlsoap.org/wsdl/soap/');
+            $oXMLWriter->writeAttributeNs('xmlns', 'xsd', NULL, 'http://www.w3.org/2001/XMLSchema');
+            $oXMLWriter->writeAttributeNs('xmlns', 'soapenc', NULL, 'http://schemas.xmlsoap.org/soap/encoding/');
+            $oXMLWriter->writeAttribute('xmlns', 'http://schemas.xmlsoap.org/wsdl/');
+    
+    
+    
+    
+    
+    
+    
+    $oXMLWriter->endDocument();
+    return $oXMLWriter->outputMemory(TRUE);
 }
