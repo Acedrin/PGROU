@@ -63,28 +63,31 @@ class dataBaseCall {
     }
 
     //prend en argument le nom du client et renvoit un array contenant les ids des fonctions auxquelles le client peut accèder
-    function listFunction($client_name) {
+    function listFunction($client_name,$service) {
         //appel des fonctions autorisees pour le client
         $base = $this->bdd;
-        $function_request = $base->query('SELECT function.function_id FROM function INNER JOIN access ON function.function_id=access.function_id
+         $function_request = $base->query('SELECT function.function_id FROM function INNER JOIN access ON function.function_id=access.function_id
                     INNER JOIN client ON access.client_id=client.client_id
                     INNER JOIN server ON server.server_id=function.server_id
-                    WHERE client_name=\'' . $client_name . '\' ');
-        //extraire le premier element              
-        $current_function = $function_request->fetch();
-        //creation d'un array
-        $functions = array($current_function["function_id"]);
-        //On garde l'id
-        $last_function = $current_function["function_id"];
-        //parcours de la table des fonctions autorisees
-        while ($current_function = $function_request->fetch()) {
-            //ajoute la fonction courante au array
-            if ($current_function["function_id"] != $last_function) {
-                array_push($functions, $current_function["function_id"]);
-                echo $current_function["function_id"];
-                echo '</br>';
-            }
+                    WHERE client_name=\'' . $client_name . '\' AND server_name=\'' . $service . '\'');
+        //extraire le premier element, s'il y en a un on extrait les autres et on les met dans un array              
+        if ($current_function = $function_request->fetch()) {
+            //creation d'un array
+            $functions = array($current_function["function_id"]);
+            //On garde l'id
             $last_function = $current_function["function_id"];
+            //parcours de la table des fonctions autorisees
+            while ($current_function = $function_request->fetch()) {
+                //ajoute la fonction courante au array
+                if ($current_function["function_id"] != $last_function) {
+                    array_push($functions, $current_function["function_id"]);
+                }
+                $last_function = $current_function["function_id"];
+            }
+        }
+        else{
+            //on renvoie un array vide
+            $functions=array();
         }
         //on renvoit l'array des fonctions autorisées
         echo '<pre>';
@@ -147,7 +150,10 @@ echo $client_password_digest;
 echo'</br>';
 $client_access = 'batch';
 $client_name = 'agap';
+$service='moodle';
 $result = $dataBase->clientRegistered($client_name, $Nonce, $Created, $client_access, $client_password_digest, $client_IP);
+//test de listFunction
+$liste=$dataBase->listFunction($client_name,$service);
 //agap: kangourou87
 //forumprepa: tortue62
 //test d'affichage
