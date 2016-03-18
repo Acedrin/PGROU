@@ -13,6 +13,8 @@
 <html lang="fr-fr">
     <head>
         <link href="../../public/css/accueil.css" type="text/css" rel="stylesheet" />
+        <link rel="shortcut icon" href="../../public/img/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="../../public/img/favicon.ico" type="image/x-icon">
         <meta charset="UTF-8" />
         <script type="text/javascript" src="../../public/js/functions.js"></script>
         <title><?php echo($titre_web); ?></title>

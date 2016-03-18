@@ -11,8 +11,8 @@
 // Démarrage de la session avant toute chose
 session_start();
 // Désactivation de l'affichage des erreurs
-//ini_set("display_errors", 0);
-//error_reporting(0);
+ini_set("display_errors", 0);
+error_reporting(0);
 
 if (isset($_SESSION['login'])) {
     if (isset($_GET['client_id'])) {
