@@ -1,7 +1,7 @@
 <?php
 /* --------------------------------------------------
   Projet MOOWSE
-  Fichier html
+  Fichier php
   Vue pour ajouter un droit d'accès pour un client de MooWse
 
   Victor Enaud

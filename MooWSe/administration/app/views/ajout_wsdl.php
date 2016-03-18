@@ -1,4 +1,13 @@
 <?php
+/* --------------------------------------------------
+  Projet MOOWSE
+  Fichier html
+  Vue de l'ajout d'un WSDL au projet MooWse
+
+  Christophe Cleuet
+  Ecole Centrale de Nantes
+  -------------------------------------------------- */
+
 // Démarrage de la session avant toute chose
 session_start();
 // Désactivation de l'affichage des erreurs
@@ -23,35 +32,15 @@ if (isset($_SESSION['login'])) {
         <div class="navigation">
             <div style="background-color:darksalmon">
                 <h3>Ajouter un Serveur</h3>
-                <form name="server" method="post" action="remplissage.php">
+                <form name="server" method="POST" action="addServer.php">
                     <!-- On écrit le nom du serveur --> 
-                    <label style="display:block;width: 150px;float:left"> Name : </label> <input type="text" name="name"/><br/>
+                    <label for="server_name"> Nom du serveur : </label> <input type="text" name="server_name"/><br/>
                     </br>
                     <!-- On écrit le nom de la Soap adress associée--> 
-                    <label style="display:block;width: 150px;float:left "> Soap_adress : </label><input type="text" name="soap_adress"/><br/>
+                    <label> Adresse SOAP : </label><input type="text" name="server_soapadress"/><br/>
                     <input type="submit" name="valider_server" onclick="return confirm('Confirmer?')" value="OK"/>
                 </form>
-                <?php
-                if (isset($_POST['valider_server'])) {
-                    //On récupère les valeurs entrées par l'utilisateur :
-                    $server_name = $_POST['name'];
-                    $server_soapadress = $_POST['soap_adress'];
-
-                    //On se connecte
-                    connectMaBase();
-
-                    //On prépare la commande sql d'insertion
-                    $sql = 'INSERT INTO server VALUES("","' . $server_name . '","' . $server_soapadress . '")';
-                    /* on lance la commande (mysql_query) et au cas où,
-                      on rédige un petit message d'erreur si la requête ne passe pas
-                      (Message qui intègrera les causes d'erreur sql) */
-                    echo "<script>alert(\"Ajout \340 la base de donn\351es\")</script>";
-                    mysql_query($sql) or die('Erreur SQL !' . $sql . '<br />' . mysql_error());
-
-                    // on ferme la connexion
-                    mysql_close();
-                }
-                ?>
+                
             </div>
             <div>
                 <h3>Ajouter une fonction</h3>

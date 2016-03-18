@@ -18,7 +18,7 @@ error_reporting(0);
 //gestion des logs
 require ("../../vendor/autoload.php");
 
-// Booléen pour vérifier la bonne suppression de l'utilisateur
+// Booléen pour vérifier le bon ajout du client
 $added = false;
 $edited = false;
 
@@ -84,9 +84,9 @@ if (isset($_SESSION['login'])) {
 
         // Si le formulaire remis est correct, on enregistre
         if ($correct) {
-            // Si l'id de l'utilisateur est supérieur à 0, c'est une modification
+            // Si l'id du client existe, c'est une modification
             // Sinon c'est un ajout
-            if ($client_id > 0) {
+            if (isset($client_id)) {
                 try {
                     // Modification du client
                     $stmt = $bdd->prepare("UPDATE client SET client_name=:client_name, client_ip=:client_ip, modality_id=:modality_id WHERE client_id=:client_id");
@@ -105,14 +105,14 @@ if (isset($_SESSION['login'])) {
 
                     if ($edited) {
                         // Le client a bien été édité
-                        $message = array(true, "Le client a bien été modifié");
+                        $message = array(true, "Le client a bien &eacute;t&eacute; modifi&eacute;");
                     } else {
-                        $message = array(false, "Erreur lors de la modification du client\nVeuillez r&eacute;&eacute;ssayer");
+                        $message = array(false, "Erreur lors de la modification du client\nVeuillez r&eacute;essayer");
                     }
 
                     // Gestion des exceptions
                 } catch (Exception $e) {
-                    $message = array(false, "Erreur lors de la modification du client\nVeuillez r&eacute;&eacute;ssayer");
+                    $message = array(false, "Erreur lors de la modification du client\nVeuillez r&eacute;essayer");
                 }
             } else {
                 try {
@@ -135,12 +135,12 @@ if (isset($_SESSION['login'])) {
                         // Le client a bien été ajouté
                         $message = array(true, "Le client a bien &eacute;t&eacute; ajout&eacute;");
                     } else {
-                        $message = array(false, "Erreur lors de l'ajout du client\nVeuillez r&eacute;&eacute;ssayer");
+                        $message = array(false, "Erreur lors de l'ajout du client\nVeuillez r&eacute;essayer");
                     }
 
                     // Gestion des exceptions
                 } catch (Exception $e) {
-                    $message = array(false, "Erreur lors de l'ajout du client\nVeuillez r&eacute;&eacute;ssayer");
+                    $message = array(false, "Erreur lors de l'ajout du client\nVeuillez r&eacute;essayer");
                 }
             }
         }
