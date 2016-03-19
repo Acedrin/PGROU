@@ -113,7 +113,7 @@ function generateWSDL($array) {
                         if (strcmp($s->function_name, $r->function_name) == 0 && ($s->variable_input == 1)) {
                             $oXMLWriter->startElementNS('wsdl', 'part', NULL);
                             $oXMLWriter->writeAttribute('name', $s->variable_name);
-                            $oXMLWriter->writeAttribute('type', $s->type_namewsdl);
+                            $oXMLWriter->writeAttribute('type', 'xsd:'.$s->type_namewsdl);
                             $oXMLWriter->endElement();
                         }
                     }
@@ -127,7 +127,7 @@ function generateWSDL($array) {
                         if (strcmp($s->function_name, $r->function_name) == 0 && ($s->variable_input == 0)) {
                             $oXMLWriter->startElementNS('wsdl', 'part', NULL);
                             $oXMLWriter->writeAttribute('name', $s->variable_name);
-                            $oXMLWriter->writeAttribute('type', $s->type_namewsdl);
+                            $oXMLWriter->writeAttribute('type', 'xsd:'.$s->type_namewsdl);
                             $oXMLWriter->endElement();
                         }
                     }
