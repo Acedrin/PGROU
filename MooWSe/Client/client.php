@@ -95,7 +95,8 @@
 		$Created = time(); // temps actuel
 	}
 	$Password = base64_encode(sha1($Nonce.$Created.$hash1)); //on envoie le mot de passe crypte
-
+        echo $hash1.'</br>';
+        echo $Username.'</br>';
 	$UsernameToken = [];
 	$UsernameToken["Username"] = new SoapVar($Username, XSD_STRING, NULL, $wsse, "Username", $wsse);
 	$UsernameToken["Password"] = new SoapVar($Password, XSD_STRING, "PasswordDigest", $wsse, "Password", $wsse);

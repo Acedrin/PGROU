@@ -34,8 +34,7 @@ class dataBaseCall {
             //assignation des variables, le préfixe data caractérise les infos récupérerées ne base
             $client_database_name = $info_client['client_name'];
             $client_database_ip = $info_client['client_ip'];
-            //$client_database_password = sha1($info_client['client_password']);// à supprimer lorsque les mdp en base seront hachés
-            $client_database_password = $info_client['client_password'];// à décommenter lorsque les mdp en base seront hachés
+            $client_database_password = $info_client['client_password'];
             $client_database_modality = $info_client['modality_name'];
             //mot de passe encryptre
             $client_database_encrypted_password = base64_encode(sha1($client_nonce . $client_created . $client_database_password));
@@ -46,7 +45,6 @@ class dataBaseCall {
                     ($client_IP == $client_database_ip) &&
                     ($client_database_modality == $client_access)) || $registered);
         }
-
         return $registered;
     }
 
@@ -77,6 +75,7 @@ class dataBaseCall {
             //on renvoie un array vide
             $functions=array();
         }
+        //on renvoit l'array des fonctions autorisées
         return $functions;
     }
 
