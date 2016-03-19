@@ -120,32 +120,6 @@ class MooWSe {
     }
 
 }
-/*
-//test de Security
-$Username ='agap';
-	$crypto_strong = false;
-	while (!$crypto_strong) { //generation d'un sel (aleatoire pour le moment), le sel va permettre de brouiller le mot de passe aux yeux d'un HDM (Homme Du Milieu)
-		$Nonce = base64_encode(bin2hex(openssl_random_pseudo_bytes(16,$crypto_strong))); //encode 64 bit d'un mot de passe aléatoire de 16 bits converti du binaire à l'hexadécimal
-		$Created = time(); // temps actuel
-	}
-        $hash1=  sha1('kangourou87');
-	$Password = base64_encode(sha1($Nonce.$Created.$hash1)); //on envoie le mot de passe crypte
 
-	$UsernameToken = array();
-	$UsernameToken["Username"] =$Username;
-	$UsernameToken["Password"] = $Password;
-	$UsernameToken["Nonce"] = $Nonce; //il faut aussi envoyer le sel
-	$UsernameToken["Created"] = $Created; //on envoie la date
-        
-        echo $Password.'</br>';
-        //le array Security va contenir UsernameToken et 
-	$Security = array();
-	$Security["UsernameToken"] = array_push($Security, $UsernameToken);
-        echo "<pre>";
-		print_r($Security);
-        echo "</pre>";
-        $moteur= new MooWSe($Security);
-        $moteur->Security($Security);
-        echo 'coucou</br>';*/
 
 ?>

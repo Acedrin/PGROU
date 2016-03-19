@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="moodle" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+ 
+ <wsdl:message name="matiereRequest">
+  <wsdl:part name="NumMatiere" type="xsd:int"/>
+ </wsdl:message>
+ 
+ <wsdl:message name="matiereResponse">
+  <wsdl:part name="Result" type="xsd:int"/>
+ </wsdl:message>
+ 
+ <wsdl:message name="descriptionRequest">
+  <wsdl:part name="DesMatiere" type="xsd:string"/>
+ </wsdl:message>
+ 
+ <wsdl:message name="descriptionResponse">
+  <wsdl:part name="Result" type="xsd:string"/>
+ </wsdl:message>
+ 
+ <wsdl:portType name="matierePortType">
+  <wsdl:operation name="matiere">
+   <wsdl:input message="tns:matiereRequest"/>
+   <wsdl:output message="tns:matiereResponse"/>
+  </wsdl:operation>
+ </wsdl:portType>
+ 
+ <wsdl:portType name="descriptionPortType">
+  <wsdl:operation name="description">
+   <wsdl:input message="tns:descriptionRequest"/>
+   <wsdl:output message="tns:descriptionResponse"/>
+  </wsdl:operation>
+ </wsdl:portType>
+ 
+ <wsdl:binding name="matiereBinding" type="tns:matierePortType">
+  <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+  <wsdl:operation name="matiere">
+   <soap:operation soapAction="urn:xmethods-delayed-quotes#matiere"/>
+   <wsdl:input>
+    <soap:body use="encoded" namespace="urn:xmethods-delayed-quotes" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+   </wsdl:input>
+   <wsdl:output>
+    <soap:body use="encoded" namespace="urn:xmethods-delayed-quotes" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+   </wsdl:output>
+  </wsdl:operation>
+ </wsdl:binding>
+ 
+ <wsdl:binding name="descriptionBinding" type="tns:descriptionPortType">
+  <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+  <wsdl:operation name="description">
+   <soap:operation soapAction="urn:xmethods-delayed-quotes#description"/>
+   <wsdl:input>
+    <soap:body use="encoded" namespace="urn:xmethods-delayed-quotes" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+   </wsdl:input>
+   <wsdl:output>
+    <soap:body use="encoded" namespace="urn:xmethods-delayed-quotes" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+   </wsdl:output>
+  </wsdl:operation>
+ </wsdl:binding>
+ 
+ <wsdl:service name="matiereService">
+  <wsdl:port name="matierePort" binding="matiereBinding">
+   <soap:address location="http://localhost/moodle/wsdl_server.php"/>
+  </wsdl:port>
+ </wsdl:service>
+ 
+ <wsdl:service name="descriptionService">
+  <wsdl:port name="descriptionPort" binding="descriptionBinding">
+   <soap:address location="http://localhost/moodle/wsdl_server.php"/>
+  </wsdl:port>
+ </wsdl:service>
+</wsdl:definitions>
