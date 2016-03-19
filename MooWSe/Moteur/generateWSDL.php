@@ -50,7 +50,7 @@ function generateWSDL($array) {
         $a = new ArrayObject(); // Création d'un tableau d'objet
         foreach ($array as $r) {
             //dangereux appel de base dans une boucle
-            $bdd = new PDO('mysql:host=localhost;dbname=moowse;charset=utf8', 'root', '', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+            $bdd = new PDO('mysql:host=localhost;dbname=webservices;charset=utf8', 'root', '', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
             $result = $bdd->query("SELECT DISTINCT function_name,variable_name,variable_input,type_namewsdl,server_name "
                     . "FROM access,client,function,variable,type,server "
                     . "WHERE client.client_id=access.client_id "
