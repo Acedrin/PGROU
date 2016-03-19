@@ -30,7 +30,8 @@ if (isset($_SESSION['login'])) {
 
     require("../controllers/getFunctions.php");
     require("../controllers/getServers.php");
-
+    require("../controllers/getVariables.php");
+    
     // Définition des variables nécessaires pour le header
     $titre_web = "MooWse - Gestion des serveurs et des fonctions";
     $titre_principal = "Espace Administration de MooWse";
@@ -86,7 +87,7 @@ if (isset($_SESSION['login'])) {
 
                             <a href="../controllers/deleteServer.php?server_id=<?php print_r($servers[$i]['server_id']) ?>" 
                                onclick="return(confirm('Voulez vous vraiment supprimer le serveur <?php print_r($servers[$i]['function_name']) ?> ?\n\n\
-                                                                ATTENTION - Cela supprimera toutes les <?php print_r($nbFunctions[$servers[$i]['server_id']]); ?> qui y sont encore associées !'));">
+                                                                                ATTENTION - Cela supprimera toutes les <?php print_r($nbFunctions[$servers[$i]['server_id']]); ?> qui y sont encore associées !'));">
                                 <img src="../../public/img/delete.png" title="Supprimer le serveur" alt="Supprimer">
                             </a>
                         </td>
@@ -140,10 +141,32 @@ if (isset($_SESSION['login'])) {
                         </td>
                         <td>
                             <?php
+                            for ($j = 0; $j < sizeof($variables); $j++) {
+                                if ($variables[$j]['function_id'] == $functions[$i]['function_id'] && $variables[$j]['variable_input'] == 1) {
+                                    print_r($variables[$j]['variable_order']);
+                                    echo(" : ");
+                                    print_r($variables[$j]['variable_name']);
+                                    echo(" (");
+                                    print_r($variables[$j]['type_name']);
+                                    echo(")");
+                                    echo("<br/>");
+                                }
+                            }
                             ?>
                         </td>
                         <td>
                             <?php
+                            for ($j = 0; $j < sizeof($variables); $j++) {
+                                if ($variables[$j]['function_id'] == $functions[$i]['function_id'] && $variables[$j]['variable_input'] == 0) {
+                                    print_r($variables[$j]['variable_order']);
+                                    echo(" : ");
+                                    print_r($variables[$j]['variable_name']);
+                                    echo(" (");
+                                    print_r($variables[$j]['type_name']);
+                                    echo(")");
+                                    echo("<br/>");
+                                }
+                            }
                             ?>
                         </td>
                         <td>
