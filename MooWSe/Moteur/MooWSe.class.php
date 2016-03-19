@@ -27,9 +27,9 @@ class MooWSe {
 
             //on regarde si le client est enregistré, appel de base
 
-            /* $checkingDatas = new dataBaseCall('localhost', 'webservices', 'utf8', 'root', '');  --> giano */
+            $checkingDatas = new dataBaseCall('localhost', 'webservices', 'utf8', 'root', '');
 
-            $checkingDatas = new dataBaseCall($dbms_address, $db, 'utf8', $user, $passwd);
+            //$checkingDatas = new dataBaseCall($dbms_address, $db, 'utf8', $user, $passwd);
 
             $registered = $checkingDatas->clientRegistered($client_nonce, $client_created, $client_access, $client_password_digest, $client_IP);
 
@@ -110,9 +110,9 @@ class MooWSe {
             if ($this->_tokenChecked) {
                 //connexion ï¿½ la base de donnï¿½es 
 
-                /* $checkingDatas = new dataBaseCall('localhost', 'webservices', 'utf8', 'root', '');  --> giano */
+                $checkingDatas = new dataBaseCall('localhost', 'webservices', 'utf8', 'root', ''); 
 
-                $gettingDatas = new dataBaseCall($dbms_address, $db, 'utf8', $user, $passwd);
+                //$gettingDatas = new dataBaseCall($dbms_address, $db, 'utf8', $user, $passwd);
                 $functions = $gettingDatas->listFunction($client_name,$service);
             }
         }
