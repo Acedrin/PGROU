@@ -25,7 +25,7 @@ if (isset($_SESSION['login'])) {
     } else {
         $_SESSION['timestamp'] = time();
     }
-    // Vérification de si un paramètre a été donné (=modification d'un client)
+    // Vérification de si un paramètre a été donné (=modification d'un administrateur)
     if (isset($_GET['user_id'])) {
         $user_id = $_GET['user_id'];
         require("../controllers/getUsers.php");
@@ -42,11 +42,11 @@ if (isset($_SESSION['login'])) {
             <div class="navigation">
 
                 <?php
-                // Vérification de l'existence de $client
-                // Son existence implique une modification d'un client existant
+                // Vérification de l'existence de $user
+                // Son existence implique une modification d'un adminitrateur existant
 
                 if (isset($user)) {
-                    // Modification d'un client
+                    // Modification d'un administrateur
                     ?>
                     <form name="formAdd" action="../controllers/addUser.php" method="POST">
 

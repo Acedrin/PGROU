@@ -40,6 +40,38 @@ if (isset($_SESSION['login'])) {
             // Enregistrement du message
             $_SESSION['alert'] = $message;
         }
+    } else if ($function_add) {
+        // Appel depuis la vue d'ajout de fonctions
+        // Retour de la liste des serveurs indexée par leur id
+        
+        // Récupération de tous les serveurs
+        try {
+            // Récupération de tous les serveurs
+            $stmt = $bdd->prepare('SELECT server_id,server_name FROM server');
+            $stmt->setFetchMode(PDO::FETCH_ASSOC);
+            $stmt->execute();
+
+            // Enregistrement du résultat dans un tableau
+            $server_id = array();
+            $server_name = array();
+            // Utilisation d'une boucle pour que le label des colonnes soit l'id
+            while ($row = $stmt->fetch()) {
+                $server_id[] = $row['server_id'];
+                $server_name[] = $row['server_name'];
+            }
+            $servers_list = array_combine($server_id, $server_name);
+
+            // Fermeture de la connexion
+            $stmt->closeCursor();
+
+            // Traitement des exceptions
+        } catch (Exception $e) {
+            $message = array(false, "Erreur lors de la r&eacute;cup&eacute;ration des serveurs\nVeuillez r&eacute;essayer");
+
+            // Enregistrement du message
+            $_SESSION['alert'] = $message;
+        }
+        
     } else {
         // Récupération de tous les serveurs
         try {

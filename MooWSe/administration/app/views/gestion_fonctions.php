@@ -76,7 +76,7 @@ if (isset($_SESSION['login'])) {
                             ?>
                         </td>
                         <td>
-                            <a href="ajout_server.php?server_id=<?php print_r($servers[$i]['server_id']) ?>"><img src="../../public/img/edit.png" title="Modifier le serveur" alt="Modifier"></a>
+                            <a href="ajout_serveur.php?server_id=<?php print_r($servers[$i]['server_id']) ?>"><img src="../../public/img/edit.png" title="Modifier le serveur" alt="Modifier"></a>
 
                             &nbsp;
 
@@ -169,7 +169,7 @@ if (isset($_SESSION['login'])) {
             <br />
             <br />
 
-            <a href="ajout_fonction.php"><button type="button">Ajouter une fonction</button></a>
+            <a href="#"><button type="button" onclick="nbFunctions()">Ajouter des fonctions</button></a>
             <a href="ajout_serveur.php"><button type="button">Ajouter un serveur</button></a>
             <?php include("../../app/views/footer.php"); ?>
         </div>

@@ -130,6 +130,38 @@ function validerFormulaireServeur() {
     }
 }
 
+// Fonction pour valider le formulaire pour les fonctions, vérifiant que les champs sont bien remplis
+function validerFormulaireFonction(number) {
+    var alerte = "";
+    for (i = 0; i < number; i++) {
+        if (!document.getElementById('function_name' + i).value.length > 0) {
+            alerte += "Veuillez indiquer le nom de la fonction n°" + i + " !\n";
+            document.getElementById('function_name' + i).style.backgroundColor = '#FF9900';
+            document.getElementById('function_name' + i).style.color = '#000000';
+        }
+
+        /**On récupère l'élement select server_id*/
+        var selectElmt = document.getElementById('server_id' + i);
+        /**
+         selectElmt.options correspond au tableau des balises <option> du select
+         selectElmt.selectedIndex correspond à l'index du tableau options qui est actuellement sélectionné
+         */
+        if (selectElmt.options[selectElmt.selectedIndex].value == 0) {
+            alerte += "Veuillez indiquer le serveur de la fonction n°" + i + " !\n";
+            document.getElementById('server_id' + i).style.backgroundColor = '#FF9900';
+            document.getElementById('server_id' + i).style.color = '#000000';
+        }
+        if (alerte != "") {
+            alerte += "\n";
+        }
+    }
+    if (alerte == "") {
+        document.getElementsByName('formAdd')[0].submit();
+    } else {
+        alert(alerte);
+    }
+}
+
 // Fonction pour faire disparaitre les messages d'alerte et de succès
 window.setTimeout("closeDiv();", 5000);
 
@@ -137,8 +169,20 @@ function closeDiv() {
     var Temp = document.getElementById("success_message");
     if (Temp != null)
         Temp.style.display = "none";
-    
+
     var Temp = document.getElementById("error_message");
     if (Temp != null)
         Temp.style.display = "none";
+}
+
+// Fonction pour définir le nombre de fonctions à ajouter
+function nbFunctions() {
+    var nb = prompt("Combien de fonctions voulez-vous ajouter ? (max 5)", 1);
+
+    if (nb != null) {
+        if (nb > 5) {
+            nb = 5;
+        }
+        document.location.href = 'ajout_fonction.php?function_nb=' + nb;
+    }
 }
