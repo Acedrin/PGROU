@@ -30,9 +30,6 @@ if (isset($_SESSION['login'])) {
         $user_id = $_GET['user_id'];
         require("../controllers/getUsers.php");
     }
-    print_r($_SESSION['alert']);
-    // Remise à zéro de la variable d'alerte
-    $_SESSION['alert'] = "";
     
      // Définition des variables nécessaires pour le header
     $titre_web = "MooWse - Ajout/modification d'un administrateur";
