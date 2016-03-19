@@ -15,7 +15,7 @@
             <a href="modification.php" class="a2"> Configurer la BDD</a> |
             <a href="gestion_administrateurs.php" class="a2"> Administrateurs</a> |
             <a href="gestion_clients.php" class="a2"> Clients</a></div></br>
-        <div class="textfooter">MooWse project 2016 - Ecole Centrale de Nantes </div>
+            <div class="textfooter">MooWse project 2016 - Ecole Centrale de Nantes<br/>Attention: en cas d'inactivité prolongée vous serez déconnectés. </div>
         <div class="deconnexion">
             <form action="../controllers/deconnexion.php" method="POST">
                 <p><button type="submit" class="boutondeconnexion"><br/></button></p>
