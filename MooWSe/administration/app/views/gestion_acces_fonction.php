@@ -15,6 +15,16 @@ ini_set("display_errors", 0);
 error_reporting(0);
 
 if (isset($_SESSION['login']) && isset($_GET['function_id'])) {
+    if (isset($_SESSION['timestamp'])) { // si $_SESSION['timestamp'] existe
+        if ($_SESSION['timestamp'] + 300 > time()) {
+            $_SESSION['timestamp'] = time();
+        } else {
+            header("Location:../controllers/deconnexion.php"); // deconnexion au bout de 5 minutes d'inactivite
+            exit();
+        }
+    } else {
+        $_SESSION['timestamp'] = time();
+    }
 
     $function_id = $_GET['function_id'];
 
@@ -53,7 +63,7 @@ if (isset($_SESSION['login']) && isset($_GET['function_id'])) {
             <p>
                 Les clients suivants ont acc&egrave;s &agrave; cette fonction :
             </p>
-            
+
             <table>
                 <tr>
                     <th>Client</th>
@@ -84,8 +94,8 @@ if (isset($_SESSION['login']) && isset($_GET['function_id'])) {
                         <td>
                             <a href="../controllers/deleteAccess.php?client_id=<?php print_r($access[$i]['client_id']) ?>&function_id=<?php print_r($function[0]['function_id']) ?>&retour=fonction" 
                                onclick="return(confirm('Voulez vous vraiment supprimer l''accès du client <?php print_r($access[$i]['client_name']) ?> \n\
-                                    à la fonction <?php print_r($access[$i]['function_name']) ?> \n\
-                                    du serveur <?php print_r($access[$i]['server_name']) ?> ?'));">
+                                            à la fonction <?php print_r($access[$i]['function_name']) ?> \n\
+                                            du serveur <?php print_r($access[$i]['server_name']) ?> ?'));">
                                 <img src="../../public/img/delete.png" title="Supprimer le droit d'acc&egrave;s" alt="Supprimer">
                             </a>
                         </td>

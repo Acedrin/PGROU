@@ -20,7 +20,16 @@ function connectMaBase() {
 }
 
 if (isset($_SESSION['login'])) {
-
+    if (isset($_SESSION['timestamp'])) { // si $_SESSION['timestamp'] existe
+        if ($_SESSION['timestamp'] + 600 > time()) {
+            $_SESSION['timestamp'] = time();
+        } else {
+            header("Location:../controllers/deconnexion.php"); // deconnexion au bout de 10 minutes d'inactivite
+            exit();
+        }
+    } else {
+        $_SESSION['timestamp'] = time();
+    }
 // Définition des variables nécessaires pour le header
     $titre_web = "MooWse - Ajout d'une fonction";
     $titre_principal = "Espace Administration de MooWse";

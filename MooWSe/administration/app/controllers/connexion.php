@@ -52,6 +52,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if ($rows['user_uid'] == $login) {
                 $restart = false;
                 $_SESSION['login'] = $login;
+                $_SESSION['timestamp'] = time();
                 $logger = new Katzgrau\KLogger\Logger(__DIR__.'../../../logs');
                 $logger->info("Connexion de ".$login. " depuis l'adresse ". $_SERVER["REMOTE_ADDR"]);
             }
@@ -65,10 +66,12 @@ if ($restart) {
     // La page
     header('Content-Type: text/html; charset=utf-8');
     header("Location:../../index.php");
+    exit();
 } else {
     // Connexion valide
     // redirection vers la page accueil.php
     header('Content-Type: text/html; charset=utf-8');
     header("Location:../views/accueil.php");
+    exit();
 }
 ?>
