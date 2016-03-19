@@ -74,7 +74,7 @@ if (isset($_SESSION['login'])) {
             if ($user_id > 0) {
                 try {
                     // Vérification de l'unicité de l'uid
-                    $stmt = $bdd->prepare('SELECT user_uid FROM user WHERE user_uid = :user_uid AND user_id NOT :user_id');
+                    $stmt = $bdd->prepare('SELECT user_uid FROM user WHERE user_uid = :user_uid AND NOT user_id=:user_id');
                     $stmt->setFetchMode(PDO::FETCH_ASSOC);
                     $stmt->bindParam(':user_uid', $user_uid);
                     $stmt->bindParam(':user_id', $user_id);

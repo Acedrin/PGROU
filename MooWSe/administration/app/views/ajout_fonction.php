@@ -53,23 +53,41 @@ if (isset($_SESSION['login'])) {
     <body>
         <div class="navigation">
             <?php
-            // Vérification de l'existence de $server
-            // Son existence implique une modification d'un client existant
+            // Vérification de l'existence de $function
+            // Son existence implique une modification d'une fonction existante
 
             if (isset($function)) {
-                // Modification d'un serveur
+                // Modification d'une fonction
                 ?>
                 <form name="formAdd" action="../controllers/addFunction.php" method="POST">
 
-                    <input type="hidden" name="server_id" id="server_id" value="<?php print_r($server[0]['server_id']) ?>"/>
+                    <input type="hidden" name="function_id" id="function_id" value="<?php print_r($function[0]['function_id']) ?>"/>
 
-                    <label for="function_name">Nom du serveur :</label>
-                    <input type="text" name="function_name" id="function_name" value="<?php print_r($server[0]['function_name']) ?>" placeholder="Nom" required/>
+                    <label for="function_name[]">Nom de la fonction :</label>
+                    <input type="text" name="function_name[]" id="function_name0" value="<?php print_r($function[0]['function_name']) ?>" required/>
 
                     <br />
 
-                    <label for="server_soapadress">Adresse SOAP :</label>
-                    <input type="text" name="server_soapadress" id="server_soapadress" value="<?php print_r($server[0]['server_soapadress']) ?>" placeholder="Adresse SOAP" required/>
+                    <label for="server_id[]">Serveur associé à la fonction :</label>
+                    <select name="server_id[]" id="server_id0">
+                        <?php
+                        // Récupération des ids des serveurs
+                        $keys = array_keys($servers_list);
+
+                        for ($j = 0; $j < sizeof($servers_list); $j++) {
+                            $server_id = $keys[$j];
+                            if ($server_id == $function[0]['server_id']) {
+                                ?>
+                                <option value=<?php echo $server_id ?> selected><?php print_r($servers_list[$server_id]) ?></option>
+                                <?php
+                            } else {
+                                ?>
+                                <option value=<?php echo $server_id ?>><?php print_r($servers_list[$server_id]) ?></option>
+                                <?php
+                            }
+                        }
+                        ?>
+                    </select>
 
                     <br />
                     <br />
@@ -105,15 +123,9 @@ if (isset($_SESSION['login'])) {
 
                                 for ($j = 0; $j < sizeof($servers_list); $j++) {
                                     $server_id = $keys[$j];
-                                    if ($server_id == $function[0]['server_id']) {
-                                        ?>
-                                        <option value=<?php echo $server_id ?> selected><?php print_r($servers_list[$server_id]) ?></option>
-                                        <?php
-                                    } else {
-                                        ?>
-                                        <option value=<?php echo $server_id ?>><?php print_r($servers_list[$server_id]) ?></option>
-                                        <?php
-                                    }
+                                    ?>
+                                    <option value=<?php echo $server_id ?>><?php print_r($servers_list[$server_id]) ?></option>
+                                    <?php
                                 }
                                 ?>
                             </select>

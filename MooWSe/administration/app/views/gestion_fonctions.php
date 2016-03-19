@@ -147,7 +147,7 @@ if (isset($_SESSION['login'])) {
                             ?>
                         </td>
                         <td>
-                            <a href="ajout_fonction.php?fonction_id=<?php print_r($functions[$i]['function_id']) ?>"><img src="../../public/img/edit.png" title="Modifier la fonction" alt="Modifier"></a>
+                            <a href="ajout_fonction.php?function_id=<?php print_r($functions[$i]['function_id']) ?>"><img src="../../public/img/edit.png" title="Modifier la fonction" alt="Modifier"></a>
 
                             &nbsp;
 
