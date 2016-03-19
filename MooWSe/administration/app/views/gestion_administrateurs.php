@@ -19,18 +19,15 @@ if (isset($_SESSION['login'])) {
     print_r($_SESSION['alert']);
     // Remise à zéro de la variable d'alerte
     $_SESSION['alert'] = "";
+     // Définition des variables nécessaires pour le header
+    $titre_web = "MooWse - Gestion Administrateur";
+    $titre_principal = "Espace Administration de MooWse";
+    $titre_section = "Gestions des Administrateurs";
+
+    require("../views/header.php");
     ?>
-    <!DOCTYPE html>
-    <html lang="fr-fr">
-        <head>
-            <link href="../../public/css/accueil.css" type="text/css" rel="stylesheet" />
-            <meta charset="UTF-8" />
-            <title>MooWse - Gestion administrateurs</title>
-        </head>
         <body>
             <div class="navigation">
-                <h1>Espace Administration de MooWse</h1>
-                <h2>Gestion administrateurs</h2>
 
                 <table>
                     <tr>
