@@ -55,7 +55,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $today = date('Y-m-d', time());
             
             // on verifie que le login est dans la bdd et que la date d'expiration n'est pas depassee;
-            if (($rows['user_uid'] == $login)&&(($rows['user_expirationdate']=='0000-00-00')||(strotime($today)>strotime($rows['user_expirationdate'])))) {
+            if (($rows['user_uid'] == $login)&&(($rows['user_expirationdate']=='0000-00-00')||(strotime($today)<strotime($rows['user_expirationdate'])))) {
                 $restart = false;
                 $_SESSION['login'] = $login;
                 $_SESSION['timestamp'] = time();
