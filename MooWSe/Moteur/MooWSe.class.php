@@ -4,6 +4,7 @@
 require "generateWSDL.php";
 //classe de Quentin
 require "dataBaseCall.php";
+
 //fichier avec data de configuration
 //require "settings.php"; //---> Insert giano
 
@@ -16,14 +17,14 @@ class MooWSe {
     private $_tokenTimeToLive = 1;
 
     public function Security($Security) {
-           //$this->_test=$Security->UsernameToken->Username;
+        //$this->_test=$Security->UsernameToken->Username;
         if (isset($Security->UsernameToken->Username) && isset($Security->UsernameToken->Password) && isset($Security->UsernameToken->Nonce) && isset($Security->UsernameToken->Created)) {
             list($client_name, $client_access) = explode(",", $Security->UsernameToken->Username);
             $client_password_digest = $Security->UsernameToken->Password; // est le mot de passe encrypte recu
             $client_nonce = $Security->UsernameToken->Nonce;
             $client_created = $Security->UsernameToken->Created;
             $client_IP = $_SERVER["REMOTE_ADDR"];
-                        $this->_test=$client_IP;
+            $this->_test = $client_IP;
             //on regarde si le client est enregistre, appel de base
             $checkingDatas = new dataBaseCall('localhost', 'webservices', 'utf8', 'root', '');
             //$checkingDatas = new dataBaseCall($dbms_address, $db, 'utf8', $user, $passwd);
@@ -100,26 +101,30 @@ class MooWSe {
             $time = time();
             $client_name = $this->_client_name;
             $client_access = $this->_client_access;
-			$service;
+            $service;
             $action = "getWSDL";
 
             //renvoyer la liste des fonctions auxquelles l'utilisateur a acc�s 
             //appel � la base
             if ($this->_tokenChecked) {
                 //connexion � la base de donn�es 
-                $gettingDatas = new dataBaseCall('localhost', 'webservices', 'utf8', 'root', ''); 
+                $gettingDatas = new dataBaseCall('localhost', 'webservices', 'utf8', 'root', '');
                 //$gettingDatas = new dataBaseCall($dbms_address, $db, 'utf8', $user, $passwd);
-				
-                $functions = $gettingDatas->listFunction($client_name,$service);
+
+                $functions = $gettingDatas->listFunction($client_name, $service);
             }
         }
 
         //générateur
-        $service_WSDL = generateWSDL($functions);
+        if(count($functions)!=0) {
+            $service_WSDL = generateWSDL($functions);
+        }
+        else{
+            $service_WSDL = generateFakeWSDL($functions);
+        }
         return htmlspecialchars($service_WSDL, ENT_XML1);
     }
 
 }
-
 
 ?>
