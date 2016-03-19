@@ -19,18 +19,18 @@ class MooWSe {
 
         if (isset($Security->UsernameToken->Username) && isset($Security->UsernameToken->Password) && isset($Security->UsernameToken->Nonce) && isset($Security->UsernameToken->Created)) {
             list($client_name, $client_access) = explode(",", $Security->UsernameToken->Username);
-            $client_password_digest = $Security->UsernameToken->Password;
+            $client_password_digest = $Security->UsernameToken->Password; // est le mot de passe encrypte recu
             $client_nonce = $Security->UsernameToken->Nonce;
             $client_created = $Security->UsernameToken->Created;
             $client_IP = $_SERVER["REMOTE_ADDR"];
 
-            //on regarde si le client est enregistr�, appel de base
+            //on regarde si le client est enregistre, appel de base
             $checkingDatas = new dataBaseCall('localhost', 'webservices', 'utf8', 'root', '');
             //$checkingDatas = new dataBaseCall($dbms_address, $db, 'utf8', $user, $passwd);
-
+            //vrai si les informations clientes sont exactes
             $registered = $checkingDatas->clientRegistered($client_name, $client_nonce, $client_created, $client_access, $client_password_digest, $client_IP);
 
-			//si l'authentification est r�usssie
+            //si l'authentification est reusssie
             if ($registered) {
 
                 $this->_client_name = $client_name;

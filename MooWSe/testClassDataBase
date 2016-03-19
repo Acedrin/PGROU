@@ -138,7 +138,8 @@ class dataBaseCall {
 }
 
 //test de la fonction database call (constructeur)
-
+//echo sha1('mouton44');
+//echo(sha1('kangourou87'));
 $dataBase = new dataBaseCall('localhost', 'webservices', 'utf8', 'root', '');
 //test de la fonction de clientRegistered
 $Nonce = base64_encode(bin2hex(openssl_random_pseudo_bytes(16, $crypto_strong)));
@@ -155,6 +156,7 @@ $result = $dataBase->clientRegistered($client_name, $Nonce, $Created, $client_ac
 //test de listFunction
 $liste=$dataBase->listFunction($client_name,$service);
 //agap: kangourou87
+////moodle : mouton44
 //forumprepa: tortue62
 //test d'affichage
 $dataBase->affichage('forumprepa');
