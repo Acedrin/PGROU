@@ -1,30 +1,22 @@
-<!DOCTYPE html>
-<!-- - - - - - - - - - - - - - - - - - - - - - - - - - -
+<?php
+/*-- - - - - - - - - - - - - - - - - - - - - - - - - - -
   Projet MOOWSE
-  Fichier html
+  Fichier php
   Vue inclue dans chaque vue pour y incorporer les éléments communs
 
   Quentin Payet
   Ecole Centrale de Nantes
  - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-<html>
-    <head>
-        <title>TODO supply a title</title>
-        <link href="../../public/css/layout.css" type="text/css" rel="stylesheet" />
-        <meta charset="UTF-8" />
-
-
-    <body>
+*/
+?>
         <br/><br/><br/>
-        <div class="layout"><a href="remplissage.php">Ajouter un WS</a> |
-            <a href="gestion_fonctions.php">Fonctions</a> |
-            <a href="modification.php"> Configurer la BDD</a> |
-            <a href="gestion_administrateurs.php"> Administrateurs</a> |
-            <a href="gestion_clients.php"> Clients</a></div></br>
+        <div class="footer"><a href="remplissage.php" class="a2">Ajouter un WS</a> |
+            <a href="gestion_fonctions.php" class="a2">Fonctions</a> |
+            <a href="modification.php" class="a2"> Configurer la BDD</a> |
+            <a href="gestion_administrateurs.php" class="a2"> Administrateurs</a> |
+            <a href="gestion_clients.php" class="a2"> Clients</a></div></br>
         <div class="textfooter">MooWse project 2016 - Ecole Centrale de Nantes </div>
         <div class="deconnexion">
             <form action="../controllers/deconnexion.php" method="POST">
                 <p><button type="submit" class="boutondeconnexion"><br/></button></p>
             </form></div>
-    </body>
-</html>

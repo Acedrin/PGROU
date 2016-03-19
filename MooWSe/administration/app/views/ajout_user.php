@@ -166,7 +166,7 @@ if (isset($_SESSION['login'])) {
                     </form>
                     <?php
                 }
-                include("../../app/views/layout.html");
+                include("../../app/views/footer.php");
                 ?>
             </div>
 

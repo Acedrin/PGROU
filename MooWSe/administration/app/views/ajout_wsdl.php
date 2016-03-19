@@ -209,7 +209,7 @@ if (isset($_SESSION['login'])) {
                 ?>
             </div>
             <?php
-            include("../../app/views/layout.html");
+            include("../../app/views/footer.php");
             ?>
         </div>
     </body>

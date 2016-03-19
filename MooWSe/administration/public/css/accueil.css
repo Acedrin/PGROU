@@ -109,3 +109,53 @@ button {
     color: #BA1515;
     font-weight: bold;
 }
+
+/* Gestion du footer */
+
+.footer {
+    text-align: center;
+    width: 100%;
+    padding: 2px;
+    background: brown;
+    border-radius: 5px;
+}
+
+.a2 {
+    text-decoration: none;
+    color: whitesmoke;
+}
+
+.a2:hover {
+    text-decoration: none;
+    color: black;
+    background-color: antiquewhite;
+
+}
+
+.textfooter {
+    font-size:10px;
+    display: inline-block;
+    margin-left: 300px;
+}
+
+
+.deconnexion {
+    display: inline-block;
+    margin-left: 200px;
+}
+
+
+.boutondeconnexion
+{
+    background-image: url("../img/logout_24.png");
+    background-repeat: no-repeat;
+    border: none;
+    color: white;
+    background-color: transparent;
+    padding:2px 24px 0 0;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    cursor: pointer;
+
+}

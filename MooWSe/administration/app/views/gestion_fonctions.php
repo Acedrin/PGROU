@@ -84,7 +84,7 @@ if (isset($_SESSION['login'])) {
 
             <a href="ajout_fonction.php"><button type="button">Ajouter une fonction</button></a>
             <a href="ajout_serveur.php"><button type="button">Ajouter un serveur</button></a>
-            <?php include("../../app/views/layout.html"); ?>
+            <?php include("../../app/views/footer.php"); ?>
         </div>
     </body>
     </html>

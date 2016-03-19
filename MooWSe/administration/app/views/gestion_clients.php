@@ -91,7 +91,7 @@ if (isset($_SESSION['login'])) {
             <br />
 
             <a href="ajout_client.php"><button type="button">Ajouter un client</button></a>
-            <?php include("../../app/views/layout.html"); ?>
+            <?php include("../../app/views/footer.php"); ?>
         </div>
     </body>
     </html>

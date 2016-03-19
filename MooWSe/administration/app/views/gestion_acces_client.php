@@ -99,7 +99,7 @@ if (isset($_SESSION['login']) && isset($_GET['client_id'])) {
             <br />
 
             <a href="ajout_acces.php?client_id=<?php print_r($client[0]['client_id']) ?>"><button type="button">Ajouter un droit d'acc&egrave;s</button></a>
-            <?php include("../../app/views/layout.html"); ?>
+            <?php include("../../app/views/footer.php"); ?>
         </div>
     </body>
     </html>
