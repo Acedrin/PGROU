@@ -45,11 +45,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($LDAPBind_User) {
             // couple identifiant/login reconnu par LDAP
             // dans ce cas controle au niveau de la base de donnees
-            $query = $bdd->prepare('SELECT user_uid FROM user WHERE user_uid=?');
+            $query = $bdd->prepare('SELECT user_uid, user_expirationdate FROM user WHERE user_uid=?');
+            $query->setFetchMode(PDO::FETCH_ASSOC);
             $query->execute(array($login));
             $rows = $query->fetch();
-
-            if ($rows['user_uid'] == $login) {
+            
+            // gestion de la date actuelle
+            date_default_timezone_get();
+            $today = date('Y-m-d', time());
+            
+            // on verifie que le login est dans la bdd et que la date d'expiration n'est pas depassee;
+            if (($rows['user_uid'] == $login)&&(($rows['user_expirationdate']=='0000-00-00')||(strotime($today)>strotime($rows['user_expirationdate'])))) {
                 $restart = false;
                 $_SESSION['login'] = $login;
                 $_SESSION['timestamp'] = time();
