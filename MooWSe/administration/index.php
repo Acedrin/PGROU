@@ -1,17 +1,12 @@
 <?php
+/* --------------------------------------------------
+  Projet MOOWSE
+  Fichier html
+  Page de connexion à l'application MooWse
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- * Page de connexion à l'application MooWse
- *
- * @author Quentin Payet
- */
-
+  Quentin Payet
+  Ecole Centrale de Nantes
+  -------------------------------------------------- */
 
 session_start();
 ini_set("display_errors", 0);
@@ -27,7 +22,7 @@ if (!isset($_SESSION['login'])) {
 	</head>
 	<body>
 		<form action="/app/controllers/connexion.php" method="POST">
-			<h1>Moowse</h1>
+			<h1>MooWse</h1>
 			<p><input type="text" name="login" placeholder="Login"></p>
 			<p><input type="password" name="password" placeholder="Password"></p>
 			<p><button type="submit">Se connecter</button></p>
@@ -36,7 +31,7 @@ if (!isset($_SESSION['login'])) {
 </html>
 <?php
 } else {
-    // si quelqu'un est deja connecte, on le renvoie directement a l'accueil
+    // si quelqu'un est deja connecté, on le renvoie directement a l'accueil
     header('Content-Type: text/html; charset=utf-8');
     header("Location:/app/views/accueil.php");
 }

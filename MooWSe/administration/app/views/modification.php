@@ -6,7 +6,7 @@ ini_set("display_errors", 0);
 error_reporting(0);
 
 function connectMaBase() {
-    $bdd = mysql_connect('localhost', 'root', 'root');
+    $bdd = mysql_connect('localhost', 'root', '');
     mysql_select_db('moowse', $bdd);
 }
 
@@ -450,7 +450,7 @@ if (isset($_SESSION['login'])) {
 
             </div>
     <?php
-    include("../../app/views/layout.html");
+    include("../../app/views/footer.php");
     ?>
         </div>
     </body>

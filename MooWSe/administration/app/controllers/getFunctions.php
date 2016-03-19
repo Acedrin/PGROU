@@ -39,7 +39,7 @@ if (isset($_SESSION['login'])) {
 
             // Traitement des exceptions
         } catch (Exception $e) {
-            $message = array(false, "Erreur lors de la r&eacute;cup&eacute;ration des fonctions du client\nVeuillez r&eacute;essayer");
+            $message = array(false, "Erreur lors de la r&eacute;cup&eacute;ration des fonctions du serveur\nVeuillez r&eacute;essayer");
 
             // Enregistrement du message
             $_SESSION['alert'] = $message;
@@ -87,7 +87,7 @@ if (isset($_SESSION['login'])) {
 
             // Traitement des exceptions
         } catch (Exception $e) {
-            $message = array(false, "Erreur lors de la r&eacute;cup&eacute;ration des droits d'acc&agrave;s &agrave; la fonction\nVeuillez r&eacute;essayer");
+            $message = array(false, "Erreur lors de la r&eacute;cup&eacute;ration des fonctions\nVeuillez r&eacute;essayer");
 
             // Enregistrement du message
             $_SESSION['alert'] = $message;

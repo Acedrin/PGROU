@@ -15,6 +15,16 @@ ini_set("display_errors", 0);
 error_reporting(0);
 
 if (isset($_SESSION['login'])) {
+    if (isset($_SESSION['timestamp'])) { // si $_SESSION['timestamp'] existe
+        if ($_SESSION['timestamp'] + 300 > time()) {
+            $_SESSION['timestamp'] = time();
+        } else {
+            header("Location:../controllers/deconnexion.php"); // deconnexion au bout de 5 minutes d'inactivite
+            exit();
+        }
+    } else {
+        $_SESSION['timestamp'] = time();
+    }
     require("../controllers/getFunctions.php");
 
     // Définition des variables nécessaires pour le header
@@ -51,12 +61,10 @@ if (isset($_SESSION['login'])) {
                         </td>
                         <td>
                             <?php
-                            
                             ?>
                         </td>
                         <td>
                             <?php
-
                             ?>
                         </td>
                         <td>
@@ -74,9 +82,9 @@ if (isset($_SESSION['login'])) {
                             </a>
                         </td>
                     </tr>
-                    <?php
-                }
-                ?>
+        <?php
+    }
+    ?>
             </table>
 
             <br />
@@ -84,7 +92,7 @@ if (isset($_SESSION['login'])) {
 
             <a href="ajout_fonction.php"><button type="button">Ajouter une fonction</button></a>
             <a href="ajout_serveur.php"><button type="button">Ajouter un serveur</button></a>
-            <?php include("../../app/views/layout.html"); ?>
+    <?php include("../../app/views/footer.php"); ?>
         </div>
     </body>
     </html>

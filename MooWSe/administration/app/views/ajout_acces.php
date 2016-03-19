@@ -1,7 +1,7 @@
 <?php
 /* --------------------------------------------------
   Projet MOOWSE
-  Fichier html
+  Fichier php
   Vue pour ajouter un droit d'accès pour un client de MooWse
 
   Victor Enaud
@@ -15,6 +15,16 @@ ini_set("display_errors", 0);
 error_reporting(0);
 
 if (isset($_SESSION['login'])) {
+        if (isset($_SESSION['timestamp'])) { // si $_SESSION['timestamp'] existe
+        if ($_SESSION['timestamp'] + 300 > time()) {
+            $_SESSION['timestamp'] = time();
+        } else {
+            header("Location:../controllers/deconnexion.php"); // deconnexion au bout de 5 minutes d'inactivite
+            exit();
+        }
+    } else {
+        $_SESSION['timestamp'] = time();
+    }
     if (isset($_GET['client_id'])) {
         $client_id = $_GET['client_id'];
     }
@@ -216,7 +226,7 @@ if (isset($_SESSION['login'])) {
                 </form>
                 <?php
             }
-            include("../../app/views/layout.html");
+            include("../../app/views/footer.php");
             ?>
         </div>
     </body>

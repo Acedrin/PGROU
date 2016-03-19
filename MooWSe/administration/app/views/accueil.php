@@ -1,8 +1,27 @@
 <?php
+/* --------------------------------------------------
+  Projet MOOWSE
+  Fichier de script
+  Accueil de l'application
+
+  Quentin Payet
+  Ecole Centrale de Nantes
+  -------------------------------------------------- */
+
 session_start();
 ini_set("display_errors", 0);
 error_reporting(0);
 if (isset($_SESSION['login'])) {
+    if (isset($_SESSION['timestamp'])) { // si $_SESSION['timestamp'] existe
+        if ($_SESSION['timestamp'] + 300 > time()) {
+            $_SESSION['timestamp'] = time();
+        } else {
+            header("Location:../controllers/deconnexion.php"); // deconnexion au bout de 5 minutes d'inactivite
+            exit();
+        }
+    } else {
+        $_SESSION['timestamp'] = time();
+    }
     ?>
     <!DOCTYPE html>
     <html lang="fr-fr">

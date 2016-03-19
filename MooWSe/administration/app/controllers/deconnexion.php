@@ -1,5 +1,14 @@
 <?php
 
+/* --------------------------------------------------
+  Projet MOOWSE
+  Fichier de script
+  Deconnexion d'un administrateur
+
+  Quentin Payet
+  Ecole Centrale de Nantes
+  -------------------------------------------------- */
+
 require ("../../vendor/autoload.php");
 
 session_start();

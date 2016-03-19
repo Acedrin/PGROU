@@ -15,6 +15,16 @@ ini_set("display_errors", 0);
 error_reporting(0);
 
 if (isset($_SESSION['login'])) {
+    if (isset($_SESSION['timestamp'])) { // si $_SESSION['timestamp'] existe
+        if ($_SESSION['timestamp'] + 300 > time()) {
+            $_SESSION['timestamp'] = time();
+        } else {
+            header("Location:../controllers/deconnexion.php"); // deconnexion au bout de 5 minutes d'inactivite
+            exit();
+        }
+    } else {
+        $_SESSION['timestamp'] = time();
+    }
     require("../controllers/getClients.php");
 
     // Définition des variables nécessaires pour le header
@@ -91,7 +101,7 @@ if (isset($_SESSION['login'])) {
             <br />
 
             <a href="ajout_client.php"><button type="button">Ajouter un client</button></a>
-            <?php include("../../app/views/layout.html"); ?>
+            <?php include("../../app/views/footer.php"); ?>
         </div>
     </body>
     </html>

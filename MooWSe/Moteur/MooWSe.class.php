@@ -27,11 +27,11 @@ class MooWSe {
 
             //on regarde si le client est enregistré, appel de base
 
-            /* $checkingDatas = new dataBaseCall('localhost', 'webservices', 'utf8', 'root', '');  --> giano */
+            $checkingDatas = new dataBaseCall('localhost', 'webservices', 'utf8', 'root', '');
 
-            $checkingDatas = new dataBaseCall($dbms_address, $db, 'utf8', $user, $passwd);
+            //$checkingDatas = new dataBaseCall($dbms_address, $db, 'utf8', $user, $passwd);
 
-            $registered = $checkingDatas->clientRegistered($client_nonce, $client_created, $client_access, $client_password_digest, $client_IP);
+            $registered = $checkingDatas->clientRegistered($client_name,$client_nonce, $client_created, $client_access, $client_password_digest, $client_IP);
 
 //si l'authentification est rï¿½usssie
             if ($registered) {
@@ -103,7 +103,6 @@ class MooWSe {
             $time = time();
             $client_name = $this->_client_name;
             $client_access = $this->_client_access;
-            $service = "service";
             $action = "getWSDL";
 
             //renvoyer la liste des fonctions auxquelles l'utilisateur a accï¿½s 
@@ -111,10 +110,10 @@ class MooWSe {
             if ($this->_tokenChecked) {
                 //connexion ï¿½ la base de donnï¿½es 
 
-                /* $checkingDatas = new dataBaseCall('localhost', 'webservices', 'utf8', 'root', '');  --> giano */
+                $checkingDatas = new dataBaseCall('localhost', 'webservices', 'utf8', 'root', ''); 
 
-                $gettingDatas = new dataBaseCall($dbms_address, $db, 'utf8', $user, $passwd);
-                $functions = $gettingDatas->listFunction($client_name);
+                //$gettingDatas = new dataBaseCall($dbms_address, $db, 'utf8', $user, $passwd);
+                $functions = $gettingDatas->listFunction($client_name,$service);
             }
         }
 

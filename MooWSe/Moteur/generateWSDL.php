@@ -244,7 +244,7 @@ function generateFakeWSDL() {
              * écriture de la balise d'ouverture "definition"
              */
             $oXMLWriter->startElementNS('wsdl', 'definition', 'http://schemas.xmlsoap.org/wsdl/');
-            $oXMLWriter->writeAttribute('name', $q->server_name);
+            $oXMLWriter->writeAttribute('name', 'agap');
             $oXMLWriter->writeAttributeNs('xmlns', 'soap', NULL, 'http://schemas.xmlsoap.org/wsdl/soap/');
             $oXMLWriter->writeAttributeNs('xmlns', 'xsd', NULL, 'http://www.w3.org/2001/XMLSchema');
             $oXMLWriter->writeAttributeNs('xmlns', 'soapenc', NULL, 'http://schemas.xmlsoap.org/soap/encoding/');

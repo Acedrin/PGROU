@@ -15,71 +15,78 @@ ini_set("display_errors", 0);
 error_reporting(0);
 
 if (isset($_SESSION['login'])) {
+    if (isset($_SESSION['timestamp'])) { // si $_SESSION['timestamp'] existe
+        if ($_SESSION['timestamp'] + 300 > time()) {
+            $_SESSION['timestamp'] = time();
+        } else {
+            header("Location:../controllers/deconnexion.php"); // deconnexion au bout de 5 minutes d'inactivite
+            exit();
+        }
+    } else {
+        $_SESSION['timestamp'] = time();
+    }
     require("../controllers/getUsers.php");
     print_r($_SESSION['alert']);
     // Remise à zéro de la variable d'alerte
     $_SESSION['alert'] = "";
+    // Définition des variables nécessaires pour le header
+    $titre_web = "MooWse - Gestion Administrateur";
+    $titre_principal = "Espace Administration de MooWse";
+    $titre_section = "Gestions des Administrateurs";
+
+    require("../views/header.php");
     ?>
-    <!DOCTYPE html>
-    <html lang="fr-fr">
-        <head>
-            <link href="../../public/css/accueil.css" type="text/css" rel="stylesheet" />
-            <meta charset="UTF-8" />
-            <title>MooWse - Gestion administrateurs</title>
-        </head>
-        <body>
-            <div class="navigation">
-                <h1>Espace Administration de MooWse</h1>
-                <h2>Gestion administrateurs</h2>
+    <body>
+        <div class="navigation">
 
-                <table>
-                    <tr>
-                        <th>Login</th>
-                        <th>Expiration</th>
-                        <th>Action</th>
-                    </tr>
-                    <?php
-                    for ($i = 0; $i < sizeof($users); $i++) {
-                        ?>
-                        <tr>
-
-                            <td>
-                                <?php
-                                print_r($users[$i]['user_uid']);
-                                ?>
-                            </td>
-                            <td>
-                                <?php
-                                if ($users[$i]['user_expirationdate'] == "0000-00-00") {
-                                    echo "Pas d'expiration";
-                                } else {
-                                    print_r($users[$i]['user_expirationdate']);
-                                }
-                                ?>
-                            </td>
-                            <td>
-                                <a href="ajout_user.php?user_id=<?php print_r($users[$i]['user_id']) ?>"><img src="../../public/img/edit.png" title="Modifier l'administrateur" alt="Modifier"></a>
-
-                                &nbsp;
-
-                                <a href="../controllers/deleteUser.php?user_id=<?php print_r($users[$i]['user_id']) ?>" 
-                                   onclick="return(confirm('Voulez vous vraiment supprimer l\'administrateur <?php print_r($users[$i]['user_uid']) ?> ?'));">
-                                    <img src="../../public/img/delete.png" title="Supprimer l'administrateur" alt="Supprimer">
-                                </a>
-                            </td>
-                        </tr>  
-                        <?php
-                    }
+            <table>
+                <tr>
+                    <th>Login</th>
+                    <th>Expiration</th>
+                    <th>Action</th>
+                </tr>
+                <?php
+                for ($i = 0; $i < sizeof($users); $i++) {
                     ?>
-                </table>
+                    <tr>
 
-                <br />
-                <br />
+                        <td>
+                            <?php
+                            print_r($users[$i]['user_uid']);
+                            ?>
+                        </td>
+                        <td>
+                            <?php
+                            if ($users[$i]['user_expirationdate'] == "0000-00-00") {
+                                echo "Pas d'expiration";
+                            } else {
+                                print_r($users[$i]['user_expirationdate']);
+                            }
+                            ?>
+                        </td>
+                        <td>
+                            <a href="ajout_user.php?user_id=<?php print_r($users[$i]['user_id']) ?>"><img src="../../public/img/edit.png" title="Modifier l'administrateur" alt="Modifier"></a>
 
-                <a href="ajout_user.php"><button type="button">Ajouter un administrateur</button></a>
-                <?php include("../../app/views/layout.html"); ?>
-            </div>
-        </body>
+                            &nbsp;
+
+                            <a href="../controllers/deleteUser.php?user_id=<?php print_r($users[$i]['user_id']) ?>" 
+                               onclick="return(confirm('Voulez vous vraiment supprimer l\'administrateur <?php print_r($users[$i]['user_uid']) ?> ?'));">
+                                <img src="../../public/img/delete.png" title="Supprimer l'administrateur" alt="Supprimer">
+                            </a>
+                        </td>
+                    </tr>  
+                    <?php
+                }
+                ?>
+            </table>
+
+            <br />
+            <br />
+
+            <a href="ajout_user.php"><button type="button">Ajouter un administrateur</button></a>
+            <?php include("../../app/views/footer.php"); ?>
+        </div>
+    </body>
     </html>
     <?php
 } else {
