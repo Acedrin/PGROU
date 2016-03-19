@@ -129,7 +129,7 @@ if (isset($_SESSION['login'])) {
                     . 'INNER JOIN function ON variable.function_id=function.function_id '
                     . 'INNER JOIN server ON function.server_id=server.server_id '
                     . 'INNER JOIN type ON variable.type_id=type.type_id '
-                    . 'ORDER BY server.server_name,function.function_name,variable.variable_name');
+                    . 'ORDER BY server.server_name,function.function_name,variable.variable_order');
             $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $stmt->execute();
 

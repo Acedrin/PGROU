@@ -143,6 +143,8 @@ if (isset($_SESSION['login'])) {
                             <?php
                             for ($j = 0; $j < sizeof($variables); $j++) {
                                 if ($variables[$j]['function_id'] == $functions[$i]['function_id'] && $variables[$j]['variable_input'] == 1) {
+                                    print_r($variables[$j]['variable_order']);
+                                    echo(" : ");
                                     print_r($variables[$j]['variable_name']);
                                     echo(" (");
                                     print_r($variables[$j]['type_name']);
@@ -156,6 +158,8 @@ if (isset($_SESSION['login'])) {
                             <?php
                             for ($j = 0; $j < sizeof($variables); $j++) {
                                 if ($variables[$j]['function_id'] == $functions[$i]['function_id'] && $variables[$j]['variable_input'] == 0) {
+                                    print_r($variables[$j]['variable_order']);
+                                    echo(" : ");
                                     print_r($variables[$j]['variable_name']);
                                     echo(" (");
                                     print_r($variables[$j]['type_name']);
