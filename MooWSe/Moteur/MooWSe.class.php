@@ -31,7 +31,7 @@ class MooWSe {
 
             //$checkingDatas = new dataBaseCall($dbms_address, $db, 'utf8', $user, $passwd);
 
-            $registered = $checkingDatas->clientRegistered($client_nonce, $client_created, $client_access, $client_password_digest, $client_IP);
+            $registered = $checkingDatas->clientRegistered($client_name,$client_nonce, $client_created, $client_access, $client_password_digest, $client_IP);
 
 //si l'authentification est r�usssie
             if ($registered) {
