@@ -26,9 +26,7 @@ if (isset($_SESSION['login'])) {
         $_SESSION['timestamp'] = time();
     }
     require("../controllers/getUsers.php");
-    print_r($_SESSION['alert']);
-    // Remise à zéro de la variable d'alerte
-    $_SESSION['alert'] = "";
+    
     // Définition des variables nécessaires pour le header
     $titre_web = "MooWse - Gestion Administrateur";
     $titre_principal = "Espace Administration de MooWse";

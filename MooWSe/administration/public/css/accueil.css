@@ -67,13 +67,17 @@ table {
 }
 
 th {
-    background-color: darksalmon;
+    background-color: brown;
     border:1px solid darkred;
     color:white;
 }
 
 td {
     border:1px solid darkred;
+}
+
+.couleur1 {
+    background-color: darksalmon;
 }
 
 button {

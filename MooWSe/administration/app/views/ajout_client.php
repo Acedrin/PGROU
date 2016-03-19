@@ -66,9 +66,6 @@ if (isset($_SESSION['login'])) {
                     <br />
 
                     <label for="modality_id">Modalit&eacute; de connexion du client :</label>
-                    <?php
-                    $keys = array_keys($modalities);
-                    ?>
                     <select name="modality_id">
                         <?php
                         // Récupération des ids des modalités

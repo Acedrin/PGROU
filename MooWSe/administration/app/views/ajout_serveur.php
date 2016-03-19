@@ -43,7 +43,7 @@ if (isset($_SESSION['login'])) {
         <div class="navigation">
             <?php
             // Vérification de l'existence de $server
-            // Son existence implique une modification d'un client existant
+            // Son existence implique une modification d'un serveur existant
 
             if (isset($server)) {
                 // Modification d'un serveur
@@ -68,7 +68,7 @@ if (isset($_SESSION['login'])) {
                 </form>
                 <?php
             } else {
-                // Ajout d'un client
+                // Ajout d'un serveur
                 ?>
                 <form name="formAdd" action="../controllers/addServer.php" method="POST">
 

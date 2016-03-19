@@ -15,27 +15,93 @@ ini_set("display_errors", 0);
 error_reporting(0);
 
 if (isset($_SESSION['login'])) {
-    if (isset($_SESSION['timestamp'])) { // si $_SESSION['timestamp'] existe
-        if ($_SESSION['timestamp'] + 300 > time()) {
-            $_SESSION['timestamp'] = time();
-        } else {
-            header("Location:../controllers/deconnexion.php"); // deconnexion au bout de 5 minutes d'inactivite
-            exit();
-        }
-    } else {
-        $_SESSION['timestamp'] = time();
-    }
+//    if (isset($_SESSION['timestamp'])) { // si $_SESSION['timestamp'] existe
+//        if ($_SESSION['timestamp'] + 300 > time()) {
+//            $_SESSION['timestamp'] = time();
+//        } else {
+//            header("Location:../controllers/deconnexion.php"); // deconnexion au bout de 5 minutes d'inactivite
+//            exit();
+//        }
+//    } else {
+//        $_SESSION['timestamp'] = time();
+//    }
+    $_SESSION['timestamp'] = time();
+
+
     require("../controllers/getFunctions.php");
+    require("../controllers/getServers.php");
 
     // Définition des variables nécessaires pour le header
-    $titre_web = "MooWse - Gestion fonctions";
+    $titre_web = "MooWse - Gestion des serveurs et des fonctions";
     $titre_principal = "Espace Administration de MooWse";
-    $titre_section = "Gestion fonctions";
+    $titre_section = "Gestion des serveurs et des fonctions";
 
     require("../views/header.php");
     ?>
     <body>
         <div class="navigation">
+            <!-- Tableau affichant l'ensemble des serveurs -->
+            <p>
+                Serveurs de MooWse :
+            </p>
+
+            <table>
+                <tr>
+                    <th>Nom</th>
+                    <th>Adresse SOAP</th>
+                    <th>Nombre de fonctions</th>
+                    <th>Action</th>
+                </tr>
+                <?php
+                for ($i = 0; $i < sizeof($servers); $i++) {
+                    ?>
+                    <tr>
+                        <td>
+                            <?php
+                            print_r($servers[$i]['server_name']);
+                            ?>
+                        </td>
+                        <td>
+                            <?php
+                            print_r($servers[$i]['server_soapadress']);
+                            ?>
+                        </td>
+                        <td>
+                            <?php
+                            if (isset($nbFunctions[$servers[$i]['server_id']])) {
+                                print_r($nbFunctions[$servers[$i]['server_id']]);
+                            } else {
+                                echo(0);
+                            }
+                            ?>
+                        </td>
+                        <td>
+                            <a href="ajout_serveur.php?server_id=<?php print_r($servers[$i]['server_id']) ?>"><img src="../../public/img/edit.png" title="Modifier le serveur" alt="Modifier"></a>
+
+                            &nbsp;
+
+                            <a href="gestion_acces_serveur.php?server_id=<?php print_r($servers[$i]['server_id']) ?>"><img src="../../public/img/lock.gif" title="Gérer les droits d'accès au serveur" alt="Droits d'accès"></a>
+
+                            &nbsp;
+
+                            <a href="../controllers/deleteServer.php?server_id=<?php print_r($servers[$i]['server_id']) ?>" 
+                               onclick="return(confirm('Voulez vous vraiment supprimer le serveur <?php print_r($servers[$i]['function_name']) ?> ?\n\n\
+                                                                ATTENTION - Cela supprimera toutes les <?php print_r($nbFunctions[$servers[$i]['server_id']]); ?> qui y sont encore associées !'));">
+                                <img src="../../public/img/delete.png" title="Supprimer le serveur" alt="Supprimer">
+                            </a>
+                        </td>
+                    </tr>
+                    <?php
+                }
+                ?>
+            </table>
+            <br/>
+            <!-- Tableau affichant l'ensemble des fonctions -->
+
+            <p>
+                Fonctions de MooWse :
+            </p>
+
             <table>
                 <tr>
                     <th>Serveur</th>
@@ -46,8 +112,21 @@ if (isset($_SESSION['login'])) {
                 </tr>
                 <?php
                 for ($i = 0; $i < sizeof($functions); $i++) {
+
+                    // Vérification d'un changement d'id serveur pour alterner la couleur des lignes 
+                    if ($i == 0) {
+                        // Première ligne du tableau
+                        $couleur = 0;
+                    } else if ($functions[$i - 1]['server_id'] != $functions[$i]['server_id']) {
+                        // La ligne concerne un nouveau serveur
+                        // Incrémentation de couleur
+                        $couleur = $couleur + 1;
+
+                        // Couleur modulo 2 pour n'obtenir qu'un 0 ou un 1
+                        $couleur = $couleur % 2;
+                    }
                     ?>
-                    <tr>
+                    <tr class="couleur<?php print_r($couleur) ?>">
 
                         <td>
                             <?php
@@ -68,11 +147,11 @@ if (isset($_SESSION['login'])) {
                             ?>
                         </td>
                         <td>
-                            <a href="ajout_fonction.php?fonction_id=<?php print_r($functions[$i]['function_id']) ?>"><img src="../../public/img/edit.png" title="Modifier la fonction" alt="Modifier"></a>
+                            <a href="ajout_fonction.php?function_id=<?php print_r($functions[$i]['function_id']) ?>"><img src="../../public/img/edit.png" title="Modifier la fonction" alt="Modifier"></a>
 
                             &nbsp;
 
-                            <a href="gestion_acces_fonction.php?function_id=<?php print_r($functions[$i]['function_id']) ?>"><img src="../../public/img/lock.gif" title="Gérer les droits d'accès de la fonction" alt="Droits d'accès"></a>
+                            <a href="gestion_acces_fonction.php?function_id=<?php print_r($functions[$i]['function_id']) ?>"><img src="../../public/img/lock.gif" title="Gérer les droits d'acc&egrave;s &agrave; la fonction" alt="Droits d'accès"></a>
 
                             &nbsp;
 
@@ -82,17 +161,17 @@ if (isset($_SESSION['login'])) {
                             </a>
                         </td>
                     </tr>
-        <?php
-    }
-    ?>
+                    <?php
+                }
+                ?>
             </table>
 
             <br />
             <br />
 
-            <a href="ajout_fonction.php"><button type="button">Ajouter une fonction</button></a>
+            <a href="#"><button type="button" onclick="nbFunctions()">Ajouter des fonctions</button></a>
             <a href="ajout_serveur.php"><button type="button">Ajouter un serveur</button></a>
-    <?php include("../../app/views/footer.php"); ?>
+            <?php include("../../app/views/footer.php"); ?>
         </div>
     </body>
     </html>

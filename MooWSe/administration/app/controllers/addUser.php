@@ -74,9 +74,10 @@ if (isset($_SESSION['login'])) {
             if ($user_id > 0) {
                 try {
                     // Vérification de l'unicité de l'uid
-                    $stmt = $bdd->prepare('SELECT user_uid FROM user WHERE user_uid = :user_uid');
+                    $stmt = $bdd->prepare('SELECT user_uid FROM user WHERE user_uid = :user_uid AND NOT user_id=:user_id');
                     $stmt->setFetchMode(PDO::FETCH_ASSOC);
                     $stmt->bindParam(':user_uid', $user_uid);
+                    $stmt->bindParam(':user_id', $user_id);
                     $stmt->execute();
 
                     $rows = $stmt->fetch();
@@ -84,6 +85,7 @@ if (isset($_SESSION['login'])) {
 
                     if ($rows['user_uid'] == $user_uid) {
                         // L'uid ajouté existe déjà, refus
+                        $unique = false;
                         $message = array(false, "Le login ajout&eacute; existe d&eacute;j&agrave; dans la base de donn&eacute;es");
                     } else {
                         // Modification de l'utilisateur
