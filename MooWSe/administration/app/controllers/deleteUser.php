@@ -28,7 +28,7 @@ require("bdd.php");
 // Protection pour ne pas acceder au contrôleur sans être connecté
 if (isset($_SESSION['login'])) {
 
-    // Vérification de la requête POST
+    // Vérification de la requête GET
     if ($_SERVER["REQUEST_METHOD"] == "GET") {
         // Initialisation de l'id utilisateur
         $user_id = 0;
