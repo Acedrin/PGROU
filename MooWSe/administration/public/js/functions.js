@@ -162,6 +162,21 @@ function validerFormulaireFonction(number) {
     }
 }
 
+// Fonction pour valider le formulaire pour les types, vérifiant que les champs sont bien remplis
+function validerFormulaireType() {
+    var alerte = "";
+    if (!document.getElementsByName('type_name')[0].value.length > 0) {
+        alerte += "Veuillez indiquer le nom du type !\n";
+        document.getElementsByName('type_name')[0].style.backgroundColor = '#FF9900';
+        document.getElementsByName('type_name')[0].style.color = '#000000';
+    }
+    if (alerte == "") {
+        document.getElementsByName('formAdd')[0].submit();
+    } else {
+        alert(alerte);
+    }
+}
+
 // Fonction pour faire disparaitre les messages d'alerte et de succès
 window.setTimeout("closeDiv();", 5000);
 

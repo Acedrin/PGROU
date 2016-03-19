@@ -55,11 +55,11 @@ if (isset($_SESSION['login'])) {
                                 ?>
                             </td>
                             <td>
-                                <a href="ajout_type.php?user_id=<?php print_r($types[$i]['type_id']) ?>"><img src="../../public/img/edit.png" title="Modifier le type" alt="Modifier"></a>
+                                <a href="ajout_type.php?type_id=<?php print_r($types[$i]['type_id']) ?>"><img src="../../public/img/edit.png" title="Modifier le type" alt="Modifier"></a>
 
                                 &nbsp;
 
-                                <a href="../controllers/deleteType.php?user_id=<?php print_r($types[$i]['type_id']) ?>" 
+                                <a href="../controllers/deleteType.php?type_id=<?php print_r($types[$i]['type_id']) ?>" 
                                    onclick="return(confirm('Voulez-vous vraiment supprimer le type <?php print_r($types[$i]['type_name']) ?> ?'));">
                                     <img src="../../public/img/delete.png" title="Supprimer le type" alt="Supprimer">
                                 </a>
@@ -103,11 +103,11 @@ if (isset($_SESSION['login'])) {
                                 ?>
                             </td>
                             <td>
-                                <a href="ajout_type.php?user_id=<?php print_r($types[$i]['type_id']) ?>"><img src="../../public/img/edit.png" title="Modifier le type" alt="Modifier"></a>
+                                <a href="ajout_type.php?type_id=<?php print_r($types[$i]['type_id']) ?>"><img src="../../public/img/edit.png" title="Modifier le type" alt="Modifier"></a>
 
                                 &nbsp;
 
-                                <a href="../controllers/deleteType.php?user_id=<?php print_r($types[$i]['type_id']) ?>" 
+                                <a href="../controllers/deleteType.php?type_id=<?php print_r($types[$i]['type_id']) ?>" 
                                    onclick="return(confirm('Voulez-vous vraiment supprimer le type <?php print_r($types[$i]['type_name']) ?> ?'));">
                                     <img src="../../public/img/delete.png" title="Supprimer le type" alt="Supprimer">
                                 </a>

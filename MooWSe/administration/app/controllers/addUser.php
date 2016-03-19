@@ -18,7 +18,7 @@ error_reporting(0);
 //gestion des logs
 require ("../../vendor/autoload.php");
 
-// Booléen pour vérifier la bonne suppression de l'utilisateur
+// Booléen pour vérifier le bon ajout/édition de l'utilisateur
 $added = false;
 $edited = false;
 

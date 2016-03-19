@@ -18,7 +18,7 @@ error_reporting(0);
 //gestion des logs
 require ("../../vendor/autoload.php");
 
-// Booléen pour vérifier le bon ajout du serveur
+// Booléen pour vérifier le bon ajout/édition du serveur
 $added = false;
 $edited = false;
 
