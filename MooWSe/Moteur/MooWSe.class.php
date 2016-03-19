@@ -5,7 +5,7 @@ require "generateWSDL.php";
 //classe de Quentin
 require "dataBaseCall.php";
 //fichier avec data de configuration
-require "settings.php"; //---> Insert giano
+//require "settings.php"; //---> Insert giano
 
 class MooWSe {
 
@@ -20,20 +20,18 @@ class MooWSe {
         if (isset($Security->UsernameToken->Username) && isset($Security->UsernameToken->Password) && isset($Security->UsernameToken->Nonce) && isset($Security->UsernameToken->Created)) {
             list($client_name, $client_access) = explode(",", $Security->UsernameToken->Username);
             $client_password_digest = $Security->UsernameToken->Password;
-            $client_salt = $Security->UsernameToken->Salt;
             $client_nonce = $Security->UsernameToken->Nonce;
             $client_created = $Security->UsernameToken->Created;
             $client_IP = $_SERVER["REMOTE_ADDR"];
 
-            //on regarde si le client est enregistr�, appel de base
+            //on regarde si le client est enregistr�, appel de base
 
-            /* $checkingDatas = new dataBaseCall('localhost', 'webservices', 'utf8', 'root', '');  --> giano */
+            $checkingDatas = new dataBaseCall('localhost', 'moowse', 'utf8', 'root', '');// --> giano
+            //$checkingDatas = new dataBaseCall($dbms_address, $db, 'utf8', $user, $passwd);
 
-            $checkingDatas = new dataBaseCall($dbms_address, $db, 'utf8', $user, $passwd);
-
-            $registered = $checkingDatas->clientRegistered($client_nonce, $client_created, $client_access, $client_password_digest, $client_IP);
-
-//si l'authentification est r�usssie
+            $registered = $checkingDatas->clientRegistered($client_name, $client_nonce, $client_created, $client_access, $client_password_digest, $client_IP);
+			
+			//si l'authentification est r�usssie
             if ($registered) {
 
                 $this->_client_name = $client_name;
@@ -103,7 +101,7 @@ class MooWSe {
             $time = time();
             $client_name = $this->_client_name;
             $client_access = $this->_client_access;
-            $service = "service";
+            $service;
             $action = "getWSDL";
 
             //renvoyer la liste des fonctions auxquelles l'utilisateur a acc�s 
@@ -111,17 +109,15 @@ class MooWSe {
             if ($this->_tokenChecked) {
                 //connexion � la base de donn�es 
 
-                /* $checkingDatas = new dataBaseCall('localhost', 'webservices', 'utf8', 'root', '');  --> giano */
-
-                $gettingDatas = new dataBaseCall($dbms_address, $db, 'utf8', $user, $passwd);
-                $functions = $gettingDatas->listFunction($client_name);
+                $gettingDatas = new dataBaseCall('localhost', 'moowse', 'utf8', 'root', '');// --> giano
+                //$gettingDatas = new dataBaseCall($dbms_address, $db, 'utf8', $user, $passwd);
+				
+                $functions = $gettingDatas->listFunction($client_name,$service);
             }
         }
 
         //générateur : (service,fonctions)->WSDL
-        //$service_WSDL = "<" . $service . ">" . implode(",", $functions) . "</" . $service . ">";
         $service_WSDL = generateWSDL($functions);
-        //file_put_contents("test.wsdl",$service_WSDL_test);
         return htmlspecialchars($service_WSDL, ENT_XML1);
     }
 
