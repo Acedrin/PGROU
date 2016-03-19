@@ -1,4 +1,14 @@
 <?php
+
+/* --------------------------------------------------
+  Projet MOOWSE
+  Fichier de script
+  Accueil de l'application
+
+  Quentin Payet
+  Ecole Centrale de Nantes
+  -------------------------------------------------- */
+
 session_start();
 ini_set("display_errors", 0);
 error_reporting(0);

@@ -6,7 +6,7 @@ ini_set("display_errors", 0);
 error_reporting(0);
 
 function connectMaBase() {
-    $bdd = mysql_connect('localhost', 'root', 'root');
+    $bdd = mysql_connect('localhost', 'root', '');
     mysql_select_db('moowse', $bdd);
 }
 
