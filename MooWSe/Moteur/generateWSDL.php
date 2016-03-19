@@ -113,7 +113,7 @@ function generateWSDL($array) {
                         if (strcmp($s->function_name, $r->function_name) == 0 && ($s->variable_input == 1)) {
                             $oXMLWriter->startElementNS('wsdl', 'part', NULL);
                             $oXMLWriter->writeAttribute('name', $s->variable_name);
-                            $oXMLWriter->writeAttribute('type', 'xsd:'.$s->type_namewsdl);
+                            $oXMLWriter->writeAttribute('type', 'xsd:' . $s->type_namewsdl);
                             $oXMLWriter->endElement();
                         }
                     }
@@ -127,7 +127,7 @@ function generateWSDL($array) {
                         if (strcmp($s->function_name, $r->function_name) == 0 && ($s->variable_input == 0)) {
                             $oXMLWriter->startElementNS('wsdl', 'part', NULL);
                             $oXMLWriter->writeAttribute('name', $s->variable_name);
-                            $oXMLWriter->writeAttribute('type', 'xsd:'.$s->type_namewsdl);
+                            $oXMLWriter->writeAttribute('type', 'xsd:' . $s->type_namewsdl);
                             $oXMLWriter->endElement();
                         }
                     }
@@ -142,7 +142,7 @@ function generateWSDL($array) {
                     $oXMLWriter->startElementNS('wsdl', 'portType', NULL);
                     $oXMLWriter->writeAttribute('name', $r->function_name . 'PortType');
                     $oXMLWriter->startElementNS('wsdl', 'operation', NULL);
-                    $oXMLWriter->writeAttribute('name',  $r->function_name);
+                    $oXMLWriter->writeAttribute('name', $r->function_name);
                     foreach ($a as $s) {
                         if (strcmp($s->function_name, $r->function_name) == 0 && ($s->variable_input == 1) && $parcours == 0) {
                             $oXMLWriter->startElementNS('wsdl', 'input', NULL);
@@ -176,7 +176,7 @@ function generateWSDL($array) {
                     $oXMLWriter->startElementNS('wsdl', 'operation', NULL);
                     $oXMLWriter->writeAttribute('name', $r->function_name);
                     $oXMLWriter->startElementNS('soap', 'operation', NULL);
-                    $oXMLWriter->writeAttribute('soapAction', 'urn:xmethods-delayed-quotes#get' . $r->function_name);
+                    $oXMLWriter->writeAttribute('soapAction', 'urn:xmethods-delayed-quotes#'. $r->function_name);
                     $oXMLWriter->endElement();
                     foreach ($a as $s) {
                         if (strcmp($s->function_name, $r->function_name) == 0 && ($s->variable_input == 1) && $parcours == 0) {
@@ -230,7 +230,7 @@ function generateWSDL($array) {
 }
 
 function generateFakeWSDL() {
-    
+
     /*
      * on commence l'Ã©criture du WSDL au format XML
      */
@@ -239,23 +239,71 @@ function generateFakeWSDL() {
     $oXMLWriter->openMemory();
     $oXMLWriter->startDocument('1.0', 'UTF-8');
     $oXMLWriter->setIndent(true);
-    
-            /*
-             * Ã©criture de la balise d'ouverture "definition"
-             */
-            $oXMLWriter->startElementNS('wsdl', 'definitions', 'http://schemas.xmlsoap.org/wsdl/');
-            $oXMLWriter->writeAttribute('name', 'agap');
-            $oXMLWriter->writeAttributeNs('xmlns', 'soap', NULL, 'http://schemas.xmlsoap.org/wsdl/soap/');
-            $oXMLWriter->writeAttributeNs('xmlns', 'xsd', NULL, 'http://www.w3.org/2001/XMLSchema');
-            $oXMLWriter->writeAttributeNs('xmlns', 'soapenc', NULL, 'http://schemas.xmlsoap.org/soap/encoding/');
-            $oXMLWriter->writeAttribute('xmlns', 'http://schemas.xmlsoap.org/wsdl/');
-    
-    
-    
-    
-    
-    
-    
+
+    /*
+     * Ã©criture de la balise d'ouverture "definition"
+     */
+    $oXMLWriter->startElementNS('wsdl', 'definitions', 'http://schemas.xmlsoap.org/wsdl/');
+    $oXMLWriter->writeAttribute('name', 'agap');
+    $oXMLWriter->writeAttributeNs('xmlns', 'soap', NULL, 'http://schemas.xmlsoap.org/wsdl/soap/');
+    $oXMLWriter->writeAttributeNs('xmlns', 'xsd', NULL, 'http://www.w3.org/2001/XMLSchema');
+    $oXMLWriter->writeAttributeNs('xmlns', 'soapenc', NULL, 'http://schemas.xmlsoap.org/soap/encoding/');
+    $oXMLWriter->writeAttribute('xmlns', 'http://schemas.xmlsoap.org/wsdl/');
+
+    //balise message request
+    $oXMLWriter->startElementNS('wsdl', 'message', NULL);
+    $oXMLWriter->writeAttribute('name', 'helloRequest');
+    //défintion des variables d'entree
+    $oXMLWriter->startElementNS('wsdl', 'part', NULL);
+    $oXMLWriter->writeAttribute('name', 'name');
+    $oXMLWriter->writeAttribute('type', 'xsd:string');
+    $oXMLWriter->endElement();
+    //fin description des variables d'entree
+    $oXMLWriter->endElement();
+
+    //balise message response
+    $oXMLWriter->startElementNS('wsdl', 'message', NULL);
+    $oXMLWriter->writeAttribute('name', 'helloResponse');
+    //défintion des variables d'entree
+    $oXMLWriter->startElementNS('wsdl', 'part', NULL);
+    $oXMLWriter->writeAttribute('name', 'name');
+    $oXMLWriter->writeAttribute('type', 'xsd:string');
+    $oXMLWriter->endElement();
+    //fin description des variables de sortie 
+    $oXMLWriter->endElement();
+
+    //Port Type
+    $oXMLWriter->startElementNS('wsdl', 'portType', NULL);
+    $oXMLWriter->writeAttribute('name', 'helloPortType');
+    $oXMLWriter->startElementNS('wsdl', 'operation', NULL);
+    $oXMLWriter->writeAttribute('name', 'hello');
+    //input
+    $oXMLWriter->startElementNS('wsdl', 'input', NULL);
+    $oXMLWriter->writeAttribute('message', 'tns:helloRequest');
+    $oXMLWriter->endElement();
+    //output
+    $oXMLWriter->startElementNS('wsdl', 'output', NULL);
+    $oXMLWriter->writeAttribute('message', 'tns:helloResponse');
+    $oXMLWriter->endElement();
+    //fin operation
+    $oXMLWriter->endElement();
+    //fin port type
+    $oXMLWriter->endElement();
+
+    //binding
+    $oXMLWriter->startElementNS('wsdl', 'binding', NULL);
+    $oXMLWriter->writeAttribute('name', 'helloBinding');
+    $oXMLWriter->writeAttribute('type', 'tns:helloPortType');
+    $oXMLWriter->startElementNS('soap', 'binding', NULL);
+    $oXMLWriter->writeAttribute('style', 'rpc');
+    $oXMLWriter->writeAttribute('transport', 'http://schemas.xmlsoap.org/soap/http');
+    $oXMLWriter->endElement();
+    $oXMLWriter->startElementNS('wsdl', 'operation', NULL);
+    $oXMLWriter->writeAttribute('name', 'hello');
+    $oXMLWriter->startElementNS('soap', 'operation', NULL);
+    $oXMLWriter->writeAttribute('soapAction', 'urn:xmethods-delayed-quotes#hello');
+    $oXMLWriter->endElement();
+
     $oXMLWriter->endDocument();
     return $oXMLWriter->outputMemory(TRUE);
 }
