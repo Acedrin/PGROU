@@ -65,7 +65,7 @@ if (isset($_SESSION['login'])) {
                 // Enregistrement du résultat dans un tableau
                 $orders = array();
                 $types = array();
-                // Utilisation d'une boucle pour que le label des colonnes soit l'id
+                // Utilisation d'une boucle pour que le label des colonnes soit l'ordre
                 while ($row = $stmt->fetch()) {
                     $orders[] = $row['typecomplex_order'];
                     $types[] = $row['typecomplex_type'];

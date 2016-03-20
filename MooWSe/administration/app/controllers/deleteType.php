@@ -93,7 +93,7 @@ if (isset($_SESSION['login'])) {
     // Enregistrement du message d'alerte
     if ($deleted) {
         // La suppression a bien été effectuée
-        // log de suppression d'un user
+        // log de suppression d'un type
         $loggerSuppr = new Katzgrau\KLogger\Logger(__DIR__ . '../../../logs');
         $loggerSuppr->info($_SESSION['login'] . " a supprimé le type d'id" . $type_id);
         $message = array(true, "Le type a bien &eacute;t&eacute; supprim&eacute;");

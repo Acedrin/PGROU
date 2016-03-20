@@ -51,7 +51,8 @@ if (isset($_SESSION['login'])) {
             $stmt->closeCursor();
 
             // Récupération de la liste des types
-            $stmt = $bdd->prepare('SELECT type_id,type_name FROM type');
+            $stmt = $bdd->prepare('SELECT type_id,type_name FROM type WHERE not type_id=:type_id');
+            $stmt->bindParam(':type_id', $type_id);
             $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $stmt->execute();
 

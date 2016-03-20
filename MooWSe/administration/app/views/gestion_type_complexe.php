@@ -107,6 +107,7 @@ du type complexe <?php print_r($type[0]['type_name']); ?> ?'));">
             <br />
             <br />
 
+            <a href="gestion_types.php"><button type="button">Retour</button></a>
             <a href="#"><button type="button" onclick="show()">Ajouter un sous-type</button></a>
             <br />
             <br />
@@ -147,7 +148,6 @@ du type complexe <?php print_r($type[0]['type_name']); ?> ?'));">
                     <br />
                     <br />
 
-                    <a href="gestion_types.php"><button type="button">Annuler</button></a>
                     <button type="button" onclick="validerFormulaireTypeComplex()">Valider</button>
                 </form>
             </div>
