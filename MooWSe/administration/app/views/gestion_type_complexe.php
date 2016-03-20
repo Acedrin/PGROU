@@ -2,7 +2,7 @@
 /* --------------------------------------------------
   Projet MOOWSE
   Fichier html
-  Vue de l'interface de gestion des accès des clients de MooWse
+  Vue de l'interface de gestion d'une variable complexe de MooWse
 
   Victor Enaud
   Ecole Centrale de Nantes
@@ -130,7 +130,7 @@ du type complexe <?php print_r($type[0]['type_name']); ?> ?'));">
                     <br />
 
                     <label for="typecomplex_type">Type :</label>
-                    <select name="typecomplex_type" id="server_id0">
+                    <select name="typecomplex_type">
                         <option value=0>&nbsp;</option>
                         <?php
                         // Récupération des ids des types

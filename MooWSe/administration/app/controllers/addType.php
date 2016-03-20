@@ -45,8 +45,10 @@ if (isset($_SESSION['login'])) {
             
             if ($_POST['type_complex']) {
                 $type_complex = 1;
+                $type_namewsdl = "tns:" . mb_strtolower($type_name, 'UTF-8');
             } else {
                 $type_complex = 0;
+                $type_namewsdl = "xsd:" . mb_strtolower($type_name, 'UTF-8');
             }
         } else {
             // Le nom n'est pas fixé
@@ -75,9 +77,10 @@ if (isset($_SESSION['login'])) {
                         $message = array(false, "Le nom du type ajout&eacute; existe d&eacute;j&agrave; dans la base de donn&eacute;es");
                     } else {
                         // Modification du type
-                        $stmt = $bdd->prepare("UPDATE type SET type_name=:type_name, type_complex=:type_complex WHERE type_id=:type_id");
+                        $stmt = $bdd->prepare("UPDATE type SET type_name=:type_name, type_complex=:type_complex, type_namewsdl=:type_namewsdl WHERE type_id=:type_id");
                         $stmt->bindParam(':type_name', $type_name);
                         $stmt->bindParam(':type_complex', $type_complex);
+                        $stmt->bindParam(':type_namewsdl', $type_namewsdl);
                         $stmt->bindParam(':type_id', $type_id);
                         $edited = $stmt->execute();
 
@@ -111,9 +114,10 @@ if (isset($_SESSION['login'])) {
                         $message = array(false, "Le nom du type ajout&eacute; existe d&eacute;j&agrave; dans la base de donn&eacute;es");
                     } else {
                         // Ajout du type
-                        $stmt = $bdd->prepare("INSERT INTO  type(type_name, type_complex) VALUES (:type_name, :type_complex)");
+                        $stmt = $bdd->prepare("INSERT INTO  type(type_name, type_complex, type_namewsdl) VALUES (:type_name, :type_complex, :type_namewsdl)");
                         $stmt->bindParam(':type_name', $type_name);
                         $stmt->bindParam(':type_complex', $type_complex);
+                        $stmt->bindParam(':type_namewsdl', $type_namewsdl);
                         $added = $stmt->execute();
 
                         // Fermeture de la connexion

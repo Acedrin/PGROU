@@ -21,7 +21,7 @@ if (isset($_SESSION['login'])) {
 
     // Vérification d'une demande d'information sur un type particulier
     if (isset($type_id)) {
-        
+
         try {
             // Récupération du type
             $stmt = $bdd->prepare('SELECT * FROM type WHERE type_id=:type_id');
@@ -33,7 +33,7 @@ if (isset($_SESSION['login'])) {
             $type = $stmt->fetchAll();
             // Fermeture de la connexion
             $stmt->closeCursor();
-            
+
             // Récupération de ses dépendances si complexe
             $stmt = $bdd->prepare('SELECT typecomplex.typecomplex_depends,typecomplex.typecomplex_order,typecomplex.typecomplex_type,tyde.type_name as depends_name,tyty.type_name as tyco_name '
                     . 'FROM typecomplex '
@@ -68,7 +68,7 @@ if (isset($_SESSION['login'])) {
 
             // Fermeture de la connexion
             $stmt->closeCursor();
-            
+
             // Traitement des exceptions
         } catch (Exception $e) {
             $message = array(false, "Erreur lors de la r&eacute;cup&eacute;ration du type\nVeuillez r&eacute;essayer");
@@ -88,7 +88,7 @@ if (isset($_SESSION['login'])) {
             $types = $stmt->fetchAll();
             // Fermeture de la connexion
             $stmt->closeCursor();
-            
+
             // Récupération de leurs dépendances
             $stmt = $bdd->prepare('SELECT typecomplex.typecomplex_depends,typecomplex.typecomplex_order,typecomplex.typecomplex_type,tyde.type_name as depends_name,tyty.type_name as tyco_name '
                     . 'FROM typecomplex '
@@ -100,6 +100,25 @@ if (isset($_SESSION['login'])) {
 
             // Enregistrement du résultat dans un tableau
             $typescomplex = $stmt->fetchAll();
+            // Fermeture de la connexion
+            $stmt->closeCursor();
+
+            // Récupération de la liste des types
+            $stmt = $bdd->prepare('SELECT type_id,type_name FROM type');
+            $stmt->bindParam(':type_id', $type_id);
+            $stmt->setFetchMode(PDO::FETCH_ASSOC);
+            $stmt->execute();
+
+            // Enregistrement du résultat dans un tableau
+            $type_id = array();
+            $type_name = array();
+            // Utilisation d'une boucle pour que le label des colonnes soit l'id
+            while ($row = $stmt->fetch()) {
+                $type_id[] = $row['type_id'];
+                $type_name[] = $row['type_name'];
+            }
+            $types_list = array_combine($type_id, $type_name);
+
             // Fermeture de la connexion
             $stmt->closeCursor();
 

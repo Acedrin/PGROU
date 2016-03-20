@@ -23,19 +23,16 @@ if (isset($_SESSION['login'])) {
 
         try {
             // Récupération des variables du serveur demandé
-            $stmt = $bdd->prepare('SELECT variable.variable_id,variable.variable_input,variable.variable_order,variable.function_id,variable.type_id,'
+            $stmt = $bdd->prepare('SELECT variable.variable_id,variable.variable_input,variable.variable_order,variable.variable_name,variable.function_id,variable.type_id,'
                     . 'function.function_name,function.server_id,'
                     . 'server.server_name,'
-                    . 'type.type_name,type.type_complex,'
-                    . 'typecomplex.typecomplex_order,typecomplex.typecomplex_depends,typecomplex.typecomplex_type '
+                    . 'type.type_name,type.type_complex '
                     . 'FROM variable '
                     . 'INNER JOIN function ON variable.function_id=function.function_id '
                     . 'INNER JOIN server ON function.server_id=server.server_id '
                     . 'INNER JOIN type ON variable.type_id=type.type_id '
-                    . 'INNER JOIN typecomplex ON type.type_id=typecomplex.typecomplex_depends '
-                    . 'INNER JOIN type ON typecomplex.typecomplex_id=type.type_id '
                     . 'WHERE server.server_id=:server_id '
-                    . 'ORDER BY server.server_name,function.function_name,variable.variable_name');
+                    . 'ORDER BY server.server_name,function.function_name,variable.variable_order');
             $stmt->bindParam(':server_id', $server_id);
             $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $stmt->execute();
@@ -56,19 +53,16 @@ if (isset($_SESSION['login'])) {
         // Vérification d'une demande d'information sur une fonction particulière
         try {
             // Récupération des variables de la fonction
-            $stmt = $bdd->prepare('SELECT variable.variable_id,variable.variable_input,variable.variable_order,variable.function_id,variable.type_id,'
+            $stmt = $bdd->prepare('SELECT variable.variable_id,variable.variable_input,variable.variable_order,variable.variable_name,variable.function_id,variable.type_id,'
                     . 'function.function_name,function.server_id,'
                     . 'server.server_name,'
-                    . 'type.type_name,type.type_complex,'
-                    . 'typecomplex.typecomplex_order,typecomplex.typecomplex_depends,typecomplex.typecomplex_type '
+                    . 'type.type_name,type.type_complex '
                     . 'FROM variable '
                     . 'INNER JOIN function ON variable.function_id=function.function_id '
                     . 'INNER JOIN server ON function.server_id=server.server_id '
                     . 'INNER JOIN type ON variable.type_id=type.type_id '
-                    . 'INNER JOIN typecomplex ON type.type_id=typecomplex.typecomplex_depends '
-                    . 'INNER JOIN type ON typecomplex.typecomplex_id=type.type_id '
                     . 'WHERE function.function_id=:function_id '
-                    . 'ORDER BY server.server_name,function.function_name,variable.variable_name');
+                    . 'ORDER BY server.server_name,function.function_name,variable.variable_input,variable.variable_order');
             $stmt->bindParam(':function_id', $function_id);
             $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $stmt->execute();
@@ -89,17 +83,14 @@ if (isset($_SESSION['login'])) {
         // Vérification d'une demande d'information sur une seule variable
         try {
             // Récupération des variables de la fonction
-            $stmt = $bdd->prepare('SELECT variable.variable_id,variable.variable_input,variable.variable_order,variable.function_id,variable.type_id,'
+            $stmt = $bdd->prepare('ELECT variable.variable_id,variable.variable_input,variable.variable_order,variable.variable_name,variable.function_id,variable.type_id,'
                     . 'function.function_name,function.server_id,'
                     . 'server.server_name,'
-                    . 'type.type_name,type.type_complex,'
-                    . 'typecomplex.typecomplex_order,typecomplex.typecomplex_depends,typecomplex.typecomplex_type '
+                    . 'type.type_name,type.type_complex '
                     . 'FROM variable '
                     . 'INNER JOIN function ON variable.function_id=function.function_id '
                     . 'INNER JOIN server ON function.server_id=server.server_id '
                     . 'INNER JOIN type ON variable.type_id=type.type_id '
-                    . 'INNER JOIN typecomplex ON type.type_id=typecomplex.typecomplex_depends '
-                    . 'INNER JOIN type ON typecomplex.typecomplex_id=type.type_id '
                     . 'WHERE variable.variable_id=:variable_id');
             $stmt->bindParam(':variable_id', $variable_id);
             $stmt->setFetchMode(PDO::FETCH_ASSOC);

@@ -31,7 +31,7 @@ if (isset($_SESSION['login'])) {
     require("../controllers/getFunctions.php");
     require("../controllers/getServers.php");
     require("../controllers/getVariables.php");
-    
+
     // Définition des variables nécessaires pour le header
     $titre_web = "MooWse - Gestion des serveurs et des fonctions";
     $titre_principal = "Espace Administration de MooWse";
@@ -51,7 +51,7 @@ if (isset($_SESSION['login'])) {
                     <th>Nom</th>
                     <th>Adresse SOAP</th>
                     <th>Nombre de fonctions</th>
-                    <th>Action</th>
+                    <th>Actions</th>
                 </tr>
                 <?php
                 for ($i = 0; $i < sizeof($servers); $i++) {
@@ -87,7 +87,7 @@ if (isset($_SESSION['login'])) {
 
                             <a href="../controllers/deleteServer.php?server_id=<?php print_r($servers[$i]['server_id']) ?>" 
                                onclick="return(confirm('Voulez vous vraiment supprimer le serveur <?php print_r($servers[$i]['function_name']) ?> ?\n\n\
-                                                                                ATTENTION - Cela supprimera toutes les <?php print_r($nbFunctions[$servers[$i]['server_id']]); ?> qui y sont encore associées !'));">
+ATTENTION - Cela supprimera toutes les <?php print_r($nbFunctions[$servers[$i]['server_id']]); ?> qui y sont encore associées !'));">
                                 <img src="../../public/img/delete.png" title="Supprimer le serveur" alt="Supprimer">
                             </a>
                         </td>
@@ -109,7 +109,7 @@ if (isset($_SESSION['login'])) {
                     <th>Fonction</th>
                     <th>Input</th>
                     <th>Output</th>
-                    <th>Action</th>
+                    <th>Actions</th>
                 </tr>
                 <?php
                 for ($i = 0; $i < sizeof($functions); $i++) {
@@ -174,8 +174,12 @@ if (isset($_SESSION['login'])) {
 
                             &nbsp;
 
-                            <a href="gestion_acces_fonction.php?function_id=<?php print_r($functions[$i]['function_id']) ?>"><img src="../../public/img/lock.gif" title="Gérer les droits d'acc&egrave;s &agrave; la fonction" alt="Droits d'accès"></a>
+                            <a href="gestion_fonction_variables.php?function_id=<?php print_r($functions[$i]['function_id']) ?>"><img src="../../public/img/configuration.png" title="G&eacute;rer les variables" alt="Variables"></a>
+                            
+                            &nbsp;
 
+                            <a href="gestion_acces_fonction.php?function_id=<?php print_r($functions[$i]['function_id']) ?>"><img src="../../public/img/lock.gif" title="Gérer les droits d'acc&egrave;s &agrave; la fonction" alt="Droits d'accès"></a>
+                            
                             &nbsp;
 
                             <a href="../controllers/deleteFunction.php?function_id=<?php print_r($functions[$i]['function_id']) ?>" 

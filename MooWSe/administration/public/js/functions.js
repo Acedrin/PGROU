@@ -207,9 +207,56 @@ function validerFormulaireTypeComplex() {
         document.getElementsByName('typecomplex_type')['0'].style.backgroundColor = '#FF9900';
         document.getElementsByName('typecomplex_type')['0'].style.color = '#000000';
     }
-    if (alerte != "") {
-        alerte += "\n";
+    if (alerte == "") {
+        document.getElementsByName('formAdd')[0].submit();
+    } else {
+        alert(alerte);
     }
+}
+
+// Fonction pour valider le formulaire pour les variables, vérifiant que les champs sont bien remplis
+function validerFormulaireVariable() {
+    var alerte = "";
+    
+    if (!document.getElementsByName('variable_name')[0].value.length > 0) {
+        alerte += "Veuillez indiquer le nom de la variable !\n";
+        document.getElementsByName('variable_name')[0].style.backgroundColor = '#FF9900';
+        document.getElementsByName('variable_name')[0].style.color = '#000000';
+    }
+    
+    if (!document.getElementsByName('variable_order')[0].value.length > 0) {
+        alerte += "Veuillez indiquer l'ordre de la variable !\n";
+        document.getElementsByName('variable_order')[0].style.backgroundColor = '#FF9900';
+        document.getElementsByName('variable_order')[0].style.color = '#000000';
+    }
+    
+    /**On récupère l'élément select type_id*/
+    var selectElmt = document.getElementsByName('type_id')['0'];
+    /**
+     selectElmt.options correspond au tableau des balises <option> du select
+     selectElmt.selectedIndex correspond à l'index du tableau options qui est actuellement sélectionné
+     */
+    if (selectElmt.options[selectElmt.selectedIndex].value == 0) {
+        alerte += "Veuillez indiquer le type de la variable !\n";
+        document.getElementsByName('type_id')['0'].style.backgroundColor = '#FF9900';
+        document.getElementsByName('type_id')['0'].style.color = '#000000';
+    }
+    
+    var checked = false;
+    for (i=0; i<document.getElementsByName('variable_input').length; i++) {
+       if (document.getElementsByName('variable_input')[i].checked) {
+          checked = true;
+       }
+    }
+    
+    if (!checked) {
+        alerte += "Veuillez indiquer si la variable est en entr&eacute;e ou en sortie !\n";
+        document.getElementsByName('variable_input')['0'].style.backgroundColor = '#FF9900';
+        document.getElementsByName('variable_input')['0'].style.color = '#000000';
+        document.getElementsByName('variable_input')['1'].style.backgroundColor = '#FF9900';
+        document.getElementsByName('variable_input')['1'].style.color = '#000000';
+    }
+
     if (alerte == "") {
         document.getElementsByName('formAdd')[0].submit();
     } else {
