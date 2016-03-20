@@ -93,9 +93,8 @@ if (isset($_SESSION['login']) && isset($_GET['client_id'])) {
                         </td>
                         <td>
                             <a href="../controllers/deleteAccess.php?client_id=<?php print_r($client[0]['client_id']) ?>&function_id=<?php print_r($access[$i]['function_id']) ?>&retour=client" 
-                               onclick="return(confirm('Voulez vous vraiment supprimer l''accès du client <?php print_r($clients[0]['client_name']) ?> \n\
-                                            à la fonction <?php print_r($access[$i]['function_name']) ?> \n\
-                                            du serveur <?php print_r($access[$i]['server_name']) ?> ?'));">
+                               onclick="return(confirm('Voulez vous vraiment supprimer l\accès du client <?php print_r($client[0]['client_name']) ?> \
+à la fonction <?php print_r($access[$i]['function_name']) ?> du serveur <?php print_r($access[$i]['server_name']) ?> ?'));">
                                 <img src="../../public/img/delete.png" title="Supprimer le droit d'acc&egrave;s" alt="Supprimer">
                             </a>
                         </td>

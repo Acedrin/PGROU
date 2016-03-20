@@ -106,6 +106,10 @@ if (isset($_SESSION['login'])) {
                                 <a href="ajout_type.php?type_id=<?php print_r($types[$i]['type_id']) ?>"><img src="../../public/img/edit.png" title="Modifier le type" alt="Modifier"></a>
 
                                 &nbsp;
+                                
+                                <a href="gestion_type_complexe.php?type_id=<?php print_r($types[$i]['type_id']) ?>"><img src="../../public/img/configuration.png" title="G&eacute;rer les sous-types" alt="Sous-types"></a>
+
+                                &nbsp;
 
                                 <a href="../controllers/deleteType.php?type_id=<?php print_r($types[$i]['type_id']) ?>" 
                                    onclick="return(confirm('Voulez-vous vraiment supprimer le type <?php print_r($types[$i]['type_name']) ?> ?'));">

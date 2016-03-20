@@ -82,7 +82,6 @@ if (isset($_SESSION['login'])) {
                     // Ajout d'un type
                     ?>
                     <form name="formAdd" action="../controllers/addType.php" method="POST">
-
                         <label for="type_name">Nom :</label>
                         <input type="text" name="type_name" id="type_name" placeholder="Nom" required/>
 

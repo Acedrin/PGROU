@@ -177,6 +177,46 @@ function validerFormulaireType() {
     }
 }
 
+// Fonction pour valider le formulaire pour les types complexes, vérifiant que les champs sont bien remplis
+function validerFormulaireTypeComplex() {
+    var alerte = "";
+    
+    /**On récupère l'élement select typecomplex_order*/
+    var selectElmt = document.getElementsByName('typecomplex_order')['0'];
+    /**
+     selectElmt.options correspond au tableau des balises <option> du select
+     selectElmt.selectedIndex correspond à l'index du tableau options qui est actuellement sélectionné
+     */
+    if (selectElmt.options[selectElmt.selectedIndex].value == 0) {
+        alerte += "Veuillez indiquer l'ordre du sous-type !\n";
+        document.getElementsByName('typecomplex_order')['0'].style.backgroundColor = '#FF9900';
+        document.getElementsByName('typecomplex_order')['0'].style.color = '#000000';
+    }
+    if (alerte != "") {
+        alerte += "\n";
+    }
+    
+    /**On récupère l'élement select typecomplex_type*/
+    var selectElmt = document.getElementsByName('typecomplex_type')['0'];
+    /**
+     selectElmt.options correspond au tableau des balises <option> du select
+     selectElmt.selectedIndex correspond à l'index du tableau options qui est actuellement sélectionné
+     */
+    if (selectElmt.options[selectElmt.selectedIndex].value == 0) {
+        alerte += "Veuillez indiquer le type du sous-type !\n";
+        document.getElementsByName('typecomplex_type')['0'].style.backgroundColor = '#FF9900';
+        document.getElementsByName('typecomplex_type')['0'].style.color = '#000000';
+    }
+    if (alerte != "") {
+        alerte += "\n";
+    }
+    if (alerte == "") {
+        document.getElementsByName('formAdd')[0].submit();
+    } else {
+        alert(alerte);
+    }
+}
+
 // Fonction pour faire disparaitre les messages d'alerte et de succès
 window.setTimeout("closeDiv();", 5000);
 
@@ -199,5 +239,17 @@ function nbFunctions() {
             nb = 5;
         }
         document.location.href = 'ajout_fonction.php?function_nb=' + nb;
+    }
+}
+
+// Fonction permettant l'affichage d'un élément d'id "hide"
+function show() {
+    if (document.getElementById("hide").style.display == "none")
+    {
+        document.getElementById("hide").style.display = "";
+    }
+    else
+    {
+        document.getElementById("hide").style.display = "none";
     }
 }

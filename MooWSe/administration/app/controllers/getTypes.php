@@ -35,10 +35,12 @@ if (isset($_SESSION['login'])) {
             $stmt->closeCursor();
             
             // Récupération de ses dépendances si complexe
-            $stmt = $bdd->prepare('SELECT typecomplex.typecomplex_depends,typecomplex.typecomplex_order,typecomplex.typecomplex_type,type.type_nom '
+            $stmt = $bdd->prepare('SELECT typecomplex.typecomplex_depends,typecomplex.typecomplex_order,typecomplex.typecomplex_type,tyde.type_name as depends_name,tyty.type_name as tyco_name '
                     . 'FROM typecomplex '
-                    . 'INNER JOIN type ON typecomplex.typecomplex_depends=type.type_id '
-                    . 'WHERE typecomplex_depends=:type_id');
+                    . 'INNER JOIN type as tyde ON typecomplex.typecomplex_depends=tyde.type_id '
+                    . 'INNER JOIN type as tyty ON typecomplex.typecomplex_type=tyty.type_id '
+                    . 'WHERE typecomplex_depends=:type_id '
+                    . 'ORDER BY typecomplex_order');
             $stmt->bindParam(':type_id', $type_id);
             $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $stmt->execute();
@@ -48,6 +50,24 @@ if (isset($_SESSION['login'])) {
             // Fermeture de la connexion
             $stmt->closeCursor();
 
+            // Récupération de la liste des types
+            $stmt = $bdd->prepare('SELECT type_id,type_name FROM type');
+            $stmt->setFetchMode(PDO::FETCH_ASSOC);
+            $stmt->execute();
+
+            // Enregistrement du résultat dans un tableau
+            $type_id = array();
+            $type_name = array();
+            // Utilisation d'une boucle pour que le label des colonnes soit l'id
+            while ($row = $stmt->fetch()) {
+                $type_id[] = $row['type_id'];
+                $type_name[] = $row['type_name'];
+            }
+            $types_list = array_combine($type_id, $type_name);
+
+            // Fermeture de la connexion
+            $stmt->closeCursor();
+            
             // Traitement des exceptions
         } catch (Exception $e) {
             $message = array(false, "Erreur lors de la r&eacute;cup&eacute;ration du type\nVeuillez r&eacute;essayer");
@@ -72,7 +92,8 @@ if (isset($_SESSION['login'])) {
             $stmt = $bdd->prepare('SELECT typecomplex.typecomplex_depends,typecomplex.typecomplex_order,typecomplex.typecomplex_type,tyde.type_name as depends_name,tyty.type_name as tyco_name '
                     . 'FROM typecomplex '
                     . 'INNER JOIN type as tyde ON typecomplex.typecomplex_depends=tyde.type_id '
-                    . 'INNER JOIN type as tyty ON typecomplex.typecomplex_type=tyty.type_id');
+                    . 'INNER JOIN type as tyty ON typecomplex.typecomplex_type=tyty.type_id '
+                    . 'ORDER BY typecomplex_order');
             $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $stmt->execute();
 
