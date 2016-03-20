@@ -55,7 +55,7 @@ class dataBaseCall {
          $function_request = $base->query('SELECT function.function_id FROM function INNER JOIN access ON function.function_id=access.function_id
                     INNER JOIN client ON access.client_id=client.client_id
                     INNER JOIN server ON server.server_id=function.server_id
-                    WHERE client_name=\'' . $client_name . '\' AND server_name=\'' . $service . '\'');
+                    WHERE client_name=\'' . $client_name . '\' AND server_name=\'' . $service . '\' AND access_right=1');
         //extraire le premier element, s'il y en a un on extrait les autres et on les met dans un array              
         if ($current_function = $function_request->fetch()) {
             //creation d'un array
