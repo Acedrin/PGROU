@@ -31,7 +31,7 @@ if (isset($_SESSION['login']) && isset($_GET['function_id'])) {
     require("../controllers/getFunctions.php");
     require("../controllers/getTypes.php");
     require("../controllers/getVariables.php");
-    
+
     // Initialisation des compteurs du nombre d'inputs et d'outputs
     $nb_input = 0;
     $nb_output = 0;
@@ -118,12 +118,12 @@ if (isset($_SESSION['login']) && isset($_GET['function_id'])) {
                             if ($variables[$i]['variable_input'] == 1) {
                                 // Compteur du nombre d'inputs
                                 $nb_input = $nb_input + 1;
-                                
+
                                 echo("Input");
                             } else {
                                 // Compteur du nombre d'outputs
                                 $nb_output = $nb_output + 1;
-                                
+
                                 echo("Output");
                             }
                             ?>
@@ -144,11 +144,9 @@ if (isset($_SESSION['login']) && isset($_GET['function_id'])) {
                             ?>
                         </td>
                         <td>
-                            <a href="../controllers/deleteTypeComplex.php?typecomplex_depends=<?php print_r($variables[$i]['typecomplex_depends']) ?>&typecomplex_order=<?php print_r($variables[$i]['typecomplex_order']) ?>" 
-                               onclick="return(confirm('Voulez vous vraiment supprimer le sous-type num&eacute;ro <?php print_r($variables[$i]['typecomplex_order']); ?> \
-        de type <?php print_r($variables[$i]['tyco_name']); ?> \
-        du type complexe <?php print_r($type[0]['type_name']); ?> ?'));">
-                                <img src="../../public/img/delete.png" title="Supprimer le sous-type" alt="Supprimer">
+                            <a href="../controllers/deleteVariable.php?variable_id=<?php print_r($variables[$i]['variable_id']) ?>" 
+                               onclick="return(confirm('Voulez vous vraiment supprimer la variable <?php print_r($variables[$i]['variable_name']); ?> ?'));">
+                                <img src="../../public/img/delete.png" title="Supprimer a variable" alt="Supprimer">
                             </a>
                         </td>
                     </tr>
@@ -177,14 +175,14 @@ if (isset($_SESSION['login']) && isset($_GET['function_id'])) {
                     <label for="variable_input">Entr&eacute;e/Sortie :</label>
                     <input type="radio" name="variable_input" value="1">Input
                     <input type="radio" name="variable_input" value="0">Output
-                    
+
                     <br/>
-                    
+
                     <label for="variable_order">Ordre :</label>
                     <input type="text" name="variable_order" placeholder="Ordre">
 
                     <br />
-                    
+
                     <label for="type_id">Type :</label>
                     <select name="type_id">
                         <option value=0>&nbsp;</option>
