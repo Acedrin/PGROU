@@ -76,7 +76,7 @@ class MooWSe {
     }
 
     public function authenticate() {
-        $token = "ERROR !";
+        $token = "Authentification echouee";
         if ($this->_clientAuthenticated) {
 
             //logs : (ip,client,modalite,action)->log
