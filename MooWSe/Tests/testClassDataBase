@@ -115,18 +115,19 @@ class dataBaseCall {
                 echo 'fonction numero: ' . $function_recup["function_id"] . ' ' . $function_recup["function_name"] . ' du serveur ' . $function_recup["server_name"];
                 echo '</br>';
                 //aller chercher les variables de la fonction
-                $variable_request = $base->query('SELECT variable.variable_name,type.type_name,variable.variable_input FROM variable INNER JOIN type ON type.type_id=variable.type_id
+                $variable_request = $base->query('SELECT variable.variable_name,type.type_name,variable.variable_input,variable.variable_order FROM variable INNER JOIN type ON type.type_id=variable.type_id
                     WHERE variable.function_id=\'' . $function_recup["function_id"] . '\' ');
                 while ($variable_recup = $variable_request->fetch()) {
                     $variable_name = $variable_recup["variable_name"];
                     $type_name = $variable_recup["type_name"];
                     $variable_input = $variable_recup["variable_input"];
+                    $variable_order=$variable_recup["variable_order"];
                     if ($variable_input == 1) {
                         echo'<div style="text-indent: 15px;">Argument(s) :</div>';
                     } else {
                         echo'<div style="text-indent: 15px;">Sortie :</div>';
                     }
-                    echo '<div style="text-indent: 30px;">variable ' . $variable_name . ' de type ' . $type_name . '</div>';
+                    echo '<div style="text-indent: 30px;">variable ' . $variable_name . ' de type ' . $type_name . ' ordre '.$variable_order.'</div>';
                 }
                 echo '</br>';
                 //fin de recherche des variables
