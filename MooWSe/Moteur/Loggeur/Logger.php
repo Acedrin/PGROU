@@ -15,7 +15,7 @@ private $USER;
 private $PASSWD;
 private $PORT;
 
-private $time;
+private $_time;
 
 private $filesize;
 private $variables_file; // file .ini for persistent variables
@@ -48,12 +48,12 @@ public function __construct(){
 
 //public function to log Users and token
 public function LogClient($ip,$client,$modality,$action){
- 
+
     $this->time="[".date('Y/m/d - H:i:s', time())."]";
     $txt=$this->time." ".$ip." ".$client." ".$modality." ".$action;
 
-    if($this->debug) echo "</br>".$txt;
-    if($this->debug) echo "</br>case";
+    //if($this->debug) echo "</br>".$txt;
+    //if($this->debug) echo "</br>case";
 
     switch($this->LOGDEVICE){
         case 1:

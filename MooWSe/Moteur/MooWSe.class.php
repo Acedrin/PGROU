@@ -4,6 +4,8 @@
 require "generateWSDL.php";
 //classe de Quentin
 require "dataBaseCall.php";
+//classe de Giano
+require "Loggeur/Logger.php";
 
 //fichier avec data de configuration
 //$settings = include("settings.php"); //---> Insert giano
@@ -15,6 +17,12 @@ class MooWSe {
     private $_clientAuthenticated = false;
     private $_tokenChecked = false;
     private $_tokenTimeToLive = 1;
+	private $_logger;
+	
+	public function __construct(){
+		//require "settings.php'";
+		$this->_logger = new Logger();
+	}
 
     public function Security($Security) {
         //$this->_test=$Security->UsernameToken->Username;
@@ -32,7 +40,7 @@ class MooWSe {
             $checkingDatas = new dataBaseCall($settings["db_host"], $settings["db_name"], 'utf8', $settings["db_user"], $settings["db_password"]);
             //vrai si les informations clientes sont exactes
             $registered = $checkingDatas->clientRegistered($client_name, $client_nonce, $client_created, $client_access, $client_password_digest, $client_IP);
-			$registered = true;
+			//$registered = true;
             //si l'authentification est reusssie
             if ($registered) {
 
@@ -71,12 +79,13 @@ class MooWSe {
         $token = "ERROR !";
         if ($this->_clientAuthenticated) {
 
-            //logs : (ip,date,client,modalite,action)->log
+            //logs : (ip,client,modalite,action)->log
             $client_IP = $_SERVER["REMOTE_ADDR"];
             $time = time();
             $client_name = $this->_client_name;
             $client_access = $this->_client_access;
             $action = "authenticate";
+			$this->_logger->LogClient($client_IP,$client_name,$client_access,$action);
 
             $crypto_strong = false;
             while (!$crypto_strong) {
@@ -98,13 +107,14 @@ class MooWSe {
         $service_WSDL = "ERROR !";
         if ($this->_tokenChecked) {
 
-            //logs : (ip,date,client,modalite,service,action)->log
+            //logs : (ip,client,modalite,service,action)->log
             $client_IP = $_SERVER["REMOTE_ADDR"];
             $time = time();
             $client_name = $this->_client_name;
             $client_access = $this->_client_access;
             $service;
             $action = "getWSDL";
+			$this->_logger->LogServ($client_IP, $client_name, $client_access, $service, $action);
 
             //renvoyer la liste des fonctions auxquelles l'utilisateur a acc�s 
             //appel � la base
