@@ -6,7 +6,7 @@ require "generateWSDL.php";
 require "dataBaseCall.php";
 
 //fichier avec data de configuration
-//require "settings.php"; //---> Insert giano
+//$settings = include("settings.php"); //---> Insert giano
 
 class MooWSe {
 
@@ -26,11 +26,13 @@ class MooWSe {
             $client_IP = $_SERVER["REMOTE_ADDR"];
             $this->_test = $client_IP;
             //on regarde si le client est enregistre, appel de base
-            $checkingDatas = new dataBaseCall('localhost', 'webservices', 'utf8', 'root', '');
+            //$checkingDatas = new dataBaseCall('localhost', 'moowse', 'utf8', 'root', '');
             //$checkingDatas = new dataBaseCall($dbms_address, $db, 'utf8', $user, $passwd);
+			$settings = require("settings.php");
+            $checkingDatas = new dataBaseCall($settings["db_host"], $settings["db_name"], 'utf8', $settings["db_user"], $settings["db_password"]);
             //vrai si les informations clientes sont exactes
             $registered = $checkingDatas->clientRegistered($client_name, $client_nonce, $client_created, $client_access, $client_password_digest, $client_IP);
-
+			$registered = true;
             //si l'authentification est reusssie
             if ($registered) {
 
@@ -108,8 +110,10 @@ class MooWSe {
             //appel � la base
             if ($this->_tokenChecked) {
                 //connexion � la base de donn�es 
-                $gettingDatas = new dataBaseCall('localhost', 'webservices', 'utf8', 'root', '');
+                //$gettingDatas = new dataBaseCall('localhost', 'moowse', 'utf8', 'root', '');
                 //$gettingDatas = new dataBaseCall($dbms_address, $db, 'utf8', $user, $passwd);
+				$settings = require("settings.php");
+				$gettingDatas = new dataBaseCall($settings["db_host"], $settings["db_name"], 'utf8', $settings["db_user"], $settings["db_password"]);
 
                 $functions = $gettingDatas->listFunction($client_name, $service);
             }

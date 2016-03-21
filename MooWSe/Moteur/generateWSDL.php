@@ -50,7 +50,9 @@ function generateWSDL($array) {
         $a = new ArrayObject(); // CrÃ©ation d'un tableau d'objet
         foreach ($array as $r) {
             //dangereux appel de base dans une boucle
-            $bdd = new PDO('mysql:host=localhost;dbname=webservices;charset=utf8', 'root', '', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+            //$bdd = new PDO('mysql:host=localhost;dbname=moowse;charset=utf8', 'root', '', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+			$settings = require("settings.php");
+			$bdd = new PDO('mysql:host='.$settings["db_host"].';dbname='.$settings["db_name"].';charset=utf8', $settings["db_user"], $settings["db_password"], array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
             $result = $bdd->query("SELECT DISTINCT function_name,variable_name,variable_input,type_namewsdl,server_name "
                     . "FROM access,client,function,variable,type,server "
                     . "WHERE client.client_id=access.client_id "
@@ -253,7 +255,7 @@ function generateFakeWSDL() {
     //balise message request
     $oXMLWriter->startElementNS('wsdl', 'message', NULL);
     $oXMLWriter->writeAttribute('name', 'helloRequest');
-    //défintion des variables d'entree
+    //dï¿½fintion des variables d'entree
     $oXMLWriter->startElementNS('wsdl', 'part', NULL);
     $oXMLWriter->writeAttribute('name', 'name');
     $oXMLWriter->writeAttribute('type', 'xsd:string');
@@ -264,7 +266,7 @@ function generateFakeWSDL() {
     //balise message response
     $oXMLWriter->startElementNS('wsdl', 'message', NULL);
     $oXMLWriter->writeAttribute('name', 'helloResponse');
-    //défintion des variables d'entree
+    //dï¿½fintion des variables d'entree
     $oXMLWriter->startElementNS('wsdl', 'part', NULL);
     $oXMLWriter->writeAttribute('name', 'name');
     $oXMLWriter->writeAttribute('type', 'xsd:string');

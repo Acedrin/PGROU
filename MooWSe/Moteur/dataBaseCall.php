@@ -34,7 +34,8 @@ class dataBaseCall {
             //assignation des variables, le préfixe data caractérise les infos récupérerées ne base
             $client_database_name = $info_client['client_name'];
             $client_database_ip = $info_client['client_ip'];
-            $client_database_password = $info_client['client_password'];
+            //$client_database_password = $info_client['client_password'];
+            $client_database_password = sha1($info_client['client_password']);
             $client_database_modality = $info_client['modality_name'];
             //mot de passe encryptre
             $client_database_encrypted_password = base64_encode(sha1($client_nonce . $client_created . $client_database_password));
