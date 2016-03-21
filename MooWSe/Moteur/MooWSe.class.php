@@ -17,12 +17,12 @@ class MooWSe {
     private $_clientAuthenticated = false;
     private $_tokenChecked = false;
     private $_tokenTimeToLive = 1;
-	private $_logger;
-	
-	public function __construct(){
-		//require "settings.php'";
-		$this->_logger = new Logger();
-	}
+    private $_logger;
+
+    public function __construct() {
+        //require "settings.php'";
+        $this->_logger = new Logger();
+    }
 
     public function Security($Security) {
         //$this->_test=$Security->UsernameToken->Username;
@@ -36,14 +36,14 @@ class MooWSe {
             //on regarde si le client est enregistre, appel de base
             //$checkingDatas = new dataBaseCall('localhost', 'moowse', 'utf8', 'root', '');
             //$checkingDatas = new dataBaseCall($dbms_address, $db, 'utf8', $user, $passwd);
-			$settings = require("settings.php");
+            $settings = require("settings.php");
+
             $checkingDatas = new dataBaseCall($settings["db_host"], $settings["db_name"], 'utf8', $settings["db_user"], $settings["db_password"]);
             //vrai si les informations clientes sont exactes
             $registered = $checkingDatas->clientRegistered($client_name, $client_nonce, $client_created, $client_access, $client_password_digest, $client_IP);
-			//$registered = true;
+            //$registered = true;
             //si l'authentification est reusssie
             if ($registered) {
-
                 $this->_client_name = $client_name;
                 $this->_client_access = $client_access;
                 session_name($this->_client_name . "_" . $this->_client_access . "_session");
@@ -85,7 +85,7 @@ class MooWSe {
             $client_name = $this->_client_name;
             $client_access = $this->_client_access;
             $action = "authenticate";
-			$this->_logger->LogClient($client_IP,$client_name,$client_access,$action);
+            $this->_logger->LogClient($client_IP, $client_name, $client_access, $action);
 
             $crypto_strong = false;
             while (!$crypto_strong) {
@@ -104,7 +104,8 @@ class MooWSe {
     }
 
     public function getWSDL($service) {
-        $service_WSDL = array();
+        $service_WSDL = 'ERROR';
+        $functions=array();
         if ($this->_tokenChecked) {
 
             //logs : (ip,client,modalite,service,action)->log
@@ -114,7 +115,7 @@ class MooWSe {
             $client_access = $this->_client_access;
             $service;
             $action = "getWSDL";
-			$this->_logger->LogServ($client_IP, $client_name, $client_access, $service, $action);
+            $this->_logger->LogServ($client_IP, $client_name, $client_access, $service, $action);
 
             //renvoyer la liste des fonctions auxquelles l'utilisateur a acc�s 
             //appel � la base
@@ -122,20 +123,24 @@ class MooWSe {
                 //connexion � la base de donn�es 
                 //$gettingDatas = new dataBaseCall('localhost', 'moowse', 'utf8', 'root', '');
                 //$gettingDatas = new dataBaseCall($dbms_address, $db, 'utf8', $user, $passwd);
-				$settings = require("settings.php");
-				$gettingDatas = new dataBaseCall($settings["db_host"], $settings["db_name"], 'utf8', $settings["db_user"], $settings["db_password"]);
+                $settings = require("settings.php");
+                $gettingDatas = new dataBaseCall($settings["db_host"], $settings["db_name"], 'utf8', $settings["db_user"], $settings["db_password"]);
 
                 $functions = $gettingDatas->listFunction($client_name, $service);
             }
-        }     
-        //générateur
-        if(count($functions)!=0) {
-            $service_WSDL = generateWSDL($functions);
         }
-        else{
+        //générateur
+        if (count($functions) != 0) {
+            $service_WSDL = generateWSDL($functions);
+        } else {
             $service_WSDL = generateFakeWSDL($functions);
         }
         return htmlspecialchars($service_WSDL, ENT_XML1);
+    }
+    
+    //getter sur le nom du client
+    function getClientName(){
+        return $this->_client_name;
     }
 
 }

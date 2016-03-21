@@ -7,8 +7,8 @@
   <wsdl:part name="Result" type="xsd:string"/>
  </wsdl:message>
  <wsdl:message name="notesRequest">
-  <wsdl:part name="StudentLogin" type="xsd:string"/>
   <wsdl:part name="StudentPassword" type="xsd:string"/>
+  <wsdl:part name="StudentLogin" type="xsd:string"/>
  </wsdl:message>
  <wsdl:message name="notesResponse">
   <wsdl:part name="Result" type="xsd:string"/>

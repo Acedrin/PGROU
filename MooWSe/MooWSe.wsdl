@@ -14,6 +14,12 @@ xmlns="http://schemas.xmlsoap.org/wsdl/">
 	<wsdl:message name="getWSDLResponse">
 		<wsdl:part name="wsdl" type="xsd:string"/>
 	</wsdl:message>
+        <wsdl:message name="getClientNameRequest">
+		<wsdl:part name="wsdl" type="xsd:string"/>
+	</wsdl:message>
+        <wsdl:message name="getClientNameResponse">
+		<wsdl:part name="wsdl" type="xsd:string"/>
+	</wsdl:message>
 	<wsdl:portType name="MooWSePortType">
 		<wsdl:operation name="authenticate">
 			<wsdl:output message="tns:authenticateResponse"/>
@@ -21,6 +27,10 @@ xmlns="http://schemas.xmlsoap.org/wsdl/">
 		<wsdl:operation name="getWSDL">
 			<wsdl:input message="tns:getWSDLRequest"/>
 			<wsdl:output message="tns:getWSDLResponse"/>
+		</wsdl:operation>
+                <wsdl:operation name="getClientName">
+			<wsdl:input message="tns:getClientNameRequest"/>
+			<wsdl:output message="tns:getClientNameResponse"/>
 		</wsdl:operation>
 	</wsdl:portType>
 	<wsdl:binding name="MooWSeBinding" type="tns:MooWSePortType">
@@ -37,6 +47,17 @@ xmlns="http://schemas.xmlsoap.org/wsdl/">
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="getWSDL">
+			<soap:operation soapAction="urn:xmethods-delayed-quotes#getWSDL"/>
+			<wsdl:input>
+				<soap:body use="encoded" namespace="urn:xmethods-delayed-quotes"
+				encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="encoded" namespace="urn:xmethods-delayed-quotes"
+				encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+			</wsdl:output>
+		</wsdl:operation>
+                <wsdl:operation name="getClientName">
 			<soap:operation soapAction="urn:xmethods-delayed-quotes#getWSDL"/>
 			<wsdl:input>
 				<soap:body use="encoded" namespace="urn:xmethods-delayed-quotes"
