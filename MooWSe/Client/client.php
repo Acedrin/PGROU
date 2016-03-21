@@ -221,9 +221,12 @@ echo getLastHTTPDialogue($MooWSe_client);
 echo "<pre>" . htmlspecialchars($service2_WSDL) . "</pre>";
 file_put_contents($service2_WSDL_file, $service2_WSDL);
 
-//attente de 2 secondes
-sleep(2);
-
+//attente de 2 secondes, qui invlaide les token
+//sleep(2);
+$date=time();
+while(time()<($date+2)){
+    
+}
 //=======================================================================================================================================================
 //Deuxieme demande (après recuperation de Token), deuxieme appel de WSDL, TOKEN NON VALABLE !
 // Moodle -> AGAP
