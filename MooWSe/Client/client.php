@@ -6,25 +6,31 @@ ini_set("soap.wsdl_cache_ttl", 1);
 ini_set("display_startup_errors", true);
 ini_set("display_errors", true);
 ini_set("html_errors", true);
-//extension Zend
+//extension Zend (inutilise)
 //ini_set("zend_extension","C:\xampp\php\ext\php_xdebug.dll"); // inutile, Ã  activer directement dans php.ini, avant de redÃ©marrer XAMPP
+//chargement des erreurs de logs
 ini_set("log_errors", false);
+//reporter toutes les erreurs
 error_reporting(E_ALL);
 //chargment de l'URL du dossier contenant le WSDL
 $MooWSe_URL = "http://localhost/github/PGROU/MooWSe";
+//nom du fichier contenant le code WSDL de MooWSe qui est le serveur du web service entre ce client et lui
 $MooWSe_WSDL_file = "MooWSe.wsdl";
-//ajout du contenu du fichier WSDL
+//ajout du contenu du fichier WSDL, il est extrait de l'URL indiqué avec le nom de fichier associé au premier argument
+//le fichier WSDL est indispensable au bon fonctionnement de la classe 
 file_put_contents($MooWSe_WSDL_file, file_get_contents($MooWSe_URL));
 
 //Ici le client entre ses mots de passe en brut (ce fichier n'est pas accessible par un pirate, seules les informations transmises le sont)
 //informations relatives à AGAP qui veut se connecter à Moodle par batch
+//concaténation de ces informations
 $username1 = "agap" . "," . "batch";
-$password1 = "kangourou87"; //mot de passe 
-$hash1 = sha1($password1); //Il faut maintenant hacher une premiÃ¨re fois le mot de passe (on utilisera simplement sha1 pour le moment)
+$password1 = "kangourou87"; //mot de passe de agap
+$hash1 = sha1($password1); //Il faut maintenant hacher une premiere fois le mot de passe (on utilisera simplement sha1 pour le moment)
 $service1 = "moodle"; //service appellé 
-$service1_WSDL_file = "moodle.wsdl"; //fichier WSDL du service en question si authentification
-$service1_failed_WSDL_file = "moodle_error.wsdl"; //fichier renvoyé si erreur
+$service1_WSDL_file = "moodle.wsdl"; //nom du fichier WSDL du service en question si authentification
+$service1_failed_WSDL_file = "moodle_error.wsdl"; //nom du fichier renvoyé si erreur (ici token non valide) voir plus loin
 //informations relatives à moodle qui veut se connecter à AGAP par batch
+//mêmes informations, mais dans le cas d'une connexion à AGAP
 $username2 = "moodle" . "," . "batch";
 $password2 = "mouton44";
 $hash2 = sha1($password2);
@@ -87,19 +93,21 @@ $actor = "http://schemas.xmlsoap.org/soap/actor/next"; // le destinataire est le
 //Premiere demande
 // AGAP -> Moodle
 //=======================================================================================================================================================
-$Username = $username1;
+$Username = $username1; //on utilise le premier username (celui d'AGAP) comme Username 
 $crypto_strong = false;
 while (!$crypto_strong) { //generation d'un sel (aleatoire pour le moment), le sel va permettre de brouiller le mot de passe aux yeux d'un HDM (Homme Du Milieu)
     $Nonce = base64_encode(bin2hex(openssl_random_pseudo_bytes(16, $crypto_strong))); //encode 64 bit d'un mot de passe aléatoire de 16 bits converti du binaire à l'hexadécimal
     $Created = time(); // temps actuel
 }
-$Password = base64_encode(sha1($Nonce . $Created . $hash1)); //on envoie le mot de passe crypte
+$Password = base64_encode(sha1($Nonce . $Created . $hash1)); //on envoie le mot de passe crypte, sel = chaine aléatoire concatenee avec le hash sha1 du mot de passe natif
+//le tout est de nouveau hashe et encodé dans une base 64
+//Utilisation d'un array contenant les infos utilisateurs. On envoie le mot de passe encrypté plus les sels qui vont permettre à MooWSe d'authentifier le client sans mot de passe en clair
 $UsernameToken = [];
 $UsernameToken["Username"] = new SoapVar($Username, XSD_STRING, NULL, $wsse, "Username", $wsse);
 $UsernameToken["Password"] = new SoapVar($Password, XSD_STRING, "PasswordDigest", $wsse, "Password", $wsse);
 $UsernameToken["Nonce"] = new SoapVar($Nonce, XSD_STRING, "Base64Binary", $wsse, "Nonce", $wsse); //il faut aussi envoyer le sel
 $UsernameToken["Created"] = new SoapVar($Created, XSD_STRING, NULL, $wsu, "Created", $wsu); //on envoie la date
-//le array Security va contenir UsernameToken et 
+//le array Security va contenir UsernameToken 
 $Security = array();
 $Security["UsernameToken"] = new SoapVar($UsernameToken, SOAP_ENC_OBJECT, NULL, $wsse, "UsernameToken", $wsse);
 $Security = new SoapVar($Security, SOAP_ENC_OBJECT, NULL, $wsse, "Security", $wsse);
@@ -113,13 +121,13 @@ $MooWSe_client->__setSoapHeaders($Header);
 //print_r_pre($Header);
 //récupération d'un token par la fonction authenticate, sinon on imprime le dernier dialogue reseau et l'erreur
 try {
-    $token1 = $MooWSe_client->authenticate();
+    $token1 = $MooWSe_client->authenticate(); //obtention d'un token (chaine aleatoire) si authentification réussie avec les donnees envoyees dans le header sinon msg d'erreur
 } catch (SoapFault $fault) {
-    echo getLastHTTPDialogue($MooWSe_client);
+    echo getLastHTTPDialogue($MooWSe_client); // affiche requete et reponse avec le nom du client et le header SOAP
     trigger_error("SOAP Fault: (faultcode: {$fault->faultcode}, faultstring: {$fault->faultstring})", E_USER_ERROR);
 }
 //appel du dernier dialogue réseau
-echo getLastHTTPDialogue($MooWSe_client);
+echo getLastHTTPDialogue($MooWSe_client); // affiche requete et reponse avec le nom du client et le header SOAP
 //on imprime le token
 echo "<pre>" . htmlspecialchars($token1) . "</pre>";
 
@@ -128,7 +136,7 @@ echo "<pre>" . htmlspecialchars($token1) . "</pre>";
 // Moodle -> AGAP
 //=======================================================================================================================================================
 
-$Username = $username2;
+$Username = $username2; // le fonctionnement est très semblable
 $crypto_strong = false;
 while (!$crypto_strong) {
     $Nonce = base64_encode(bin2hex(openssl_random_pseudo_bytes(16, $crypto_strong)));
@@ -167,37 +175,37 @@ echo "<pre>" . htmlspecialchars($token2) . "</pre>";
 // AGAP -> Moodle
 //=======================================================================================================================================================
 
-$Username = $username1;
+$Username = $username1; //on repasse dans le cas AGAP -->Moodle on a déjà un token mais on réintialise les paramètres
 $UsernameToken = [];
 $UsernameToken["Username"] = new SoapVar($Username, XSD_STRING, NULL, $wsse, "Username", $wsse);
 
 $Security = [];
 $Security["UsernameToken"] = new SoapVar($UsernameToken, SOAP_ENC_OBJECT, NULL, $wsse, "UsernameToken", $wsse);
 //ajout du deuxieme champ de security
-$Security["BinarySecurityToken"] = new SoapVar($token1, XSD_STRING, "Base64Binary", $wsse, "BinarySecurityToken", $wsse);
-$Security = new SoapVar($Security, SOAP_ENC_OBJECT, NULL, $wsse, "Security", $wsse);
+$Security["BinarySecurityToken"] = new SoapVar($token1, XSD_STRING, "Base64Binary", $wsse, "BinarySecurityToken", $wsse); //ce champ va permettre d'envoyer le token par soap header à la focntion Security
+$Security = new SoapVar($Security, SOAP_ENC_OBJECT, NULL, $wsse, "Security", $wsse); //creation d'un objet soap pour envoi
 $Header = [];
-$Header[] = new SoapHeader($wsse, "Security", $Security, $mustUnderstand, $actor);
-$MooWSe_client->__setSoapHeaders(NULL);
-$MooWSe_client->__setSoapHeaders($Header);
+$Header[] = new SoapHeader($wsse, "Security", $Security, $mustUnderstand, $actor); //envoi d'un nouvel header à deux champs arrays maintenant
+$MooWSe_client->__setSoapHeaders(NULL); //passage à NULL avant envoi pour nettoyer
+$MooWSe_client->__setSoapHeaders($Header); //va appeler la deuxième partie de security qui 
 //Appel de la fonction GetWSDL qui check le token et renvoie un fichier WSDL s'il est bon
 try {
-    $service1_WSDL = htmlspecialchars_decode($MooWSe_client->getWSDL(new SoapParam($service1, "service")), ENT_XML1);
+    $service1_WSDL = htmlspecialchars_decode($MooWSe_client->getWSDL(new SoapParam($service1, "service")), ENT_XML1); //recuperation de lachaine de caractère associee au WSDL demande
 } catch (SoapFault $fault) {
     echo getLastHTTPDialogue($MooWSe_client);
     trigger_error("SOAP Fault: (faultcode: {$fault->faultcode}, faultstring: {$fault->faultstring})", E_USER_ERROR);
 }
 //impression du dernier dialogue réseau
-echo getLastHTTPDialogue($MooWSe_client);
-echo "<pre>" . htmlspecialchars($service1_WSDL) . "</pre>";
+echo getLastHTTPDialogue($MooWSe_client); //affichage reponse et requete, si le WSDL est renvoye on n'affiche pas la reponse hors header
+echo "<pre>" . htmlspecialchars($service1_WSDL) . "</pre>"; //affichagedu WSDL renvoye
 //on envoie le contenu de $service1_WSDL qui est un string dans le fichier dont le nom est $service1_WSDL_file initialise plus haut
-file_put_contents($service1_WSDL_file, $service1_WSDL);
+file_put_contents($service1_WSDL_file, $service1_WSDL); //placer le code renvoyer dans un fichier avec le nom specifie precedement
 
 //=======================================================================================================================================================
 //Deuxieme demande (après recuperation de Token), premier appel de WSDL
 // Moodle -> AGAP
 //=======================================================================================================================================================
-$Username = $username2;
+$Username = $username2; // meme fonctionnement
 $UsernameToken = [];
 $UsernameToken["Username"] = new SoapVar($Username, XSD_STRING, NULL, $wsse, "Username", $wsse);
 
@@ -231,17 +239,17 @@ while(time()<($date+2)){
 //Deuxieme demande (après recuperation de Token), deuxieme appel de WSDL, TOKEN NON VALABLE !
 // Moodle -> AGAP
 //=======================================================================================================================================================
-
+// a ce stade le client a un token qui n'est plus valide et redemande un WSDL
 try {
-    $service2_WSDL = htmlspecialchars_decode($MooWSe_client->getWSDL(new SoapParam($service1, "service")), ENT_XML1);
+    $service2_WSDL = htmlspecialchars_decode($MooWSe_client->getWSDL(new SoapParam($service1, "service")), ENT_XML1); //demande le WSDL avec f=token non valide. Ceci renvoie le WSDL de hello
 } catch (SoapFault $fault) {
     echo getLastHTTPDialogue($MooWSe_client);
     trigger_error("SOAP Fault: (faultcode: {$fault->faultcode}, faultstring: {$fault->faultstring})", E_USER_ERROR);
 }
 
-echo getLastHTTPDialogue($MooWSe_client);
-echo "<pre>" . htmlspecialchars($service2_WSDL) . "</pre>";
-file_put_contents($service1_failed_WSDL_file, $service2_WSDL);
+echo getLastHTTPDialogue($MooWSe_client); //affichage de la requete et de la reponse
+echo "<pre>" . htmlspecialchars($service2_WSDL) . "</pre>"; // affichage WSDL
+file_put_contents($service1_failed_WSDL_file, $service2_WSDL); //creation du fichier avec le nom associe
 
 //=======================================================================================================================================================
 // Fonctions
@@ -262,12 +270,13 @@ function getLastHTTPDialogue($client) {
     $string .= "*---------------------------------------------------------------------------------\n";
     $string .= "* request from client: ".$client->getClientName()."\n";
     $string .= "*---------------------------------------------------------------------------------\n";
-    $string .= htmlentities($client->__getLastRequestHeaders()) . "\n";
-    $string .= htmlentities(format($client->__getLastRequest())) . "\n";
+    $string .= htmlentities($client->__getLastRequestHeaders()) . "\n"; //renvoie les caracteristiques headers
+    $string .= htmlentities(format($client->__getLastRequest())) . "\n"; //renvoit le contenu SOAP de la derniere requete
     $string .= "*---------------------------------------------------------------------------------\n";
     $string .= "* response to client: ".$client->getClientName()."\n";
     $string .= "*---------------------------------------------------------------------------------\n";
-    $string .= htmlentities($client->__getLastResponseHeaders()) . "\n";
+    $string .= htmlentities($client->__getLastResponseHeaders()) . "\n"; // header de la reponse
+    //si la reponse renvoit une chaine trop grande (un WSDL) on prefera l'afficher manuellement
     if (strlen(htmlentities(format($client->__getLastResponse()))) < 1000) {
         $string .= htmlentities(format($client->__getLastResponse())) . "\n";
     }
