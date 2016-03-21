@@ -104,7 +104,7 @@ class MooWSe {
     }
 
     public function getWSDL($service) {
-        $service_WSDL = "ERROR !";
+        $service_WSDL = array();
         if ($this->_tokenChecked) {
 
             //logs : (ip,client,modalite,service,action)->log
@@ -127,8 +127,7 @@ class MooWSe {
 
                 $functions = $gettingDatas->listFunction($client_name, $service);
             }
-        }
-
+        }     
         //générateur
         if(count($functions)!=0) {
             $service_WSDL = generateWSDL($functions);
