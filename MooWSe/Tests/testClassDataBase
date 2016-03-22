@@ -1,5 +1,5 @@
 <?php
-
+// test de la classe en question
 class dataBaseCall {
 
     private $bdd; //objet caracterisant la base de donnÃ©es
@@ -96,7 +96,7 @@ class dataBaseCall {
         return $functions;
     }
 
-    function affichage($client_name) {
+   function affichage($client_name) {
         //appel de la base
         $base = $this->bdd;
         //requete sql
@@ -135,18 +135,18 @@ class dataBaseCall {
             $last_function = $function_recup;
         }
     }
-
 }
 
 //test de la fonction database call (constructeur)
 //echo sha1('mouton44');
 //echo(sha1('kangourou87'));
+//agap, mot de passe 
 $dataBase = new dataBaseCall('localhost', 'webservices', 'utf8', 'root', '');
-//test de la fonction de clientRegistered
-$Nonce = base64_encode(bin2hex(openssl_random_pseudo_bytes(16, $crypto_strong)));
-$Created = time();
-$client_IP = 'localhost';
-$client_password_digest = base64_encode(sha1($Nonce . $Created . sha1('kangourou87')));
+//test de la fonction de clientRegistered, on va simuler l'arrivée de données en provenance d'un client
+$Nonce = base64_encode(bin2hex(openssl_random_pseudo_bytes(16, $crypto_strong))); //on créer un sel aléatoire
+$Created = time(); //un sel avec le temps (comme pour une connexion habituelle du client)
+$client_IP = 'localhost'; //adresse IP du client
+$client_password_digest = base64_encode(sha1($Nonce . $Created . sha1('kangourou87'))); //creation du mot de passe encrypté associé à agap
 echo 'mot de passe du client en entree (encrypte):';
 echo $client_password_digest;
 echo'</br>';
