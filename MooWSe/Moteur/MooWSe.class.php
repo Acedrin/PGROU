@@ -129,19 +129,26 @@ class MooWSe {
         return $token;
     }
     
-    //la fonction getWSDL 
+    //la fonction getWSDL prend en parametre le nom d'un serveur et renvoit le WSDL avec les fonctions auorisees pour notre client
     public function getWSDL($service) {
+        //la chaine service_WSDL sera renvoyee sous forme error par defaut
         $service_WSDL = 'ERROR';
+        //array de fonction vide
         $functions=array();
+        //si le token est toujours valable
         if ($this->_tokenChecked) {
-
+            //appel du log
             //logs : (ip,client,modalite,service,action)->log
+            //recuperation de l'IP
             $client_IP = $_SERVER["REMOTE_ADDR"];
+            //date actuelle
             $time = time();
+            //nom du client
             $client_name = $this->_client_name;
+            //acces
             $client_access = $this->_client_access;
-            $service;
             $action = "getWSDL";
+            //stokage de l'action dans le logger
             $this->_logger->LogServ($client_IP, $client_name, $client_access, $service, $action);
 
             //renvoyer la liste des fonctions auxquelles l'utilisateur a accï¿½s 
@@ -150,19 +157,21 @@ class MooWSe {
                 //connexion ï¿½ la base de donnï¿½es 
                 //$gettingDatas = new dataBaseCall('localhost', 'moowse', 'utf8', 'root', '');
                 //$gettingDatas = new dataBaseCall($dbms_address, $db, 'utf8', $user, $passwd);
+                //appel de settings pour obtenir les infos de connexion à la bdd
                 $settings = require("settings.php");
+                //connexion à la bdd
                 $gettingDatas = new dataBaseCall($settings["db_host"], $settings["db_name"], 'utf8', $settings["db_user"], $settings["db_password"]);
-
+                //cette fonction renvoie la liste de fonction auxquelles le client de nom client_name, peut acceder sur le serveur $serveur
                 $functions = $gettingDatas->listFunction($client_name, $service);
             }
         }
-        //gÃ©nÃ©rateur
+        //si le tableau est non vide le fichier WSDL contiendra au moins une focntion
         if (count($functions) != 0) {
-            $service_WSDL = generateWSDL($functions);
+            $service_WSDL = generateWSDL($functions); // on appelle cette fonction qui génère le WSDL si on a plus d'une focntion dans la liste
         } else {
-            $service_WSDL = generateFakeWSDL($functions);
+            $service_WSDL = generateFakeWSDL($functions); //sinon on renvoie le WSDL de hello
         }
-        return htmlspecialchars($service_WSDL, ENT_XML1);
+        return htmlspecialchars($service_WSDL, ENT_XML1); //on retourne la chaine de caractere associee au WSDL
     }
     
     //getter sur le nom du client
