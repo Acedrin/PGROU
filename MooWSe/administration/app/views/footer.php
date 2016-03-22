@@ -11,7 +11,7 @@
 ?>
         <br/><br/><br/>
         <div class="footer"><a href="accueil.php" class="a2">ACCUEIL</a> |
-            <a href="gestion_fonctions.php" class="a2">Fonctions</a> |
+            <a href="gestion_fonctions.php" class="a2">Serveurs et Fonctions</a> |
             <a href="gestion_types.php" class="a2">Types</a> |
             <a href="gestion_clients.php" class="a2"> Clients</a> |
             <a href="gestion_administrateurs.php" class="a2"> Administrateurs</a></div></br>
