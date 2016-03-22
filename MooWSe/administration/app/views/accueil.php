@@ -35,9 +35,9 @@ if (isset($_SESSION['login'])) {
             <div class="navigation">
                 <h2>Bienvenue sur l'interface d'administration de MooWse</h2>
                 <div class="navigation2"><a href="gestion_fonctions.php">Gestion des serveurs et leurs fonctions</a></br></div>
-                <div class="navigation2"><a href="gestion_types.php">Gestion des types</a></br></div>
                 <div class="navigation2"><a href="gestion_clients.php">Gestion des clients</a></br></div>
                 <div class="navigation2"><a href="gestion_administrateurs.php">Gestion des administrateurs</a></br></div>
+                 <div class="navigation2"><a href="gestion_types.php">Gestion des types</a></br></div>
                 <form action="../controllers/deconnexion.php" method="POST">
                     <p><button type="submit">Déconnexion</button></p>
                 </form>
