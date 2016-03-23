@@ -85,7 +85,7 @@ if (isset($_SESSION['login'])) {
 
                             <a href="../controllers/deleteServer.php?server_id=<?php print_r($servers[$i]['server_id']) ?>" 
                                onclick="return(confirm('Voulez vous vraiment supprimer le serveur <?php print_r($servers[$i]['function_name']) ?> ?\n\n\
-ATTENTION - Cela supprimera toutes les <?php print_r($nbFunctions[$servers[$i]['server_id']]); ?> qui y sont encore associées !'));">
+ATTENTION - Cela supprimera toutes les <?php print_r($nbFunctions[$servers[$i]['server_id']]); ?> fonctions qui y sont encore associées !'));">
                                 <img src="../../public/img/delete.png" title="Supprimer le serveur" alt="Supprimer">
                             </a>
                         </td>

@@ -34,6 +34,13 @@ if (isset($_SESSION['login'])) {
         require("../controllers/getClients.php");
     }
 
+    // Vérification d'un paramètre password, signifiant que c'est pour une modification de mot de passe
+    if (isset($_GET['password'])) {
+        $password = true;
+    } else {
+        $password = false;
+    }
+
     // Définition des variables nécessaires pour le header
     $titre_web = "MooWse - Ajout/modification d'un client";
     $titre_principal = "Espace Administration de MooWse";
@@ -48,7 +55,7 @@ if (isset($_SESSION['login'])) {
             // Vérification de l'existence de $client
             // Son existence implique une modification d'un client existant
 
-            if (isset($client)) {
+            if (isset($client) && !$password) {
                 // Modification d'un client
                 ?>
                 <form name="formAdd" action="../controllers/addClient.php" method="POST">
@@ -91,6 +98,27 @@ if (isset($_SESSION['login'])) {
 
                     <a href="gestion_clients.php"><button type="button">Annuler</button></a>
                     <button type="button" onclick="validerFormulaireClient(1)">Valider</button>
+                </form>
+                <?php
+            } else if (isset($client) && $password){
+                // Modification du mot de passe d'un client
+                ?>
+                <form name="formAdd" action="../controllers/addClient.php" method="POST">
+                    <input type="hidden" name="client_id" id="client_id" value="<?php print_r($client[0]['client_id']) ?>"/>
+
+                    <label for="client_password">Nouveau mot de passe du client :</label>
+                    <input type="password" name="client_password" id="client_password" placeholder="Password" required/>
+
+                    <br />
+
+                    <label for="client_password_confirmation">Confirmation du mot de passe du client :</label>
+                    <input type="password" name="client_password_confirmation" id="client_password_confirmation" placeholder="Retype password" required/>
+
+                    <br />
+                    <br />
+
+                    <a href="gestion_clients.php"><button type="button">Annuler</button></a>
+                    <button type="button" onclick="validerFormulaireClient(2)">Valider</button>
                 </form>
                 <?php
             } else {
@@ -142,7 +170,7 @@ if (isset($_SESSION['login'])) {
                     <br />
 
                     <a href="gestion_clients.php"><button type="button">Annuler</button></a>
-                    <button type="button" onclick="validerFormulaireClient(2)">Valider</button>
+                    <button type="button" onclick="validerFormulaireClient(3)">Valider</button>
                 </form>
                 <?php
             }

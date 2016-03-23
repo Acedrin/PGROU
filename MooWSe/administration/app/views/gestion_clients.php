@@ -78,7 +78,7 @@ if (isset($_SESSION['login'])) {
 
                             &nbsp;
 
-                            <img src="../../public/img/key.png" title="Modifier le mot de passe du client" alt="Mot de passe">
+                            <a href="ajout_client.php?client_id=<?php print_r($clients[$i]['client_id']) ?>&password=true"><img src="../../public/img/key.png" title="Modifier le mot de passe du client" alt="Mot de passe"></a>
 
                             &nbsp;
 

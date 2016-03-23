@@ -1,28 +1,30 @@
 // Fonction pour valider le formulaire pour les Clients, vérifiant que les champs sont bien remplis
 function validerFormulaireClient(type) {
     var alerte = "";
-    if (!document.getElementsByName('client_name')[0].value.length > 0) {
-        alerte += "Veuillez indiquer le nom du client !\n";
-        document.getElementsByName('client_name')[0].style.backgroundColor = '#FF9900';
-        document.getElementsByName('client_name')[0].style.color = '#000000';
+    if ((type == 1) || (type == 3)) {
+        if (!document.getElementsByName('client_name')[0].value.length > 0) {
+            alerte += "Veuillez indiquer le nom du client !\n";
+            document.getElementsByName('client_name')[0].style.backgroundColor = '#FF9900';
+            document.getElementsByName('client_name')[0].style.color = '#000000';
+        }
+        if (!document.getElementsByName('client_ip')[0].value.length > 0) {
+            alerte += "Veuillez indiquer l'ip du client !\n";
+            document.getElementsByName('client_ip')[0].style.backgroundColor = '#FF9900';
+            document.getElementsByName('client_ip')[0].style.color = '#000000';
+        }
+        /**On récupère l'élement select modality_id*/
+        var selectElmt = document.getElementsByName('modality_id')[0];
+        /**
+         selectElmt.options correspond au tableau des balises <option> du select
+         selectElmt.selectedIndex correspond à l'index du tableau options qui est actuellement sélectionné
+         */
+        if (selectElmt.options[selectElmt.selectedIndex].value == 0) {
+            alerte += "Veuillez indiquer le mode de connexion du client !\n";
+            document.getElementsByName('modality_id')[0].style.backgroundColor = '#FF9900';
+            document.getElementsByName('modality_id')[0].style.color = '#000000';
+        }
     }
-    if (!document.getElementsByName('client_ip')[0].value.length > 0) {
-        alerte += "Veuillez indiquer l'ip du client !\n";
-        document.getElementsByName('client_ip')[0].style.backgroundColor = '#FF9900';
-        document.getElementsByName('client_ip')[0].style.color = '#000000';
-    }
-    /**On récupère l'élement select modality_id*/
-    var selectElmt = document.getElementsByName('modality_id')[0];
-    /**
-     selectElmt.options correspond au tableau des balises <option> du select
-     selectElmt.selectedIndex correspond à l'index du tableau options qui est actuellement sélectionné
-     */
-    if (selectElmt.options[selectElmt.selectedIndex].value == 0) {
-        alerte += "Veuillez indiquer le mode de connexion du client !\n";
-        document.getElementsByName('modality_id')[0].style.backgroundColor = '#FF9900';
-        document.getElementsByName('modality_id')[0].style.color = '#000000';
-    }
-    if (type == 2) {
+    if ((type == 2) || (type == 3)) {
         if (document.getElementsByName('client_password')[0].value != document.getElementsByName('client_password_confirmation')[0].value) {
             alerte += "Veuillez renseigner deux fois le même mot de passe !\n";
             document.getElementsByName('client_password')[0].value = "";
@@ -180,7 +182,7 @@ function validerFormulaireType() {
 // Fonction pour valider le formulaire pour les types complexes, vérifiant que les champs sont bien remplis
 function validerFormulaireTypeComplex() {
     var alerte = "";
-    
+
     /**On récupère l'élement select typecomplex_order*/
     var selectElmt = document.getElementsByName('typecomplex_order')['0'];
     /**
@@ -195,7 +197,7 @@ function validerFormulaireTypeComplex() {
     if (alerte != "") {
         alerte += "\n";
     }
-    
+
     /**On récupère l'élement select typecomplex_type*/
     var selectElmt = document.getElementsByName('typecomplex_type')['0'];
     /**
@@ -217,19 +219,19 @@ function validerFormulaireTypeComplex() {
 // Fonction pour valider le formulaire pour les variables, vérifiant que les champs sont bien remplis
 function validerFormulaireVariable() {
     var alerte = "";
-    
+
     if (!document.getElementsByName('variable_name')[0].value.length > 0) {
         alerte += "Veuillez indiquer le nom de la variable !\n";
         document.getElementsByName('variable_name')[0].style.backgroundColor = '#FF9900';
         document.getElementsByName('variable_name')[0].style.color = '#000000';
     }
-    
+
     if (!document.getElementsByName('variable_order')[0].value.length > 0) {
         alerte += "Veuillez indiquer l'ordre de la variable !\n";
         document.getElementsByName('variable_order')[0].style.backgroundColor = '#FF9900';
         document.getElementsByName('variable_order')[0].style.color = '#000000';
     }
-    
+
     /**On récupère l'élément select type_id*/
     var selectElmt = document.getElementsByName('type_id')['0'];
     /**
@@ -241,14 +243,14 @@ function validerFormulaireVariable() {
         document.getElementsByName('type_id')['0'].style.backgroundColor = '#FF9900';
         document.getElementsByName('type_id')['0'].style.color = '#000000';
     }
-    
+
     var checked = false;
-    for (i=0; i<document.getElementsByName('variable_input').length; i++) {
-       if (document.getElementsByName('variable_input')[i].checked) {
-          checked = true;
-       }
+    for (i = 0; i < document.getElementsByName('variable_input').length; i++) {
+        if (document.getElementsByName('variable_input')[i].checked) {
+            checked = true;
+        }
     }
-    
+
     if (!checked) {
         alerte += "Veuillez indiquer si la variable est en entr&eacute;e ou en sortie !\n";
         document.getElementsByName('variable_input')['0'].style.backgroundColor = '#FF9900';
