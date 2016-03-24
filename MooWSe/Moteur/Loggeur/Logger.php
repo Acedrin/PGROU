@@ -104,7 +104,7 @@ public function LogError($ip, $client, $error){
 
    
     $this->time="[".date('Y/m/d - H:i:s', time())."]";
-    $txt=$this->time." ".$ip." ".$login." ".$error;
+    $txt=$this->time." ".$ip." ".$client." ".$error;
 
     if($this->debug) echo "</br>".$txt;
     if($this->debug) echo "</br>case";
