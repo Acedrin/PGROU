@@ -11,6 +11,7 @@ class resultat {
     public $variable_input;
     public $type_namesdl;
     public $server_name;
+	public $server_soapadress;
 
     /*
      * Constructeur par défaut sans paramètre
@@ -22,6 +23,7 @@ class resultat {
         $this->variable_input = "";
         $this->type_namesdl = "";
         $this->server_name = "";
+        $this->server_soapadress = "";
     }
 
     /*
@@ -34,6 +36,7 @@ class resultat {
         $this->variable_input = $row[2];
         $this->type_namewsdl = $row[3];
         $this->server_name = $row[4];
+        $this->server_soapadress = $row[5];		
     }
 
 }
@@ -49,9 +52,8 @@ function generateWSDL($array) {
     if (is_array($array)) {
         $a = new ArrayObject(); // Création d'un tableau d'objet
         foreach ($array as $r) {
-            //dangereux appel de base dans une boucle
             $bdd = new PDO('mysql:host=localhost;dbname=webservices;charset=utf8', 'root', '', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
-            $result = $bdd->query("SELECT DISTINCT function_name,variable_name,variable_input,type_namewsdl,server_name "
+            $result = $bdd->query("SELECT DISTINCT function_name,variable_name,variable_input,type_namewsdl,server_name,server_soapadress "
                     . "FROM access,client,function,variable,type,server "
                     . "WHERE client.client_id=access.client_id "
                     . "AND function.function_id=access.function_id "
@@ -101,6 +103,7 @@ function generateWSDL($array) {
             $oXMLWriter->writeAttributeNs('xmlns', 'xsd', NULL, 'http://www.w3.org/2001/XMLSchema');
             $oXMLWriter->writeAttributeNs('xmlns', 'soapenc', NULL, 'http://schemas.xmlsoap.org/soap/encoding/');
             $oXMLWriter->writeAttribute('xmlns', 'http://schemas.xmlsoap.org/wsdl/');
+			$oXMLWriter->endElement();
 
             //on utilise une boucle foreach pour parcourir l'ensemble des résultats
             foreach ($a as $r) {
@@ -214,7 +217,7 @@ function generateWSDL($array) {
                     $oXMLWriter->writeAttribute('name', $r->function_name . 'Port');
                     $oXMLWriter->writeAttribute('binding', $r->function_name . 'Binding');
                     $oXMLWriter->startElementNS('soap', 'address', NULL);
-                    $oXMLWriter->writeAttribute('location', 'http://localhost/' . $q->server_name . '/wsdl_server.php');
+                    $oXMLWriter->writeAttribute('location', $q->server_soapadress);
                     $oXMLWriter->endElement();
                     $oXMLWriter->endElement();
                     $oXMLWriter->endElement();

@@ -26,7 +26,7 @@ class MooWSe {
             $client_IP = $_SERVER["REMOTE_ADDR"];
             $this->_test = $client_IP;
             //on regarde si le client est enregistre, appel de base
-            $checkingDatas = new dataBaseCall('localhost', 'webservices', 'utf8', 'root', '');
+            $checkingDatas = new dataBaseCall('localhost', 'new_schema', 'utf8', 'root', 'admin');
             //$checkingDatas = new dataBaseCall($dbms_address, $db, 'utf8', $user, $passwd);
             //vrai si les informations clientes sont exactes
             $registered = $checkingDatas->clientRegistered($client_name, $client_nonce, $client_created, $client_access, $client_password_digest, $client_IP);
@@ -108,7 +108,7 @@ class MooWSe {
             //appel � la base
             if ($this->_tokenChecked) {
                 //connexion � la base de donn�es 
-                $gettingDatas = new dataBaseCall('localhost', 'webservices', 'utf8', 'root', '');
+                $gettingDatas = new dataBaseCall('localhost', 'new_schema', 'utf8', 'root', 'admin');
                 //$gettingDatas = new dataBaseCall($dbms_address, $db, 'utf8', $user, $passwd);
 
                 $functions = $gettingDatas->listFunction($client_name, $service);
