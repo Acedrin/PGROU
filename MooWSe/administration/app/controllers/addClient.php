@@ -25,6 +25,9 @@ $edited = false;
 // Booléen pour vérifier si le formulaire remis est correct
 $correct = false;
 
+// Booléen pour vérifier si c'est une demande de modification de mot de passe
+$password = false;
+
 // Connexion à la base de données
 require("bdd.php");
 
@@ -44,20 +47,21 @@ if (isset($_SESSION['login'])) {
             $client_id = $_POST['client_id'];
         }
 
-        // Vérification du champ "client_name"
-        if (isset($_POST['client_name'])) {
-            $client_name = htmlspecialchars($_POST['client_name']);
+        // Vérification d'un ajout
+        if (!isset($client_id)) {
+            // C'est un ajout
+            // Vérification du champ "client_name"
+            if (isset($_POST['client_name'])) {
+                $client_name = htmlspecialchars($_POST['client_name']);
 
-            // Vérification du champ "client_ip"
-            if (isset($_POST['client_ip'])) {
-                $client_ip = htmlspecialchars($_POST['client_ip']);
+                // Vérification du champ "client_ip"
+                if (isset($_POST['client_ip'])) {
+                    $client_ip = htmlspecialchars($_POST['client_ip']);
 
-                // Vérification du champ "modality_id"
-                if ($_POST['modality_id'] > 0) {
-                    $modality_id = htmlspecialchars($_POST['modality_id']);
+                    // Vérification du champ "modality_id"
+                    if ($_POST['modality_id'] > 0) {
+                        $modality_id = htmlspecialchars($_POST['modality_id']);
 
-                    // Si c'est ajout, vérification du mot de passe
-                    if (!isset($client_id)) {
                         // Vérification si les deux mots de passes sont égaux
                         if (($_POST['client_password'] == $_POST['client_password_confirmation'])) {
                             $client_password = htmlspecialchars($_POST['client_password']);
@@ -67,26 +71,62 @@ if (isset($_SESSION['login'])) {
                             $message = array(false, "Erreur - Les mots de passes tapés sont différents\nVeuillez recommencer");
                         }
                     } else {
-                        $correct = true;
+                        // L'id de modalité n'est pas fixé
+                        $message = array(false, "Vous n'avez pas indiqué la modalité de connexion du client à ajouter");
                     }
                 } else {
-                    // L'id de modalité n'est pas fixé
-                    $message = array(false, "Vous n'avez pas indiqué la modalité de connexion du client à ajouter");
+                    // L'ip n'est pas fixé
+                    $message = array(false, "Vous n'avez pas indiqué l'ip du client à ajouter");
                 }
             } else {
-                // L'ip n'est pas fixé
-                $message = array(false, "Vous n'avez pas indiqué l'ip du client à ajouter");
+                // Le nom n'est pas fixé
+                $message = array(false, "Vous n'avez pas indiqué le nom du client à ajouter");
             }
-        } else {
-            // Le nom n'est pas fixé
-            $message = array(false, "Vous n'avez pas indiqué le nom du client à ajouter");
+        } else if (!isset($_POST['client_password']) && isset($client_id)) {
+            // C'est une modification
+            // Vérification du champ "client_name"
+            if (isset($_POST['client_name'])) {
+                $client_name = htmlspecialchars($_POST['client_name']);
+
+                // Vérification du champ "client_ip"
+                if (isset($_POST['client_ip'])) {
+                    $client_ip = htmlspecialchars($_POST['client_ip']);
+
+                    // Vérification du champ "modality_id"
+                    if ($_POST['modality_id'] > 0) {
+                        $modality_id = htmlspecialchars($_POST['modality_id']);
+                        $correct = true;
+                    } else {
+                        // L'id de modalité n'est pas fixé
+                        $message = array(false, "Vous n'avez pas indiqué la modalité de connexion du client à ajouter");
+                    }
+                } else {
+                    // L'ip n'est pas fixé
+                    $message = array(false, "Vous n'avez pas indiqué l'ip du client à ajouter");
+                }
+            } else {
+                // Le nom n'est pas fixé
+                $message = array(false, "Vous n'avez pas indiqué le nom du client à ajouter");
+            }
+        } else if (isset($_POST['client_password']) && isset($client_id)) {
+            // Modification du mot de passe d'un client existant
+            // Vérification si les deux mots de passes sont égaux
+            if (($_POST['client_password'] == $_POST['client_password_confirmation'])) {
+                $client_password = htmlspecialchars($_POST['client_password']);
+                $correct = true;
+                $password = true;
+            } else {
+                // Les deux mots de passes ne sont pas identiques
+                $message = array(false, "Erreur - Les mots de passes tapés sont différents\nVeuillez recommencer");
+            }
         }
 
         // Si le formulaire remis est correct, on enregistre
         if ($correct) {
-            // Si l'id du client existe, c'est une modification
+            // Si l'id du client existe et le booléen $password est faux, c'est une modification
+            // Si par contre le booléen $password est vrai, c'est une modification du mot de passe
             // Sinon c'est un ajout
-            if (isset($client_id)) {
+            if (isset($client_id) && !$password) {
                 try {
                     // Modification du client
                     $stmt = $bdd->prepare("UPDATE client SET client_name=:client_name, client_ip=:client_ip, modality_id=:modality_id WHERE client_id=:client_id");
@@ -95,10 +135,10 @@ if (isset($_SESSION['login'])) {
                     $stmt->bindParam(':modality_id', $modality_id);
                     $stmt->bindParam(':client_id', $client_id);
                     $edited = $stmt->execute();
-                    
-                     // log d'ajout d'un client
+
+                    // log de modification d'un client
                     $loggerModif = new Katzgrau\KLogger\Logger(__DIR__ . '../../../logs');
-                    $loggerModif->info($_SESSION['login']. " a modifié le client d'id " .$client_id .". Nouveau nom:". $client_name . ". Nouvelle adresse ip: " .$client_ip);
+                    $loggerModif->info($_SESSION['login'] . " a modifié le client d'id " . $client_id . ". Nouveau nom:" . $client_name . ". Nouvelle adresse ip: " . $client_ip);
 
                     // Fermeture de la connexion
                     $stmt->closeCursor();
@@ -114,6 +154,32 @@ if (isset($_SESSION['login'])) {
                 } catch (Exception $e) {
                     $message = array(false, "Erreur lors de la modification du client\nVeuillez r&eacute;essayer");
                 }
+            } else if (isset($client_id) && $password) {
+                try {
+                    // Modification du mot de passe du client
+                    $stmt = $bdd->prepare("UPDATE client SET client_password=:client_password WHERE client_id=:client_id");
+                    $stmt->bindParam(':client_password', $client_password);
+                    $stmt->bindParam(':client_id', $client_id);
+                    $edited = $stmt->execute();
+
+                    // log d'ajout d'un client
+                    $loggerModif = new Katzgrau\KLogger\Logger(__DIR__ . '../../../logs');
+                    $loggerModif->info($_SESSION['login'] . " a modifié le mot de passe du client d'id " . $client_id);
+
+                    // Fermeture de la connexion
+                    $stmt->closeCursor();
+
+                    if ($edited) {
+                        // Le client a bien été édité
+                        $message = array(true, "Le mot de passe du client a bien &eacute;t&eacute; modifi&eacute;");
+                    } else {
+                        $message = array(false, "Erreur lors de la modification du mot de passe du client\nVeuillez r&eacute;essayer");
+                    }
+
+                    // Gestion des exceptions
+                } catch (Exception $e) {
+                    $message = array(false, "Erreur lors de la modification du mot de passe du client\nVeuillez r&eacute;essayer");
+                }
             } else {
                 try {
                     // Ajout du client
@@ -126,7 +192,7 @@ if (isset($_SESSION['login'])) {
 
                     // log d'ajout d'un client
                     $loggerAjout = new Katzgrau\KLogger\Logger(__DIR__ . '../../../logs');
-                    $loggerAjout->info($_SESSION['login']. " a ajouté le client " . $client_name . " d'adresse ip " .$client_ip);
+                    $loggerAjout->info($_SESSION['login'] . " a ajouté le client " . $client_name . " d'adresse ip " . $client_ip);
 
                     // Fermeture de la connexion
                     $stmt->closeCursor();

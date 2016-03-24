@@ -34,18 +34,31 @@ class dataBaseCall {
             //assignation des variables, le préfixe data caractérise les infos récupérerées ne base
             $client_database_name = $info_client['client_name'];
             $client_database_ip = $info_client['client_ip'];
-            //$client_database_password = $info_client['client_password'];
             $client_database_password = $info_client['client_password'];
             $client_database_modality = $info_client['modality_name'];
             //mot de passe encryptre
+            echo 'mot de passe du client dans la base de donnees:';
+            echo $client_database_password;
+            echo '</br>';
             $client_database_encrypted_password = base64_encode(sha1($client_nonce . $client_created . $client_database_password));
+            echo 'mot de passe du client dans la base de donnees (encrypte):';
+            echo $client_database_encrypted_password;
+            echo '</br>';
 
             //verification des informations en base, la variable ci dessous vaut vraie si les informations 
+
+            echo '</br>';
             $registered = ((($client_access == $client_database_modality) &&
                     ($client_database_encrypted_password == $client_password_digest) &&
                     ($client_IP == $client_database_ip) &&
                     ($client_database_modality == $client_access)) || $registered);
         }
+        if ($registered) {
+            echo"donnees clientes correctes";
+        } else {
+            echo"donnees clientes incorrectes";
+        }
+
         return $registered;
     }
 
@@ -56,7 +69,7 @@ class dataBaseCall {
          $function_request = $base->query('SELECT function.function_id FROM function INNER JOIN access ON function.function_id=access.function_id
                     INNER JOIN client ON access.client_id=client.client_id
                     INNER JOIN server ON server.server_id=function.server_id
-                    WHERE client_name=\'' . $client_name . '\' AND server_name=\'' . $service . '\' AND access_right=1');
+                    WHERE client_name=\'' . $client_name . '\' AND server_name=\'' . $service . '\'');
         //extraire le premier element, s'il y en a un on extrait les autres et on les met dans un array              
         if ($current_function = $function_request->fetch()) {
             //creation d'un array
@@ -77,6 +90,9 @@ class dataBaseCall {
             $functions=array();
         }
         //on renvoit l'array des fonctions autorisées
+        echo '<pre>';
+        print_r($functions);
+        echo '</pre>';
         return $functions;
     }
 
@@ -99,19 +115,18 @@ class dataBaseCall {
                 echo 'fonction numero: ' . $function_recup["function_id"] . ' ' . $function_recup["function_name"] . ' du serveur ' . $function_recup["server_name"];
                 echo '</br>';
                 //aller chercher les variables de la fonction
-                $variable_request = $base->query('SELECT variable.variable_name,type.type_name,variable.variable_input,variable.variable_order FROM variable INNER JOIN type ON type.type_id=variable.type_id
+                $variable_request = $base->query('SELECT variable.variable_name,type.type_name,variable.variable_input FROM variable INNER JOIN type ON type.type_id=variable.type_id
                     WHERE variable.function_id=\'' . $function_recup["function_id"] . '\' ');
                 while ($variable_recup = $variable_request->fetch()) {
                     $variable_name = $variable_recup["variable_name"];
                     $type_name = $variable_recup["type_name"];
                     $variable_input = $variable_recup["variable_input"];
-                    $variable_order=$variable_recup["variable_order"];
                     if ($variable_input == 1) {
                         echo'<div style="text-indent: 15px;">Argument(s) :</div>';
                     } else {
                         echo'<div style="text-indent: 15px;">Sortie :</div>';
                     }
-                    echo '<div style="text-indent: 30px;">variable ' . $variable_name . ' de type ' . $type_name . ' ordre '.$variable_order.'</div>';
+                    echo '<div style="text-indent: 30px;">variable ' . $variable_name . ' de type ' . $type_name . '</div>';
                 }
                 echo '</br>';
                 //fin de recherche des variables
@@ -122,4 +137,27 @@ class dataBaseCall {
 
 }
 
+//test de la fonction database call (constructeur)
+//echo sha1('mouton44');
+//echo(sha1('kangourou87'));
+$dataBase = new dataBaseCall('localhost', 'webservices', 'utf8', 'root', '');
+//test de la fonction de clientRegistered
+$Nonce = base64_encode(bin2hex(openssl_random_pseudo_bytes(16, $crypto_strong)));
+$Created = time();
+$client_IP = 'localhost';
+$client_password_digest = base64_encode(sha1($Nonce . $Created . sha1('kangourou87')));
+echo 'mot de passe du client en entree (encrypte):';
+echo $client_password_digest;
+echo'</br>';
+$client_access = 'batch';
+$client_name = 'agap';
+$service='moodle';
+$result = $dataBase->clientRegistered($client_name, $Nonce, $Created, $client_access, $client_password_digest, $client_IP);
+//test de listFunction
+$liste=$dataBase->listFunction($client_name,$service);
+//agap: kangourou87
+////moodle : mouton44
+//forumprepa: tortue62
+//test d'affichage
+$dataBase->affichage('forumprepa');
 ?>

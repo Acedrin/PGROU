@@ -15,18 +15,16 @@ ini_set("display_errors", 0);
 error_reporting(0);
 
 if (isset($_SESSION['login'])) {
-//    if (isset($_SESSION['timestamp'])) { // si $_SESSION['timestamp'] existe
-//        if ($_SESSION['timestamp'] + 300 > time()) {
-//            $_SESSION['timestamp'] = time();
-//        } else {
-//            header("Location:../controllers/deconnexion.php"); // deconnexion au bout de 5 minutes d'inactivite
-//            exit();
-//        }
-//    } else {
-//        $_SESSION['timestamp'] = time();
-//    }
-    $_SESSION['timestamp'] = time();
-
+    if (isset($_SESSION['timestamp'])) { // si $_SESSION['timestamp'] existe
+        if ($_SESSION['timestamp'] + 300 > time()) {
+            $_SESSION['timestamp'] = time();
+        } else {
+            header("Location:../controllers/deconnexion.php"); // deconnexion au bout de 5 minutes d'inactivite
+            exit();
+        }
+    } else {
+        $_SESSION['timestamp'] = time();
+    }
 
     require("../controllers/getFunctions.php");
     require("../controllers/getServers.php");
@@ -87,7 +85,7 @@ if (isset($_SESSION['login'])) {
 
                             <a href="../controllers/deleteServer.php?server_id=<?php print_r($servers[$i]['server_id']) ?>" 
                                onclick="return(confirm('Voulez vous vraiment supprimer le serveur <?php print_r($servers[$i]['function_name']) ?> ?\n\n\
-ATTENTION - Cela supprimera toutes les <?php print_r($nbFunctions[$servers[$i]['server_id']]); ?> qui y sont encore associées !'));">
+ATTENTION - Cela supprimera toutes les <?php print_r($nbFunctions[$servers[$i]['server_id']]); ?> fonctions qui y sont encore associées !'));">
                                 <img src="../../public/img/delete.png" title="Supprimer le serveur" alt="Supprimer">
                             </a>
                         </td>

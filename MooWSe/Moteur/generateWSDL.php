@@ -52,8 +52,16 @@ function generateWSDL($array) {
     if (is_array($array)) {
         $a = new ArrayObject(); // Cr√©ation d'un tableau d'objet
         foreach ($array as $r) {
+<<<<<<< HEAD
             $bdd = new PDO('mysql:host=localhost;dbname=webservices;charset=utf8', 'root', '', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
             $result = $bdd->query("SELECT DISTINCT function_name,variable_name,variable_input,type_namewsdl,server_name,server_soapadress "
+=======
+            //dangereux appel de base dans une boucle
+            //$bdd = new PDO('mysql:host=localhost;dbname=moowse;charset=utf8', 'root', '', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+			$settings = require("settings.php");
+			$bdd = new PDO('mysql:host='.$settings["db_host"].';dbname='.$settings["db_name"].';charset=utf8', $settings["db_user"], $settings["db_password"], array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+            $result = $bdd->query("SELECT DISTINCT function_name,variable_name,variable_input,type_namewsdl,server_name "
+>>>>>>> 07fa1e03a3ddb35887d0b2ac4627b1ba3f673b7d
                     . "FROM access,client,function,variable,type,server "
                     . "WHERE client.client_id=access.client_id "
                     . "AND function.function_id=access.function_id "
@@ -256,7 +264,7 @@ function generateFakeWSDL() {
     //balise message request
     $oXMLWriter->startElementNS('wsdl', 'message', NULL);
     $oXMLWriter->writeAttribute('name', 'helloRequest');
-    //dÈfintion des variables d'entree
+    //dÔøΩfintion des variables d'entree
     $oXMLWriter->startElementNS('wsdl', 'part', NULL);
     $oXMLWriter->writeAttribute('name', 'name');
     $oXMLWriter->writeAttribute('type', 'xsd:string');
@@ -267,7 +275,7 @@ function generateFakeWSDL() {
     //balise message response
     $oXMLWriter->startElementNS('wsdl', 'message', NULL);
     $oXMLWriter->writeAttribute('name', 'helloResponse');
-    //dÈfintion des variables d'entree
+    //dÔøΩfintion des variables d'entree
     $oXMLWriter->startElementNS('wsdl', 'part', NULL);
     $oXMLWriter->writeAttribute('name', 'name');
     $oXMLWriter->writeAttribute('type', 'xsd:string');
