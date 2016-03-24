@@ -11,25 +11,14 @@
 session_start();
 ini_set("display_errors", 0);
 error_reporting(0);
-if (isset($_SESSION['login'])) {
-    if (isset($_SESSION['timestamp'])) { // si $_SESSION['timestamp'] existe
-        if ($_SESSION['timestamp'] + 300 > time()) {
-            $_SESSION['timestamp'] = time();
-        } else {
-            header("Location:../controllers/deconnexion.php"); // deconnexion au bout de 5 minutes d'inactivite
-            exit();
-        }
-    } else {
-        $_SESSION['timestamp'] = time();
-    }
+if (isset($_SESSION['login'])) {    
+    // Définition des variables nécessaires pour le header
+    $titre_web = "MooWse - Accueil";
+    $titre_principal = "Espace Administration de MooWse";
+    $titre_section = "Accueil";
+
+    require("../views/header.php");
     ?>
-    <!DOCTYPE html>
-    <html lang="fr-fr">
-        <head>
-            <title>MooWse - Accueil Administration</title>
-            <link href="../../public/css/accueil.css" type="text/css" rel="stylesheet" />
-            <meta charset="UTF-8" />
-        </head>
         <body>
 
             <div class="navigation">
@@ -38,10 +27,8 @@ if (isset($_SESSION['login'])) {
                 <div class="navigation2"><a href="gestion_clients.php">Gestion des clients</a></br></div>
                 <div class="navigation2"><a href="gestion_administrateurs.php">Gestion des administrateurs</a></br></div>
                  <div class="navigation2"><a href="gestion_types.php">Gestion des types</a></br></div>
-                <form action="../controllers/deconnexion.php" method="POST">
-                    <p><button type="submit">Déconnexion</button></p>
-                </form>
-                <h6>Moteur de Webservices de l'Ecole Centrale de Nantes.</h6></div>
+                <?php include("../../app/views/footer.php"); ?>
+            </div>
         </body>
     </html>
     <?php

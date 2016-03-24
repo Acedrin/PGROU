@@ -15,16 +15,6 @@ ini_set("display_errors", 0);
 error_reporting(0);
 
 if (isset($_SESSION['login'])) {
-        if (isset($_SESSION['timestamp'])) { // si $_SESSION['timestamp'] existe
-        if ($_SESSION['timestamp'] + 300 > time()) {
-            $_SESSION['timestamp'] = time();
-        } else {
-            header("Location:../controllers/deconnexion.php"); // deconnexion au bout de 5 minutes d'inactivite
-            exit();
-        }
-    } else {
-        $_SESSION['timestamp'] = time();
-    }
     // Vérification de si un paramètre a été donné (=modification d'un client)
     if (isset($_GET['server_id'])) {
         $server_id = $_GET['server_id'];

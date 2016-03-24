@@ -7,6 +7,18 @@
   Victor Enaud
   Ecole Centrale de Nantes
   -------------------------------------------------- */
+
+// Déconnexion automatique au bout d'un certain laps de temps
+if (isset($_SESSION['timestamp'])) { // si $_SESSION['timestamp'] existe
+    if ($_SESSION['timestamp'] + 300 > time()) {
+        $_SESSION['timestamp'] = time();
+    } else {
+        header("Location:../controllers/deconnexion.php"); // deconnexion au bout de 5 minutes d'inactivite
+        exit();
+    }
+} else {
+    $_SESSION['timestamp'] = time();
+}
 ?>
 
 <!DOCTYPE html>
@@ -42,6 +54,7 @@
     }
     ?>
     <header class="header">
+        <a href="accueil.php"><img src="../../public/img/elan.png" id="logo_moowse" title="MooWse - Accueil" alt="Accueil"></a>
         <h1><?php echo($titre_principal); ?></h1>
         <h2><?php echo($titre_section); ?></h2>
     </header>

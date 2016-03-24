@@ -15,16 +15,6 @@ ini_set("display_errors", 0);
 error_reporting(0);
 
 if (isset($_SESSION['login'])) {
-    if (isset($_SESSION['timestamp'])) { // si $_SESSION['timestamp'] existe
-        if ($_SESSION['timestamp'] + 300 > time()) {
-            $_SESSION['timestamp'] = time();
-        } else {
-            header("Location:../controllers/deconnexion.php"); // deconnexion au bout de 5 minutes d'inactivite
-            exit();
-        }
-    } else {
-        $_SESSION['timestamp'] = time();
-    }
     require("../controllers/getTypes.php");
     
     // Définition des variables nécessaires pour le header
