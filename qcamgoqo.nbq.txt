@@ -1,0 +1,11 @@
+﻿modif de l'url dans le WSDL, on utilise maintenant la variable server_soapadress
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# Explicit paths specified without -i or -o; assuming --only paths...
+# On branch master
+# Changes to be committed:
+#	new file:   MooWSe/Client/MooWSe.wsdl
+#	modified:   MooWSe/Moteur/MooWSe.class.php
+#	modified:   MooWSe/Moteur/generateWSDL.php
+#
+
