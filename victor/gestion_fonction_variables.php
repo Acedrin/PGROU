@@ -144,6 +144,14 @@ if (isset($_SESSION['login']) && isset($_GET['function_id'])) {
                             ?>
                         </td>
                         <td>
+                               <!-- Appel d'un script javascript pour remplir et montrer le champ d'ajout d'une variable -->
+                            <a href="#">
+                                <img src="../../public/img/edit.png" title="Modifier le serveur" alt="Modifier" 
+                                     onclick="modifierVariable(<?php print_r($variables[$i]['variable_id']) ?>,'<?php print_r($variables[$i]['variable_name']) ?>',<?php print_r($variables[$i]['variable_input']) ?>,<?php print_r($variables[$i]['variable_order']) ?>,<?php print_r($variables[$i]['type_id']) ?>)">
+                            </a>
+
+                            &nbsp;
+                            
                             <a href="../controllers/deleteVariable.php?variable_id=<?php print_r($variables[$i]['variable_id']) ?>" 
                                onclick="return(confirm('Voulez vous vraiment supprimer la variable <?php print_r($variables[$i]['variable_name']); ?> ?'));">
                                 <img src="../../public/img/delete.png" title="Supprimer a variable" alt="Supprimer">
@@ -165,6 +173,7 @@ if (isset($_SESSION['login']) && isset($_GET['function_id'])) {
             <div id="hide" style="display:none">
                 <form name="formAdd" action="../controllers/addVariable.php" method="POST">
                     <input type="hidden" name="function_id" value="<?php print_r($function[0]['function_id']) ?>"/>
+                    <input type="hidden" name="variable_id" id="var_id" value="0"/>
 
                     <label for="variable_name">Nom :</label>
                     <input type="text" name="variable_name" placeholder="Nom">
@@ -172,8 +181,8 @@ if (isset($_SESSION['login']) && isset($_GET['function_id'])) {
                     <br />
 
                     <label for="variable_input">Entr&eacute;e/Sortie :</label>
-                    <input type="radio" name="variable_input" value="1">Input
-                    <input type="radio" name="variable_input" value="0">Output
+                    <input type="radio" name="variable_input" id="input" value="1">Input
+                    <input type="radio" name="variable_input" id="output" value="0">Output
 
                     <br/>
 

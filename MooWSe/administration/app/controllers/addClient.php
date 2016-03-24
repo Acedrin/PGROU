@@ -64,7 +64,7 @@ if (isset($_SESSION['login'])) {
 
                         // Vérification si les deux mots de passes sont égaux
                         if (($_POST['client_password'] == $_POST['client_password_confirmation'])) {
-                            $client_password = htmlspecialchars($_POST['client_password']);
+                            $client_password = sha1($_POST['client_password']);
                             $correct = true;
                         } else {
                             // Les deux mots de passes ne sont pas identiques
@@ -112,7 +112,7 @@ if (isset($_SESSION['login'])) {
             // Modification du mot de passe d'un client existant
             // Vérification si les deux mots de passes sont égaux
             if (($_POST['client_password'] == $_POST['client_password_confirmation'])) {
-                $client_password = htmlspecialchars($_POST['client_password']);
+                $client_password = sha1($_POST['client_password']);
                 $correct = true;
                 $password = true;
             } else {

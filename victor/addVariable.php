@@ -17,8 +17,9 @@ error_reporting(0);
 //gestion des logs
 require ("../../vendor/autoload.php");
 
-// Booléen pour vérifier le bon ajout de la variable
+// Booléen pour vérifier le bon ajout/édition de la variable
 $added = false;
+$edited = false;
 
 // Booléen pour vérifier si le formulaire remis est correct
 $correct = false;
@@ -36,6 +37,12 @@ if (isset($_SESSION['login'])) {
         if (isset($_POST['function_id'])) {
             $function_id = $_POST['function_id'];
         }
+
+        // Vérification de la présence de l'id de la variable à modifier le cas échéant
+        if ($_POST['variable_id'] > 0) {
+            $variable_id = $_POST['variable_id'];
+        }
+
 
         if (isset($_POST['variable_name'])) {
             $variable_name = htmlspecialchars($_POST['variable_name']);
@@ -89,6 +96,49 @@ if (isset($_SESSION['login'])) {
                 // Fermeture de la connexion
                 $stmt->closeCursor();
 
+                // Distinction de l'ajout et de la modification
+                if (isset($variable_id)) {
+                    // Modification
+                    // Récupération de l'ancien ordre de la variable modifiée
+                    $ex_order = array_search($variable_order, $variable_list);
+
+                    // Vérification d'un changement de l'ordre
+                    if ($ex_order != $variable_order) {
+
+                        // Si l'ordre est trop élevé, sa valeur est modifiée
+                        if ($variable_order > sizeof($variable_list)) {
+                            $variable_order = sizeof($variable_list);
+                        }
+
+                        // Déplacement des variables dont l'ordre est égal ou inférieur à celle ajoutée
+                        // 
+                        for ($i = $ex_order + 1; $i < $variable_order + 1; $i++) {
+
+                            $order = $i + 1;
+
+                            // Modification de la variable
+                            $stmt = $bdd->prepare("UPDATE variable SET variable_order=:order WHERE variable_id=:id");
+                            $stmt->bindParam(':order', $order);
+                            $stmt->bindParam(':id', $variable_list[$i]);
+                            $stmt->execute();
+
+                            // Fermeture de la connexion
+                            $stmt->closeCursor();
+                        }
+                    }
+                    // Modification de la variable
+                    $stmt = $bdd->prepare("UPDATE variable SET variable_name=:variable_name, variable_order=:variable_order, variable_input=:variable_input, type_id=:type_id WHERE variable_id=:variable_id");
+                    $stmt->bindParam(':variable_name', $variable_name);
+                    $stmt->bindParam(':variable_order', $variable_order);
+                    $stmt->bindParam(':variable_input', $variable_input);
+                    $stmt->bindParam(':type_id', $type_id);
+                    $stmt->bindParam(':variable_id', $variable_id);
+                    $edited = $stmt->execute();
+
+                    // Fermeture de la connexion
+                    $stmt->closeCursor();
+                } else {
+                    // Ajout
                     // Si l'ordre est trop élevé, sa valeur est modifiée
                     if ($variable_order > sizeof($variable_list) + 1) {
                         $variable_order = sizeof($variable_list) + 1;
@@ -120,10 +170,16 @@ if (isset($_SESSION['login'])) {
 
                     // Fermeture de la connexion
                     $stmt->closeCursor();
-                    
+                }
                 if ($added) {
                     // Le type a bien été ajouté
                     $message = array(true, "La variable a bien &eacute;t&eacute; ajout&eacute;");
+                    // log d'ajout d'un user
+                    $loggerAjout = new Katzgrau\KLogger\Logger(__DIR__ . '../../../logs');
+                    $loggerAjout->info($_SESSION['login'] . " a ajouté la variable " . $variable_name);
+                } else if ($edited) {
+                    // Le type a bien été ajouté
+                    $message = array(true, "La variable a bien &eacute;t&eacute; modifi&eacute;e");
                     // log d'ajout d'un user
                     $loggerAjout = new Katzgrau\KLogger\Logger(__DIR__ . '../../../logs');
                     $loggerAjout->info($_SESSION['login'] . " a ajouté la variable " . $variable_name);
