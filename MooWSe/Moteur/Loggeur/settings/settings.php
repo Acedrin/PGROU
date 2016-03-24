@@ -13,8 +13,8 @@ $errorLog_file="./logs/errorLog";
 
 //credentials for the database
 $db="log";
-$user="root";
-$passwd="giano";
+$user="";
+$passwd="";
 $port="3306";
 
 /*LOG SPLITTING PARAMETERS
