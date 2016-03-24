@@ -18,13 +18,14 @@ class MooWSe {
     private $_tokenChecked = false; //son token n'est pas correct non plus 
     private $_tokenTimeToLive = 1; //duree de vie d'un token
     private $_logger; //permet de stocker en base les informations sur les actions menees via la classe Logger dans Logger.php
-    
+
     //contruction d'un Logger
+
     public function __construct() {
         //require "settings.php'";
         $this->_logger = new Logger();
     }
-    
+
     // La fonction Security est toujours appelle via les headers des SOAP associés aux objets Moowse dans les clients.
     public function Security($Security) {
         //Premiere possibilite : le client envoie on header avec les champs username, password encrypte, sel : il veut se connecter et obtenir un token
@@ -90,7 +91,7 @@ class MooWSe {
             }
         }
     }
-    
+
     //si les informations clientes sont exactes et donc que _clientAuthenticate (var globale est vraie) 
     public function authenticate() {
         //par defaut le token vaudra authentification echouee pour indiquer l'echec d'authentification
@@ -128,13 +129,13 @@ class MooWSe {
         }
         return $token;
     }
-    
+
     //la fonction getWSDL prend en parametre le nom d'un serveur et renvoit le WSDL avec les fonctions auorisees pour notre client
     public function getWSDL($service) {
         //la chaine service_WSDL sera renvoyee sous forme error par defaut
         $service_WSDL = 'ERROR';
         //array de fonction vide
-        $functions=array();
+        $functions = array();
         //si le token est toujours valable
         if ($this->_tokenChecked) {
             //appel du log
@@ -163,19 +164,21 @@ class MooWSe {
                 $gettingDatas = new dataBaseCall($settings["db_host"], $settings["db_name"], 'utf8', $settings["db_user"], $settings["db_password"]);
                 //cette fonction renvoie la liste de fonction auxquelles le client de nom client_name, peut acceder sur le serveur $serveur
                 $functions = $gettingDatas->listFunction($client_name, $service);
+
+                //si le tableau est non vide le fichier WSDL contiendra au moins une focntion
+                if (count($functions) != 0) {
+                    $service_WSDL = generateWSDL($functions); // on appelle cette fonction qui génère le WSDL si on a plus d'une focntion dans la liste
+                } else {
+                    $service_WSDL = generateFakeWSDL($functions); //sinon on renvoie le WSDL de hello
+                }
             }
         }
-        //si le tableau est non vide le fichier WSDL contiendra au moins une focntion
-        if (count($functions) != 0) {
-            $service_WSDL = generateWSDL($functions); // on appelle cette fonction qui génère le WSDL si on a plus d'une focntion dans la liste
-        } else {
-            $service_WSDL = generateFakeWSDL($functions); //sinon on renvoie le WSDL de hello
-        }
+
         return htmlspecialchars($service_WSDL, ENT_XML1); //on retourne la chaine de caractere associee au WSDL
     }
-    
+
     //getter sur le nom du client
-    function getClientName(){
+    function getClientName() {
         return $this->_client_name;
     }
 
