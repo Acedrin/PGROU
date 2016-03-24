@@ -58,7 +58,7 @@ function generateWSDL($array) {
             //$bdd = new PDO('mysql:host=localhost;dbname=moowse;charset=utf8', 'root', '', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
 			$settings = require("settings.php");
 			$bdd = new PDO('mysql:host='.$settings["db_host"].';dbname='.$settings["db_name"].';charset=utf8', $settings["db_user"], $settings["db_password"], array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
-            $result = $bdd->query("SELECT DISTINCT function_name,variable_name,variable_input,type_namewsdl,server_name "
+            $result = $bdd->query("SELECT DISTINCT function_name,variable_name,variable_input,type_namewsdl,server_name,server_soapadress "
                     . "FROM access,client,function,variable,type,server "
                     . "WHERE client.client_id=access.client_id "
                     . "AND function.function_id=access.function_id "
