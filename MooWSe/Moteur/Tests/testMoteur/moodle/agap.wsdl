@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="agap" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+ <wsdl:message name="infoRequest">
+  <wsdl:part name="StudentNumber" type="xsd:string"/>
+ </wsdl:message>
+ <wsdl:message name="infoResponse">
+  <wsdl:part name="Result" type="xsd:string"/>
+ </wsdl:message>
+ <wsdl:message name="notesRequest">
+  <wsdl:part name="StudentLogin" type="xsd:string"/>
+  <wsdl:part name="StudentPassword" type="xsd:string"/>
+ </wsdl:message>
+ <wsdl:message name="notesResponse">
+  <wsdl:part name="Result" type="xsd:string"/>
+ </wsdl:message>
+ <wsdl:portType name="infoPortType">
+  <wsdl:operation name="info">
+   <wsdl:input message="tns:infoRequest"/>
+   <wsdl:output message="tns:infoResponse"/>
+  </wsdl:operation>
+ </wsdl:portType>
+ <wsdl:portType name="notesPortType">
+  <wsdl:operation name="notes">
+   <wsdl:input message="tns:notesRequest"/>
+   <wsdl:output message="tns:notesResponse"/>
+  </wsdl:operation>
+ </wsdl:portType>
+ <wsdl:binding name="infoBinding" type="tns:infoPortType">
+  <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+  <wsdl:operation name="info">
+   <soap:operation soapAction="urn:xmethods-delayed-quotes#getinfo"/>
+   <wsdl:input>
+    <soap:body use="encoded" namespace="urn:xmethods-delayed-quotes" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+   </wsdl:input>
+   <wsdl:output>
+    <soap:body use="encoded" namespace="urn:xmethods-delayed-quotes" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+   </wsdl:output>
+  </wsdl:operation>
+ </wsdl:binding>
+ <wsdl:binding name="notesBinding" type="tns:notesPortType">
+  <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+  <wsdl:operation name="notes">
+   <soap:operation soapAction="urn:xmethods-delayed-quotes#getnotes"/>
+   <wsdl:input>
+    <soap:body use="encoded" namespace="urn:xmethods-delayed-quotes" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+   </wsdl:input>
+   <wsdl:output>
+    <soap:body use="encoded" namespace="urn:xmethods-delayed-quotes" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+   </wsdl:output>
+  </wsdl:operation>
+ </wsdl:binding>
+ <wsdl:service name="infoService">
+  <wsdl:port name="infoPort" binding="infoBinding">
+   <soap:address location="http://localhost/agap/wsdl_server.php"/>
+  </wsdl:port>
+ </wsdl:service>
+ <wsdl:service name="notesService">
+  <wsdl:port name="notesPort" binding="notesBinding">
+   <soap:address location="http://localhost/agap/wsdl_server.php"/>
+  </wsdl:port>
+ </wsdl:service>
+</wsdl:definitions>
