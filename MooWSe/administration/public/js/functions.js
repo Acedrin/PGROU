@@ -272,11 +272,11 @@ window.setTimeout("closeDiv();", 5000);
 function closeDiv() {
     var Temp = document.getElementById("success_message");
     if (Temp != null)
-        Temp.style.display = "none";
+        Temp.style.visibility = "hidden";
 
     var Temp = document.getElementById("error_message");
     if (Temp != null)
-        Temp.style.display = "none";
+        Temp.style.visibility = "hidden";
 }
 
 // Fonction pour définir le nombre de fonctions à ajouter

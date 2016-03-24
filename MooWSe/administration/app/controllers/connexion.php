@@ -38,6 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $Serveur = "ldaps://ldaps.nomade.ec-nantes.fr:636";
     $Liaison_LDAP = ldap_connect($Serveur);
+    $_SESSION['alert'] = array(false, "Serveur d'authentification injoignable.\nR&eacute;essayez plus tard.");
     if ($Liaison_LDAP) {
 // le serveur est accessible
         $LDAP_DN = "uid=$login,ou=people,dc=ec-nantes,dc=fr";
@@ -49,20 +50,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $query->setFetchMode(PDO::FETCH_ASSOC);
             $query->execute(array($login));
             $rows = $query->fetch();
-            
+
             // gestion de la date actuelle
             date_default_timezone_get();
             $today = date('Y-m-d', time());
-            
+
             // on verifie que le login est dans la bdd et que la date d'expiration n'est pas depassee;
-            if (($rows['user_uid'] == $login)&&(($rows['user_expirationdate']=='0000-00-00')||(strtotime($today)<strtotime($rows['user_expirationdate'])))) {
+            if (($rows['user_uid'] == $login) && (($rows['user_expirationdate'] == '0000-00-00') || (strtotime($today) < strtotime($rows['user_expirationdate'])))) {
                 $restart = false;
                 $_SESSION['login'] = $login;
                 $_SESSION['timestamp'] = time();
-                $logger = new Katzgrau\KLogger\Logger(__DIR__.'../../../logs');
-                $logger->info("Connexion de ".$login. " depuis l'adresse ". $_SERVER["REMOTE_ADDR"]);
+                $logger = new Katzgrau\KLogger\Logger(__DIR__ . '../../../logs');
+                $logger->info("Connexion de " . $login . " depuis l'adresse " . $_SERVER["REMOTE_ADDR"]);
+                $_SESSION['alert'] = array(true, "Connexion r&eacute;ussie.\nBienvenue sur MooWse !");
+            } else {
+                $_SESSION['alert'] = array(false, "Vous n'&ecirc;tes pas ou plus autoris&eacute; &agrave; vous connecter &agrave; l'application.\nVeuillez contacter un administrateur.");
             }
             $query->closeCursor();
+        } else {
+            $_SESSION['alert'] = array(false, "Mauvais couple login/mot de passe.\nVeuillez r&eacute;essayer.");
         }
         ldap_close($Liaison_LDAP);
     }

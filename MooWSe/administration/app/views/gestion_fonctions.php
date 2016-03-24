@@ -69,10 +69,6 @@ if (isset($_SESSION['login'])) {
 
                             &nbsp;
 
-                            <a href="gestion_acces_serveur.php?server_id=<?php print_r($servers[$i]['server_id']) ?>"><img src="../../public/img/lock.gif" title="Gérer les droits d'accès au serveur" alt="Droits d'accès"></a>
-
-                            &nbsp;
-
                             <a href="../controllers/deleteServer.php?server_id=<?php print_r($servers[$i]['server_id']) ?>" 
                                onclick="return(confirm('Voulez vous vraiment supprimer le serveur <?php print_r($servers[$i]['function_name']) ?> ?\n\n\
 ATTENTION - Cela supprimera toutes les <?php print_r($nbFunctions[$servers[$i]['server_id']]); ?> fonctions qui y sont encore associées !'));">

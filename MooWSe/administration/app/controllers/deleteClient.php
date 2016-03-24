@@ -38,6 +38,14 @@ if (isset($_SESSION['login'])) {
         }
 
         try {
+            // Suppression de tous les accès du client
+            $stmt = $bdd->prepare("DELETE FROM access WHERE client_id=:client_id");
+            $stmt->bindParam(':client_id', $client_id);
+            $stmt->execute();
+
+            // Fermeture de la connexion
+            $stmt->closeCursor();
+            
             // Suppression du client
             $stmt = $bdd->prepare("DELETE FROM client WHERE client_id=:client_id");
             $stmt->bindParam(':client_id', $client_id);

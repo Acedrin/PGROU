@@ -58,6 +58,11 @@ if (isset($_SESSION['login'])) {
                 // Fermeture de la connexion
                 $stmt->closeCursor();
 
+                // Suppression de tous les accès de la fonction
+                $stmt = $bdd->prepare("DELETE FROM access WHERE function_id=:function_id");
+                $stmt->bindParam(':function_id', $functions[$i]['function_id']);
+                $stmt->execute();
+
                 // Suppression de la fonction
                 $stmt = $bdd->prepare("DELETE FROM function WHERE function_id=:function_id");
                 $stmt->bindParam(':function_id', $functions[$i]['function_id']);

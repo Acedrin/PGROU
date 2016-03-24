@@ -92,6 +92,9 @@ button {
 }
 
 #success_message {
+    position: absolute;
+    top: 10px;
+    float:left;
     width: 400px;
     border-radius: 3px;
     box-shadow: 0px 0px 10px #CCCCCC;
@@ -104,6 +107,10 @@ button {
 }
 
 #error_message {
+    position: absolute;
+    top: 10px;
+    position:absolute;
+    float:left;
     width: 400px;
     border-radius: 3px;
     box-shadow: 0px 0px 10px #CCCCCC;

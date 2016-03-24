@@ -23,10 +23,10 @@ if (isset($_SESSION['login'])) {
 
             <div class="navigation">
                 <h2>Bienvenue sur l'interface d'administration de MooWse</h2>
-                <div class="navigation2"><a href="gestion_fonctions.php">Gestion des serveurs et leurs fonctions</a></br></div>
-                <div class="navigation2"><a href="gestion_clients.php">Gestion des clients</a></br></div>
-                <div class="navigation2"><a href="gestion_administrateurs.php">Gestion des administrateurs</a></br></div>
-                 <div class="navigation2"><a href="gestion_types.php">Gestion des types</a></br></div>
+                <a href="gestion_fonctions.php"><div class="navigation2">Gestion des serveurs et leurs fonctions</br></div></a>
+                <a href="gestion_clients.php"><div class="navigation2">Gestion des clients</br></div></a>
+                <a href="gestion_administrateurs.php"><div class="navigation2">Gestion des administrateurs</br></div></a>
+                <a href="gestion_types.php"><div class="navigation2">Gestion des types</br></div></a>
                 <?php include("../../app/views/footer.php"); ?>
             </div>
         </body>
