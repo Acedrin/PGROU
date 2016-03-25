@@ -97,7 +97,8 @@ du serveur <?php print_r($access[$i]['server_name']) ?> ?'));">
 
             <br />
             <br />
-
+            
+            <a href="gestion_fonctions.php"><button type="button">Retour</button></a>
             <a href="ajout_acces.php?function_id=<?php print_r($function[0]['function_id']) ?>"><button type="button">Ajouter un droit d'accès</button></a>
             <?php include("../../app/views/footer.php"); ?>
         </div>

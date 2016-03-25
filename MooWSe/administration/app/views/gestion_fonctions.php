@@ -180,8 +180,8 @@ ATTENTION - Cela supprimera toutes les <?php print_r($nbFunctions[$servers[$i]['
             <br />
             <br />
 
-            <a href="#"><button type="button" onclick="nbFunctions()">Ajouter des fonctions</button></a>
             <a href="ajout_serveur.php"><button type="button">Ajouter un serveur</button></a>
+            <a href="#"><button type="button" onclick="nbFunctions()">Ajouter des fonctions</button></a>
             <?php include("../../app/views/footer.php"); ?>
         </div>
     </body>
